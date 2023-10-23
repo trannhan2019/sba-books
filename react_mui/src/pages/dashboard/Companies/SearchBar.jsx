@@ -1,9 +1,10 @@
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
 import { Card, InputAdornment, OutlinedInput, SvgIcon } from "@mui/material";
 
-export const SearchBar = () => (
+export const SearchBar = ({ onSearchName }) => (
   <Card sx={{ p: 2 }}>
     <OutlinedInput
+      onChange={(e) => onSearchName(e.target.value)}
       defaultValue=""
       fullWidth
       placeholder="Search customer"

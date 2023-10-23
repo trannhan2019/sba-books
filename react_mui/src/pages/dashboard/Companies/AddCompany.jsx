@@ -14,6 +14,7 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import { apiStoreCompany } from "@/apis/company";
 
 const style = {
   position: "absolute",
@@ -24,7 +25,7 @@ const style = {
   bgcolor: "background.paper",
 };
 
-const AddCompany = ({ openModal, handleOpenModal, handleCloseModal }) => {
+const AddCompany = ({ openModal, handleCloseModal }) => {
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -37,12 +38,14 @@ const AddCompany = ({ openModal, handleOpenModal, handleCloseModal }) => {
     }),
     onSubmit: async (values) => {
       try {
-        // await auth.signUp(values.email, values.name, values.password);
+        const response = await apiStoreCompany(values);
         // router.push('/');
-        toast.success("Success");
-        console.log(values);
+        toast.success("Tạo mới thành công");
+        formik.resetForm();
+        handleCloseModal();
+        console.log(response);
       } catch (err) {
-        toast.error("Error !!!");
+        toast.error("Lỗi, tạo dữ liệu mới không thành công");
       }
     },
   });
