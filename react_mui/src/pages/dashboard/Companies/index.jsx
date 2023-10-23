@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
 import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
@@ -10,52 +10,51 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
-import { subDays, subHours } from "date-fns";
 import DashboardLayout from "@/layouts/DashboardLayout";
-import { useSelection } from "@/hooks/use-selection";
+
 import { CompaniesTable } from "./CompaniesTable";
 import { SearchBar } from "./SearchBar";
-import { applyPagination } from "@/utils/apply-pagination";
 import AddCompany from "./AddCompany";
 import { apiGetAllCompany } from "@/apis/company";
 import useDebounce from "@/hooks/useDebounce";
 
-const now = new Date();
+// const now = new Date();
 
 const Companies = () => {
-  const [page, setPage] = useState(0);
-  const [itemPerPage, setItemPerPage] = useState(5);
-  const [searchName, setSearchName] = useState("");
-  const [companies, setCompanies] = useState([]);
-  // const customersIds = useCustomerIds(customers);
-  // const customersSelection = useSelection(customersIds);
-
-  const searchNameDebounce = useDebounce(searchName, 800);
-
-  const handlePageChange = useCallback((event, value) => {
-    setPage(value);
-  }, []);
-
-  const handleRowsPerPageChange = useCallback((event) => {
-    setItemPerPage(event.target.value);
-  }, []);
-
   //Modal
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
   //companies
+  const [page, setPage] = useState(0);
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
+  const [itemPerPage, setItemPerPage] = useState(5);
+  const handleRowsPerPageChange = (event) => {
+    setItemPerPage(event.target.value);
+  };
+
+  const [searchName, setSearchName] = useState("");
+  const searchNameDebounce = useDebounce(searchName, 800);
+
+  const [companies, setCompanies] = useState([]);
+  const [loadingData, setLoadingData] = useState(false);
+
   const fetchCompanies = async (page, item_per_page, search_name) => {
     try {
+      setLoadingData(true);
       const response = await apiGetAllCompany({
         page,
         item_per_page,
         search_name,
       });
       setCompanies(response.data);
-      // console.log(response.data);
+      setLoadingData(false);
     } catch (error) {
+      setLoadingData(false);
       console.log("get all companies", error);
     }
   };
@@ -116,17 +115,13 @@ const Companies = () => {
             </Stack>
             <SearchBar onSearchName={setSearchName} />
             <CompaniesTable
+              onLoading={loadingData}
               count={companies?.meta?.total}
               items={companies?.data}
-              // onDeselectAll={customersSelection.handleDeselectAll}
-              // onDeselectOne={customersSelection.handleDeselectOne}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              // onSelectAll={customersSelection.handleSelectAll}
-              // onSelectOne={customersSelection.handleSelectOne}
               page={page}
               rowsPerPage={itemPerPage}
-              // selected={customersSelection.selected}
+              onRowsPerPageChange={handleRowsPerPageChange}
+              onPageChange={handlePageChange}
             />
           </Stack>
         </Container>

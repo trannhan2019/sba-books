@@ -4,6 +4,8 @@ import {
   Box,
   Card,
   Checkbox,
+  Chip,
+  IconButton,
   Stack,
   Table,
   TableBody,
@@ -13,11 +15,16 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import { Scrollbar } from "@/components/Scrollbar";
-import { getInitials } from "@/utils/get-initials";
+import { TableRowsLoader } from "./TableRowsLoader";
+import { useSelection } from "@/hooks/useSelection";
+import { items } from "@/layouts/DashboardLayout/config";
 
 export const CompaniesTable = (props) => {
   const {
+    onLoading,
     count = 0,
     items = [],
     // onDeselectAll,
@@ -28,11 +35,19 @@ export const CompaniesTable = (props) => {
     // onSelectOne,
     page = 0,
     rowsPerPage = 0,
-    selected = [],
+    // selected = [],
   } = props;
 
-  // const selectedSome = selected.length > 0 && selected.length < items.length;
-  // const selectedAll = items.length > 0 && selected.length === items.length;
+  const useCompaniesIds = (companies) => companies.map((company) => company.id);
+
+  const companiesIds = useCompaniesIds(items);
+  const companiesSelection = useSelection(companiesIds);
+
+  const selectedSome =
+    companiesSelection.selected.length > 0 &&
+    companiesSelection.selected.length < items.length;
+  const selectedAll =
+    items.length > 0 && companiesSelection.selected.length === items.length;
 
   return (
     <Card>
@@ -56,52 +71,84 @@ export const CompaniesTable = (props) => {
                 </TableCell>
                 <TableCell>Tên Công ty</TableCell>
                 <TableCell>Tên viết tắt</TableCell>
+                <TableCell>Trạng thái</TableCell>
+                <TableCell>Hành động</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {items.map((company) => {
-                // const isSelected = selected.includes(customer.id);
-                // const createdAt = format(customer.createdAt, "dd/MM/yyyy");
-
-                return (
-                  <TableRow
-                    hover
-                    key={company.id}
-                    // selected={isSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                      // checked={isSelected}
-                      // onChange={(event) => {
-                      //   if (event.target.checked) {
-                      //     onSelectOne?.(customer.id);
-                      //   } else {
-                      //     onDeselectOne?.(customer.id);
-                      //   }
-                      // }}
-                      />
+            {onLoading ? (
+              <TableRowsLoader rowsNum={5} />
+            ) : (
+              <TableBody>
+                {items.length <= 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4}>
+                      <Typography variant="body1">
+                        Không tìm thấy dữ liệu ...
+                      </Typography>
                     </TableCell>
-                    <TableCell>
-                      <Stack alignItems="center" direction="row" spacing={2}>
-                        <Avatar src={company.avatar}>
-                          {getInitials(company.name)}
-                        </Avatar>
-                        <Typography variant="subtitle2">
-                          {company.name}
-                        </Typography>
-                      </Stack>
-                    </TableCell>
-                    <TableCell>{company.alias}</TableCell>
-                    {/* <TableCell>
-                      {customer.address.city}, {customer.address.state},{" "}
-                      {customer.address.country}
-                    </TableCell>
-                    <TableCell>{customer.phone}</TableCell>
-                    <TableCell>{createdAt}</TableCell> */}
                   </TableRow>
-                );
-              })}
-            </TableBody>
+                ) : (
+                  items.map((company) => {
+                    const isSelected = companiesSelection.selected.includes(
+                      company.id
+                    );
+                    // const createdAt = format(customer.createdAt, "dd/MM/yyyy");
+
+                    return (
+                      <TableRow hover key={company.id} selected={isSelected}>
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isSelected}
+                            onChange={(event) => {
+                              if (event.target.checked) {
+                                companiesSelection.handleSelectOne?.(
+                                  company.id
+                                );
+                              } else {
+                                companiesSelection.handleDeselectOne?.(
+                                  company.id
+                                );
+                              }
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="subtitle2">
+                            {company.name}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>{company.alias}</TableCell>
+                        <TableCell>
+                          {company.isActive ? (
+                            <Chip
+                              label="Hoạt động"
+                              color="success"
+                              size="small"
+                            />
+                          ) : (
+                            <Chip
+                              label="Tạm dừng"
+                              color="warning"
+                              size="small"
+                            />
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <Stack direction="row" gap={1}>
+                            <IconButton>
+                              <EditNoteOutlinedIcon color="indigo" />
+                            </IconButton>
+                            <IconButton>
+                              <DeleteOutlinedIcon color="error" />
+                            </IconButton>
+                          </Stack>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                )}
+              </TableBody>
+            )}
           </Table>
         </Box>
       </Scrollbar>

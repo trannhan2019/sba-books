@@ -7,7 +7,7 @@ export const SearchBar = ({ onSearchName }) => (
       onChange={(e) => onSearchName(e.target.value)}
       defaultValue=""
       fullWidth
-      placeholder="Search customer"
+      placeholder="Tìm kiếm theo tên Công ty ..."
       startAdornment={
         <InputAdornment position="start">
           <SvgIcon color="action" fontSize="small">
