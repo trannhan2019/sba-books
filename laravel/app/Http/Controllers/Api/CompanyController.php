@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Company\DeleteCompanyRequest;
 use App\Http\Requests\Company\StoreCompanyRequest;
+use App\Http\Requests\Company\UpdateCompanyRequest;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use Illuminate\Http\Request;
@@ -53,5 +54,16 @@ class CompanyController extends Controller
     public function show($id)
     {
         return new CompanyResource(Company::findOrFail($id));
+    }
+
+    public function update(UpdateCompanyRequest $request, $id)
+    {
+        $company = Company::findOrFail($id);
+        $company->name = $request->name;
+        $company->alias = $request->alias;
+        $company->isActive = $request->isActive;
+
+        $company->save();
+        return response()->json('Company updated', 201);
     }
 }

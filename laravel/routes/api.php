@@ -25,4 +25,5 @@ Route::prefix('company')->group(function () {
     Route::delete('/', [CompanyController::class, 'destroyAll']);
     Route::delete('/{id}', [CompanyController::class, 'destroy']);
     Route::get('/{id}', [CompanyController::class, 'show']);
+    Route::put('/{id}', [CompanyController::class, 'update']);
 });

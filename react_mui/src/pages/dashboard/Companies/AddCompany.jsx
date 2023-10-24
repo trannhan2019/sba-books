@@ -1,4 +1,3 @@
-import React from "react";
 import Modal from "@mui/material/Modal";
 import {
   Button,
@@ -11,7 +10,8 @@ import {
   Switch,
   TextField,
 } from "@mui/material";
-import { useFormik } from "formik";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 
@@ -24,24 +24,28 @@ const style = {
   bgcolor: "background.paper",
 };
 
+const scheme = Yup.object({
+  name: Yup.string().required("Tên Công ty không để trống"),
+  alias: Yup.string().required("Tên viết tắt không để trống"),
+  // isActive:Yup.boolean()
+}).required();
+
 const AddCompany = ({ openModal, handleCloseModal, handleAddCompany }) => {
-  const formik = useFormik({
-    initialValues: {
+  const { control, handleSubmit, setValue, reset } = useForm({
+    defaultValues: {
       name: "",
       alias: "",
       isActive: true,
     },
-    validationSchema: Yup.object({
-      name: Yup.string().max(255).required("Tên công ty không để trống"),
-      alias: Yup.string().max(255).required("Tên viết tắt không để trống"),
-    }),
-    onSubmit: async (values) => {
-      await handleAddCompany(values);
-      toast.success("Tạo mới thành công");
-      formik.resetForm();
-      handleCloseModal();
-    },
+    resolver: yupResolver(scheme),
   });
+
+  const onSubmit = async (values) => {
+    await handleAddCompany(values);
+    reset();
+    handleCloseModal();
+    // console.log(values);
+  };
 
   return (
     <div>
@@ -57,44 +61,65 @@ const AddCompany = ({ openModal, handleCloseModal, handleAddCompany }) => {
               title="Thêm thông tin Công ty"
               sx={{ paddingTop: 4, paddingBottom: 0 }}
             />
-            <form onSubmit={formik.handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <CardContent>
                 <Stack spacing={2}>
-                  <TextField
-                    autoFocus
-                    fullWidth
-                    label="Tên Công ty"
-                    type="text"
+                  <Controller
                     name="name"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    value={formik.values.name}
-                    error={!!(formik.touched.name && formik.errors.name)}
-                    helperText={formik.touched.name && formik.errors.name}
-                  />
-                  <TextField
-                    fullWidth
-                    label="Tên viết tắt"
-                    type="text"
-                    name="alias"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    value={formik.values.alias}
-                    error={!!(formik.touched.alias && formik.errors.alias)}
-                    helperText={formik.touched.alias && formik.errors.alias}
-                  />
-                  <FormControlLabel
-                    sx={{ justifyContent: "start" }}
-                    // value="start"
-                    control={
-                      <Switch
-                        name="isActive"
-                        onChange={formik.handleChange}
-                        checked={formik.values.isActive}
+                    control={control}
+                    render={({
+                      field: { onChange, onBlur, value },
+                      fieldState: { error },
+                    }) => (
+                      <TextField
+                        autoFocus
+                        fullWidth
+                        label="Tên Công ty"
+                        type="text"
+                        onBlur={onBlur}
+                        onChange={onChange}
+                        value={value}
+                        error={!!error}
+                        helperText={error ? error.message : null}
                       />
-                    }
-                    label="Trạng thái"
-                    labelPlacement="start"
+                    )}
+                  />
+                  <Controller
+                    name="alias"
+                    control={control}
+                    render={({
+                      field: { onChange, onBlur, value },
+                      fieldState: { error },
+                    }) => (
+                      <TextField
+                        fullWidth
+                        label="Tên viết tắt"
+                        type="text"
+                        onBlur={onBlur}
+                        onChange={onChange}
+                        value={value}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="isActive"
+                    control={control}
+                    render={({ field: { value, onChange } }) => (
+                      <FormControlLabel
+                        sx={{ justifyContent: "start" }}
+                        control={
+                          <Switch
+                            defaultValue={true}
+                            defaultChecked
+                            onChange={onChange}
+                          />
+                        }
+                        label="Trạng thái"
+                        labelPlacement="start"
+                      />
+                    )}
                   />
 
                   <Stack
@@ -104,7 +129,7 @@ const AddCompany = ({ openModal, handleCloseModal, handleAddCompany }) => {
                     <Button
                       onClick={() => {
                         handleCloseModal();
-                        formik.resetForm();
+                        reset();
                       }}
                       variant="outlined"
                     >

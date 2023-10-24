@@ -5,9 +5,17 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Box, Button, FormControlLabel, Switch } from "@mui/material";
-import { useFormik } from "formik";
+
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const scheme = Yup.object({
+  name: Yup.string().required("Tên Công ty không để trống"),
+  alias: Yup.string().required("Tên viết tắt không để trống"),
+  // isActive:Yup.boolean()
+}).required();
 
 const EditCompany = ({
   openDialogEdit,
@@ -15,28 +23,24 @@ const EditCompany = ({
   handleEditCompany,
   company,
 }) => {
-  const formik = useFormik({
-    validationSchema: Yup.object({
-      name: Yup.string().max(255).required("Tên công ty không để trống"),
-      alias: Yup.string().max(255).required("Tên viết tắt không để trống"),
-    }),
-    onSubmit: async (values) => {
-      await handleEditCompany(values, company.id);
-      toast.success("Sửa thông tin thành công");
-      formik.resetForm();
-      handleCloseDialogEdit();
-    },
+  const { control, handleSubmit, setValue, reset } = useForm({
+    resolver: yupResolver(scheme),
   });
 
-  const {
-    values = company,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-    resetForm,
-    touched,
-    errors,
-  } = formik;
+  const onSubmit = async (values) => {
+    await handleEditCompany(values, company.id);
+    reset();
+    handleCloseDialogEdit();
+  };
+
+  useEffect(() => {
+    setValue("name", company?.name);
+    setValue("alias", company?.alias);
+    setValue("isActive", Boolean(company?.isActive));
+  }, [openDialogEdit]);
+
+  // console.log(values);
+
   return (
     <Box>
       <Dialog
@@ -46,57 +50,71 @@ const EditCompany = ({
         maxWidth="sm"
         fullWidth
       >
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle>Sửa thông tin</DialogTitle>
           <DialogContent>
-            <TextField
-              autoFocus
-              margin="normal"
-              label="Tên Công ty"
-              type="text"
-              fullWidth
-              variant="standard"
+            <Controller
               name="name"
-              onBlur={handleBlur}
-              onChange={handleChange}
-              value={values?.name}
-              error={!!(touched.name && errors.name)}
-              helperText={touched.name && errors.name}
-            />
-
-            <TextField
-              margin="normal"
-              label="Tên viết tắt"
-              type="text"
-              fullWidth
-              variant="standard"
-              name="alias"
-              onBlur={handleBlur}
-              onChange={handleChange}
-              value={values?.alias}
-              error={!!(touched.alias && errors.alias)}
-              helperText={touched.alias && errors.alias}
-            />
-
-            <FormControlLabel
-              sx={{ justifyContent: "start", ml: 0, mt: 1 }}
-              // value="start"
-              control={
-                <Switch
-                  name="isActive"
-                  checked={values?.isActive}
-                  onChange={handleChange}
-                  // checked={formik.values.isActive}
+              control={control}
+              render={({
+                field: { onChange, onBlur, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  autoFocus
+                  margin="normal"
+                  label="Tên Công ty"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null}
                 />
-              }
-              label="Trạng thái"
-              labelPlacement="start"
+              )}
+            />
+
+            <Controller
+              name="alias"
+              control={control}
+              render={({
+                field: { onChange, onBlur, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  margin="normal"
+                  label="Tên viết tắt"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  value={value}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                />
+              )}
+            />
+
+            <Controller
+              name="isActive"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <FormControlLabel
+                  sx={{ justifyContent: "start", ml: 0, mt: 1 }}
+                  control={<Switch checked={value} onChange={onChange} />}
+                  label="Trạng thái"
+                  labelPlacement="start"
+                />
+              )}
             />
           </DialogContent>
           <DialogActions sx={{ mx: 2, mb: 2 }}>
             <Button
               onClick={() => {
-                resetForm();
+                reset();
                 handleCloseDialogEdit();
               }}
             >

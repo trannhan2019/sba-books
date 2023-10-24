@@ -21,7 +21,6 @@ import {
   apiDeleteCompany,
   apiGetAllCompany,
   apiUpdateCompany,
-  apiGetCompany,
 } from "@/apis/company";
 import useDebounce from "@/hooks/useDebounce";
 import { toast } from "react-toastify";
@@ -35,6 +34,7 @@ const Companies = () => {
   const handleAddCompany = async (values) => {
     try {
       await apiStoreCompany(values);
+      toast.success("Tạo mới thành công");
       fetchCompanies();
     } catch (error) {
       console.log("add company", error);
@@ -112,6 +112,7 @@ const Companies = () => {
   const handleEditCompany = async (values, id) => {
     try {
       await apiUpdateCompany(values, id);
+      toast.success("Sửa thông tin thành công");
       fetchCompanies();
     } catch (error) {
       console.log("edit company", error);
