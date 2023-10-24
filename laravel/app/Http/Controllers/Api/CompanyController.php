@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Company\DeleteCompanyRequest;
 use App\Http\Requests\Company\StoreCompanyRequest;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
@@ -33,5 +34,24 @@ class CompanyController extends Controller
         }
 
         return CompanyResource::collection($companies->latest('created_at')->paginate($itemPerPage));
+    }
+
+    public function destroy($id)
+    {
+        Company::findOrFail($id)->delete();
+        return response()->json('Company deleted', 201);
+    }
+
+    public function destroyAll(DeleteCompanyRequest $request)
+    {
+        // return response()->json($request);
+        $ids = $request->ids;
+        Company::destroy($ids);
+        return response()->json('Companies deleted', 201);
+    }
+
+    public function show($id)
+    {
+        return new CompanyResource(Company::findOrFail($id));
     }
 }

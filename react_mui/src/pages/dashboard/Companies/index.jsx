@@ -15,18 +15,37 @@ import DashboardLayout from "@/layouts/DashboardLayout";
 import { CompaniesTable } from "./CompaniesTable";
 import { SearchBar } from "./SearchBar";
 import AddCompany from "./AddCompany";
-import { apiGetAllCompany } from "@/apis/company";
+import {
+  apiStoreCompany,
+  apiDeleteCompanies,
+  apiDeleteCompany,
+  apiGetAllCompany,
+  apiUpdateCompany,
+  apiGetCompany,
+} from "@/apis/company";
 import useDebounce from "@/hooks/useDebounce";
-
-// const now = new Date();
+import { toast } from "react-toastify";
+import EditCompany from "./EditCompany";
 
 const Companies = () => {
-  //Modal
+  //Add modal
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
+  const handleAddCompany = async (values) => {
+    try {
+      await apiStoreCompany(values);
+      fetchCompanies();
+    } catch (error) {
+      console.log("add company", error);
+      toast.error("Lỗi không thêm được thông tin");
+    }
+  };
 
-  //companies
+  //selected
+  const [selected, setSelected] = useState([]);
+
+  //load companies
   const [page, setPage] = useState(0);
   const handlePageChange = (event, value) => {
     setPage(value);
@@ -61,6 +80,44 @@ const Companies = () => {
   useEffect(() => {
     fetchCompanies(page, itemPerPage, searchName);
   }, [page, itemPerPage, searchNameDebounce]);
+
+  //handle Delete
+  const handleDeleteOne = async (id) => {
+    try {
+      await apiDeleteCompany(id);
+      fetchCompanies();
+    } catch (error) {
+      console.log("delete company", error);
+      toast.error("Lỗi không xóa được thông tin");
+    }
+  };
+
+  const handleDeleteAll = async () => {
+    try {
+      await apiDeleteCompanies({ ids: selected });
+      fetchCompanies();
+    } catch (error) {
+      console.log("delete companies", error);
+      toast.error("Lỗi không xóa được thông tin");
+    }
+  };
+
+  //handle Edit
+  const [openDialogEdit, setOpenDialogEdit] = useState(false);
+  const handleOpenDialogEdit = () => setOpenDialogEdit(true);
+  const handleCloseDialogEdit = () => setOpenDialogEdit(false);
+
+  const [company, setCompany] = useState(null);
+
+  const handleEditCompany = async (values, id) => {
+    try {
+      await apiUpdateCompany(values, id);
+      fetchCompanies();
+    } catch (error) {
+      console.log("edit company", error);
+      toast.error("Lỗi không sửa được thông tin");
+    }
+  };
 
   return (
     <DashboardLayout>
@@ -113,7 +170,11 @@ const Companies = () => {
                 </Button>
               </div>
             </Stack>
-            <SearchBar onSearchName={setSearchName} />
+            <SearchBar
+              onSearchName={setSearchName}
+              selected={selected}
+              handleDeleteAll={handleDeleteAll}
+            />
             <CompaniesTable
               onLoading={loadingData}
               count={companies?.meta?.total}
@@ -122,11 +183,26 @@ const Companies = () => {
               rowsPerPage={itemPerPage}
               onRowsPerPageChange={handleRowsPerPageChange}
               onPageChange={handlePageChange}
+              selected={selected}
+              onSelected={setSelected}
+              handleDeleteOne={handleDeleteOne}
+              handleOpenDialogEdit={handleOpenDialogEdit}
+              setCompany={setCompany}
             />
           </Stack>
         </Container>
       </Box>
-      <AddCompany openModal={openModal} handleCloseModal={handleCloseModal} />
+      <AddCompany
+        openModal={openModal}
+        handleCloseModal={handleCloseModal}
+        handleAddCompany={handleAddCompany}
+      />
+      <EditCompany
+        openDialogEdit={openDialogEdit}
+        handleCloseDialogEdit={handleCloseDialogEdit}
+        company={company}
+        handleEditCompany={handleEditCompany}
+      />
     </DashboardLayout>
   );
 };

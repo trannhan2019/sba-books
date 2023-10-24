@@ -1,6 +1,4 @@
-import { format } from "date-fns";
 import {
-  Avatar,
   Box,
   Card,
   Checkbox,
@@ -19,35 +17,73 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import { Scrollbar } from "@/components/Scrollbar";
 import { TableRowsLoader } from "./TableRowsLoader";
-import { useSelection } from "@/hooks/useSelection";
-import { items } from "@/layouts/DashboardLayout/config";
+import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 export const CompaniesTable = (props) => {
   const {
     onLoading,
     count = 0,
     items = [],
-    // onDeselectAll,
-    // onDeselectOne,
     onPageChange = () => {},
     onRowsPerPageChange,
-    // onSelectAll,
-    // onSelectOne,
     page = 0,
     rowsPerPage = 0,
-    // selected = [],
+    selected = [],
+    onSelected,
+    handleDeleteOne,
+    handleOpenDialogEdit,
+    setCompany,
   } = props;
 
-  const useCompaniesIds = (companies) => companies.map((company) => company.id);
+  //Selected
+  const getItemIds = (arrayItems) => items.map((item) => item.id);
 
-  const companiesIds = useCompaniesIds(items);
-  const companiesSelection = useSelection(companiesIds);
+  const handleSelectAll = () => {
+    onSelected([...getItemIds(items)]);
+  };
 
-  const selectedSome =
-    companiesSelection.selected.length > 0 &&
-    companiesSelection.selected.length < items.length;
-  const selectedAll =
-    items.length > 0 && companiesSelection.selected.length === items.length;
+  const handleSelectOne = (item) => {
+    onSelected((prevState) => [...prevState, item.id]);
+  };
+
+  const handleDeselectAll = () => {
+    onSelected([]);
+  };
+
+  const handleDeselectOne = (item) => {
+    onSelected((prevState) => {
+      return prevState.filter((_item) => _item !== item.id);
+    });
+  };
+
+  const selectedSome = selected.length > 0 && selected.length < items.length;
+  const selectedAll = items.length > 0 && selected.length === items.length;
+
+  useEffect(() => {
+    onSelected([]);
+  }, [items]);
+
+  //delete Fire Swal
+  const onDelete = (id) => {
+    Swal.fire({
+      icon: "info",
+      title: "Bạn có muốn xóa dữ liệu ?",
+      showCancelButton: true,
+      confirmButtonText: "Xác nhận",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDeleteOne(id);
+        Swal.fire("Saved!", "", "success");
+      }
+    });
+  };
+
+  //show edit
+  const showEdit = async (company) => {
+    setCompany(company);
+    handleOpenDialogEdit();
+  };
 
   return (
     <Card>
@@ -58,15 +94,15 @@ export const CompaniesTable = (props) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                  // checked={selectedAll}
-                  // indeterminate={selectedSome}
-                  // onChange={(event) => {
-                  //   if (event.target.checked) {
-                  //     onSelectAll?.();
-                  //   } else {
-                  //     onDeselectAll?.();
-                  //   }
-                  // }}
+                    checked={selectedAll}
+                    indeterminate={selectedSome}
+                    onChange={(event) => {
+                      if (event.target.checked) {
+                        handleSelectAll?.();
+                      } else {
+                        handleDeselectAll?.();
+                      }
+                    }}
                   />
                 </TableCell>
                 <TableCell>Tên Công ty</TableCell>
@@ -89,9 +125,7 @@ export const CompaniesTable = (props) => {
                   </TableRow>
                 ) : (
                   items.map((company) => {
-                    const isSelected = companiesSelection.selected.includes(
-                      company.id
-                    );
+                    const isSelected = selected.includes(company.id);
                     // const createdAt = format(customer.createdAt, "dd/MM/yyyy");
 
                     return (
@@ -101,13 +135,9 @@ export const CompaniesTable = (props) => {
                             checked={isSelected}
                             onChange={(event) => {
                               if (event.target.checked) {
-                                companiesSelection.handleSelectOne?.(
-                                  company.id
-                                );
+                                handleSelectOne?.(company);
                               } else {
-                                companiesSelection.handleDeselectOne?.(
-                                  company.id
-                                );
+                                handleDeselectOne?.(company);
                               }
                             }}
                           />
@@ -135,10 +165,10 @@ export const CompaniesTable = (props) => {
                         </TableCell>
                         <TableCell>
                           <Stack direction="row" gap={1}>
-                            <IconButton>
+                            <IconButton onClick={() => showEdit(company)}>
                               <EditNoteOutlinedIcon color="indigo" />
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={() => onDelete(company.id)}>
                               <DeleteOutlinedIcon color="error" />
                             </IconButton>
                           </Stack>

@@ -14,7 +14,6 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { apiStoreCompany } from "@/apis/company";
 
 const style = {
   position: "absolute",
@@ -25,7 +24,7 @@ const style = {
   bgcolor: "background.paper",
 };
 
-const AddCompany = ({ openModal, handleCloseModal }) => {
+const AddCompany = ({ openModal, handleCloseModal, handleAddCompany }) => {
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -37,16 +36,10 @@ const AddCompany = ({ openModal, handleCloseModal }) => {
       alias: Yup.string().max(255).required("Tên viết tắt không để trống"),
     }),
     onSubmit: async (values) => {
-      try {
-        const response = await apiStoreCompany(values);
-        // router.push('/');
-        toast.success("Tạo mới thành công");
-        formik.resetForm();
-        handleCloseModal();
-        console.log(response);
-      } catch (err) {
-        toast.error("Lỗi, tạo dữ liệu mới không thành công");
-      }
+      await handleAddCompany(values);
+      toast.success("Tạo mới thành công");
+      formik.resetForm();
+      handleCloseModal();
     },
   });
 
@@ -68,6 +61,7 @@ const AddCompany = ({ openModal, handleCloseModal }) => {
               <CardContent>
                 <Stack spacing={2}>
                   <TextField
+                    autoFocus
                     fullWidth
                     label="Tên Công ty"
                     type="text"
