@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\DepartmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,4 +27,8 @@ Route::prefix('company')->group(function () {
     Route::delete('/{id}', [CompanyController::class, 'destroy']);
     Route::get('/{id}', [CompanyController::class, 'show']);
     Route::put('/{id}', [CompanyController::class, 'update']);
+});
+
+Route::prefix('department')->group(function () {
+    Route::get('/', [DepartmentController::class, 'index']);
 });
