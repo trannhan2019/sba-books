@@ -39,3 +39,9 @@ export const apiGetCompany = (id) =>
     url: `/company/${id}`,
     method: "get",
   });
+
+export const apiGetAllCompanyforDepartment = () =>
+  axiosClient({
+    url: "/company",
+    method: "get",
+  });

@@ -13,6 +13,7 @@ class Department extends Model
         'name',
         'alias',
         'isActive',
+        'location',
         'company_id'
     ];
 

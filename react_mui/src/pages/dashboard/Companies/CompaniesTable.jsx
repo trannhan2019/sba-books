@@ -16,7 +16,7 @@ import {
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import { Scrollbar } from "@/components/Scrollbar";
-import { TableRowsLoader } from "./TableRowsLoader";
+import TableLoader from "@/components/TableLoader";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
 
@@ -112,7 +112,7 @@ export const CompaniesTable = (props) => {
               </TableRow>
             </TableHead>
             {onLoading ? (
-              <TableRowsLoader rowsNum={5} />
+              <TableLoader rowsNum={5} />
             ) : (
               <TableBody>
                 {items.length <= 0 ? (

@@ -25,10 +25,12 @@ Route::prefix('company')->group(function () {
     Route::post('/', [CompanyController::class, 'store']);
     Route::delete('/', [CompanyController::class, 'destroyAll']);
     Route::delete('/{id}', [CompanyController::class, 'destroy']);
-    Route::get('/{id}', [CompanyController::class, 'show']);
+    // Route::get('/{id}', [CompanyController::class, 'show']);// note bi de vo route getall
     Route::put('/{id}', [CompanyController::class, 'update']);
+    Route::get('/all', [CompanyController::class, 'getAll']);
 });
 
 Route::prefix('department')->group(function () {
+    Route::post('/', [DepartmentController::class, 'store']);
     Route::get('/', [DepartmentController::class, 'index']);
 });

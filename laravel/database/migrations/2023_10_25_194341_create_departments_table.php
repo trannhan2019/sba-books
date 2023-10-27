@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('alias');
             $table->boolean('isActive')->default(false);
+            $table->integer('location')->default(0);
             $table->timestamps();
             $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');

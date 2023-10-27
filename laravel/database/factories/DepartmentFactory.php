@@ -22,6 +22,7 @@ class DepartmentFactory extends Factory
             'alias' => fake()->title(),
             'isActive' => fake()->boolean(),
             'company_id' => Company::all()->random()->id,
+            'location' => 3
         ];
     }
 }

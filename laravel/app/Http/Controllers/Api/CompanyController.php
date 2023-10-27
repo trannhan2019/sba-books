@@ -51,10 +51,10 @@ class CompanyController extends Controller
         return response()->json('Companies deleted', 201);
     }
 
-    public function show($id)
-    {
-        return new CompanyResource(Company::findOrFail($id));
-    }
+    // public function show($id)
+    // {
+    //     return new CompanyResource(Company::findOrFail($id));
+    // }
 
     public function update(UpdateCompanyRequest $request, $id)
     {
@@ -65,5 +65,10 @@ class CompanyController extends Controller
 
         $company->save();
         return response()->json('Company updated', 201);
+    }
+
+    public function getAll(Request $request)
+    {
+        return CompanyResource::collection(Company::all()->oder());
     }
 }

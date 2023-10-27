@@ -1,6 +1,6 @@
 import { TableRow, TableCell, Skeleton, TableBody } from "@mui/material";
 
-export const TableRowsLoader = ({ rowsNum }) => {
+const TableLoader = ({ rowsNum }) => {
   return (
     <TableBody>
       {[...Array(rowsNum)].map((row, index) => (
@@ -22,3 +22,5 @@ export const TableRowsLoader = ({ rowsNum }) => {
     </TableBody>
   );
 };
+
+export default TableLoader;

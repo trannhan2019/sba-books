@@ -16,15 +16,16 @@ class DepartmentController extends Controller
         $department->name = $request->name;
         $department->alias = $request->alias;
         $department->isActive = $request->isActive;
+        $department->location = $request->location;
         $department->company_id = $request->company_id;
 
         $department->save();
         return response()->json("New Department created", 201);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $deparments = Department::with('company')->get();
+        // $deparments = Department::with('company')->get();
         // $companies = $deparments->company;
         // foreach ($deparments as $department) {
 
@@ -33,6 +34,6 @@ class DepartmentController extends Controller
         // $company = Company::find(11);
         // $deparments = $company->departments;
 
-        return response()->json($deparments);
+        return response()->json($request);
     }
 }
