@@ -39,3 +39,9 @@ export const apiGetDepartment = (id) =>
     url: `/department/${id}`,
     method: "get",
   });
+
+export const apiGetCountDepartment = () =>
+  axiosClient({
+    url: "/department/count",
+    method: "get",
+  });

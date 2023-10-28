@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -11,9 +11,12 @@ import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIc
 import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import useDebounce from "@/hooks/useDebounce";
-import { toast } from "react-toastify";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import AddDepartment from "./AddDepartment";
+import { apiGetAllDepartment } from "@/apis/department";
+import ListDepartment from "./ListDepartment";
+import { apiGetAllCompanyforSelect } from "@/apis/company";
+import EditDepartment from "./EditDepartment";
 
 const Departments = () => {
   //Add ///////////////
@@ -21,16 +24,61 @@ const Departments = () => {
   const handleOpenAddForm = () => setOpenAddForm(true);
   const handleCloseAddForm = () => setOpenAddForm(false);
 
-  //   const handleAddCompany = async (values) => {
-  //     try {
-  //       await apiStoreCompany(values);
-  //       toast.success("Tạo mới thành công");
-  //       fetchCompanies();
-  //     } catch (error) {
-  //       console.log("add company", error);
-  //       toast.error("Lỗi không thêm được thông tin");
-  //     }
-  //   };
+  //Edit ///////////////
+  const [openEditForm, setOpenEditForm] = useState(false);
+  const handleOpenEditForm = () => setOpenEditForm(true);
+  const handleCloseEditForm = () => setOpenEditForm(false);
+
+  const [department, setDepartment] = useState(null);
+
+  //load fetch departments
+  const [departments, setDepartments] = useState([]);
+  const [loadingData, setLoadingData] = useState(false);
+
+  const [pageMui, setPageMui] = useState(0);
+  const [page, setPage] = useState(1);
+  const handlePageChange = (event, value) => {
+    setPageMui(value);
+    setPage(value + 1);
+  };
+
+  const [itemPerPage, setItemPerPage] = useState(5);
+  const handleRowsPerPageChange = (event) => {
+    setItemPerPage(event.target.value);
+  };
+
+  const [search, setSearch] = useState("");
+
+  const fetchDepartments = async (page, item_per_page, search) => {
+    try {
+      setLoadingData(true);
+      const response = await apiGetAllDepartment({
+        page,
+        item_per_page,
+        search,
+      });
+      setDepartments(response);
+      setLoadingData(false);
+    } catch (error) {
+      setLoadingData(false);
+      console.log("get all department", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDepartments(page, itemPerPage, search);
+  }, [page, itemPerPage, search]);
+
+  //lay danh sach company de truyen den add va edit form
+  const getCompanyList = async () => {
+    const response = await apiGetAllCompanyforSelect();
+    setCompanyList(response.data);
+  };
+  const [companyList, setCompanyList] = useState([]);
+  useEffect(() => {
+    getCompanyList();
+  }, []);
+
   console.log("deparment render");
   return (
     <DashboardLayout>
@@ -64,34 +112,38 @@ const Departments = () => {
               selected={selected}
               handleDeleteAll={handleDeleteAll}
             /> */}
-            {/* <CompaniesTable
+            <ListDepartment
               onLoading={loadingData}
-              count={companies?.meta?.total}
-              items={companies?.data}
-              page={page}
+              count={departments?.meta?.total}
+              items={departments?.data}
+              page={pageMui}
               rowsPerPage={itemPerPage}
               onRowsPerPageChange={handleRowsPerPageChange}
               onPageChange={handlePageChange}
-              selected={selected}
-              onSelected={setSelected}
-              handleDeleteOne={handleDeleteOne}
-              handleOpenDialogEdit={handleOpenDialogEdit}
-              setCompany={setCompany}
-            /> */}
+              // selected={selected}
+              // onSelected={setSelected}
+              // handleDeleteOne={handleDeleteOne}
+              handleOpenEditForm={handleOpenEditForm}
+              setDepartment={setDepartment}
+            />
           </Stack>
         </Container>
       </Box>
       <AddDepartment
         openAddForm={openAddForm}
         handleCloseAddForm={handleCloseAddForm}
-        // handleAddCompany={handleAddCompany}
+        handleRefreshData={fetchDepartments}
+        companyList={companyList}
+        setPageMui={setPageMui}
       />
-      {/* <EditCompany
-        openDialogEdit={openDialogEdit}
-        handleCloseDialogEdit={handleCloseDialogEdit}
-        company={company}
-        handleEditCompany={handleEditCompany}
-      /> */}
+      <EditDepartment
+        openEditForm={openEditForm}
+        handleCloseEditForm={handleCloseEditForm}
+        handleRefreshData={fetchDepartments}
+        companyList={companyList}
+        department={department}
+        setPageMui={setPageMui}
+      />
     </DashboardLayout>
   );
 };

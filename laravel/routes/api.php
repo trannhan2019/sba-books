@@ -33,4 +33,6 @@ Route::prefix('company')->group(function () {
 Route::prefix('department')->group(function () {
     Route::post('/', [DepartmentController::class, 'store']);
     Route::get('/', [DepartmentController::class, 'index']);
+    Route::get('/count', [DepartmentController::class, 'getCount']);
+    Route::put('/{id}', [DepartmentController::class, 'update']);
 });

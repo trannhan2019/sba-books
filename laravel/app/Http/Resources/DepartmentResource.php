@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CompanyResource extends JsonResource
+class DepartmentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,17 +18,11 @@ class CompanyResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'alias' => $this->alias,
+            'location' => $this->location,
             'isActive' => $this->isActive,
+            'company' => $this->company->only('id', 'name'),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-        ];
-    }
-
-    public function with(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
         ];
     }
 }

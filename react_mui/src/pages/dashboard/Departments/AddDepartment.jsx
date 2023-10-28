@@ -9,53 +9,77 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import {
-  Autocomplete,
   Box,
   Button,
+  FormControl,
   FormControlLabel,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
   Switch,
 } from "@mui/material";
-import { apiStoreDepartment } from "@/apis/department";
+import { apiGetCountDepartment, apiStoreDepartment } from "@/apis/department";
+import { apiGetAllCompanyforSelect } from "@/apis/company";
 
 const scheme = Yup.object({
   name: Yup.string().required("Tên Phòng ban không để trống"),
   alias: Yup.string().required("Tên viết tắt không để trống"),
   location: Yup.number().required("Thứ tự không được để trống"),
-  company_id: Yup.string().required(),
+  company_id: Yup.string().required("Chọn Công ty"),
 }).required();
 
-const AddDepartment = ({ openAddForm, handleCloseAddForm }) => {
-  const [companyList, setCompanyList] = useState([]);
+const AddDepartment = ({
+  openAddForm,
+  handleCloseAddForm,
+  handleRefreshData,
+  companyList,
+  setPageMui,
+}) => {
+  const [countDepartment, setcountDepartment] = useState(0);
 
   const { control, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
       name: "",
       alias: "",
       isActive: true,
-      location: 0, //call api get count +1
+      location: countDepartment > 0 ? countDepartment : 0,
       company_id: "",
     },
     resolver: yupResolver(scheme),
   });
 
   const onSubmit = async (values) => {
-    console.log(values);
-    // try {
-    //   await apiStoreDepartment(values);
-    //   reset();
-    //   handleCloseAddForm();
-    //   toast.success("Tạo mới thành công");
-    //   //       fetchCompanies();
-    // } catch (error) {
-    //   console.log("add department", error);
-    //   toast.error("Lỗi không thêm được thông tin");
-    // }
+    // console.log(values);
+    try {
+      await apiStoreDepartment(values);
+      reset();
+      handleCloseAddForm();
+      setPageMui(0); //set lai panigation cua MUI
+      toast.success("Tạo mới thành công");
+      //refresh Data
+      handleRefreshData();
+    } catch (error) {
+      console.log("add department", error);
+      toast.error("Lỗi không thêm được thông tin");
+    }
   };
 
+  const fetchData = async () => {
+    try {
+      const rescountDepartment = await apiGetCountDepartment();
+      setcountDepartment(rescountDepartment + 1);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    setCompanyList();
-    setValue();
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    setValue("location", countDepartment);
+  }, [openAddForm]);
 
   console.log("add department render");
 
@@ -68,7 +92,7 @@ const AddDepartment = ({ openAddForm, handleCloseAddForm }) => {
         maxWidth="sm"
         fullWidth
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <DialogTitle sx={{ mb: 2 }}>Thêm thông tin</DialogTitle>
           <DialogContent>
             <Controller
@@ -78,31 +102,27 @@ const AddDepartment = ({ openAddForm, handleCloseAddForm }) => {
                 field: { onChange, value },
                 fieldState: { error },
               }) => (
-                <Autocomplete
-                  //   disablePortal
-                  fullWidth
-                  onChange={(event, item) => {
-                    onChange(item);
-                  }}
-                  value={value}
-                  options={itemList}
-                  getOptionLabel={(item) => (item.name ? item.name : "")}
-                  getOptionSelected={(option, value) =>
-                    value === undefined ||
-                    value === "" ||
-                    option.id === value.id
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      margin="normal"
-                      required
-                      label="Chọn Công ty"
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                />
+                <FormControl fullWidth required error={!!error}>
+                  <InputLabel id="demo-simple-select-label">
+                    Chọn Công ty
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={value}
+                    label="Chọn Công ty"
+                    onChange={onChange}
+                    error={!!error}
+                  >
+                    {companyList.length > 0 &&
+                      companyList.map((item) => (
+                        <MenuItem key={item.id} value={item.id}>
+                          {item.name}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                  <FormHelperText>{error?.message}</FormHelperText>
+                </FormControl>
               )}
             />
             <Controller
@@ -189,6 +209,9 @@ const AddDepartment = ({ openAddForm, handleCloseAddForm }) => {
                   value={value}
                   error={!!error}
                   helperText={error ? error.message : null}
+                  InputProps={{
+                    inputProps: { min: 0 },
+                  }}
                 />
               )}
             />

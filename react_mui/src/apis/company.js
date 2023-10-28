@@ -40,8 +40,8 @@ export const apiGetCompany = (id) =>
     method: "get",
   });
 
-export const apiGetAllCompanyforDepartment = () =>
+export const apiGetAllCompanyforSelect = () =>
   axiosClient({
-    url: "/company",
+    url: "/company/all",
     method: "get",
   });

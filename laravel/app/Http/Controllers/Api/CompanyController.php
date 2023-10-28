@@ -67,8 +67,8 @@ class CompanyController extends Controller
         return response()->json('Company updated', 201);
     }
 
-    public function getAll(Request $request)
+    public function getAll()
     {
-        return CompanyResource::collection(Company::all()->oder());
+        return CompanyResource::collection(Company::orderBy('alias')->get());
     }
 }

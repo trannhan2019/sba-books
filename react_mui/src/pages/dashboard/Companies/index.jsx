@@ -46,9 +46,11 @@ const Companies = () => {
   const [selected, setSelected] = useState([]);
 
   //load companies
-  const [page, setPage] = useState(0);
+  const [pageMui, setPageMui] = useState(0);
+  const [page, setPage] = useState(1);
   const handlePageChange = (event, value) => {
-    setPage(value);
+    setPageMui(value);
+    setPage(value + 1);
   };
 
   const [itemPerPage, setItemPerPage] = useState(5);
@@ -70,7 +72,7 @@ const Companies = () => {
         item_per_page,
         search_name,
       });
-      setCompanies(response.data);
+      setCompanies(response);
       setLoadingData(false);
     } catch (error) {
       setLoadingData(false);
@@ -180,7 +182,7 @@ const Companies = () => {
               onLoading={loadingData}
               count={companies?.meta?.total}
               items={companies?.data}
-              page={page}
+              page={pageMui}
               rowsPerPage={itemPerPage}
               onRowsPerPageChange={handleRowsPerPageChange}
               onPageChange={handlePageChange}
