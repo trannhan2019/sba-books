@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\DepartmentController;
+use App\Http\Controllers\Api\RoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,4 +36,13 @@ Route::prefix('department')->group(function () {
     Route::get('/', [DepartmentController::class, 'index']);
     Route::get('/count', [DepartmentController::class, 'getCount']);
     Route::put('/{id}', [DepartmentController::class, 'update']);
+    Route::delete('/', [DepartmentController::class, 'destroyAll']);
+    Route::delete('/{id}', [DepartmentController::class, 'destroy']);
+});
+
+Route::prefix('role')->group(function () {
+    Route::post('/', [RoleController::class, 'store']);
+    Route::get('/', [RoleController::class, 'index']);
+    Route::put('/{id}', [RoleController::class, 'update']);
+    Route::delete('/{id}', [RoleController::class, 'destroy']);
 });

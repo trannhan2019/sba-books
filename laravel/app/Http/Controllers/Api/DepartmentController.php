@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Department\DeleteDepartmentRequest;
 use App\Http\Requests\Department\StoreDepartmentRequest;
 use App\Http\Requests\Department\UpdateDepartmentRequest;
 use App\Http\Resources\DepartmentResource;
-use App\Models\Company;
 use App\Models\Department;
 use Illuminate\Http\Request;
 
@@ -36,9 +36,6 @@ class DepartmentController extends Controller
         }
 
         return DepartmentResource::collection($deparments->with('company')->orderBy('location')->paginate($itemPerPage));
-        // return response()->json($deparments->with(['company' => function ($query) {
-        //     $query->select('id', 'name');
-        // }])->paginate($itemPerPage));
     }
 
     public function getCount()
@@ -58,5 +55,19 @@ class DepartmentController extends Controller
 
         $department->save();
         return response()->json('Department updated', 201);
+    }
+
+    public function destroy($id)
+    {
+        Department::findOrFail($id)->delete();
+        return response()->json('Department deleted', 201);
+    }
+
+    public function destroyAll(DeleteDepartmentRequest $request)
+    {
+        // return response()->json($request);
+        $ids = $request->ids;
+        Department::destroy($ids);
+        return response()->json('Companies deleted', 201);
     }
 }

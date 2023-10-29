@@ -19,6 +19,7 @@ import { Scrollbar } from "@/components/Scrollbar";
 import TableLoader from "@/components/TableLoader";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
+import { useSelection } from "@/hooks/useSelection";
 
 export const CompaniesTable = (props) => {
   const {
@@ -37,7 +38,7 @@ export const CompaniesTable = (props) => {
   } = props;
 
   //Selected
-  const getItemIds = (arrayItems) => items.map((item) => item.id);
+  const getItemIds = (arrayItems) => arrayItems.map((item) => item.id);
 
   const handleSelectAll = () => {
     onSelected([...getItemIds(items)]);
@@ -112,7 +113,7 @@ export const CompaniesTable = (props) => {
               </TableRow>
             </TableHead>
             {onLoading ? (
-              <TableLoader rowsNum={5} />
+              <TableLoader rowsNum={5} colsNum={4} />
             ) : (
               <TableBody>
                 {items.length <= 0 ? (

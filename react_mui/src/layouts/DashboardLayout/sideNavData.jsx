@@ -8,6 +8,7 @@ import RectangleGroupIcon from "@heroicons/react/24/solid/RectangleGroupIcon";
 import XCircleIcon from "@heroicons/react/24/solid/XCircleIcon";
 import BuildingOffice2Icon from "@heroicons/react/24/solid/BuildingOffice2Icon";
 import { SvgIcon } from "@mui/material";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 export const items = [
   {
@@ -21,7 +22,7 @@ export const items = [
   },
   {
     title: "Công ty",
-    path: "/companies",
+    path: "/company",
     icon: (
       <SvgIcon fontSize="small">
         <BuildingOffice2Icon />
@@ -30,12 +31,17 @@ export const items = [
   },
   {
     title: "Phòng Ban",
-    path: "/departments",
+    path: "/department",
     icon: (
       <SvgIcon fontSize="small">
         <RectangleGroupIcon />
       </SvgIcon>
     ),
+  },
+  {
+    title: "Quản lý Quyền",
+    path: "/role",
+    icon: <AdminPanelSettingsIcon fontSize="small" />,
   },
   {
     title: "Account",

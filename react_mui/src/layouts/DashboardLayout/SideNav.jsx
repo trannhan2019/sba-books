@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import Logo from "@/components/Logo";
 import { Scrollbar } from "@/components/Scrollbar";
-import { items } from "./config";
+import { items } from "./sideNavData";
 import { SideNavItem } from "./SideNavItem";
 
 export const SideNav = (props) => {

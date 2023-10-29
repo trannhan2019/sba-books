@@ -7,8 +7,6 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
-import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
-import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import useDebounce from "@/hooks/useDebounce";
 import DashboardLayout from "@/layouts/DashboardLayout";
@@ -17,8 +15,14 @@ import { apiGetAllDepartment } from "@/apis/department";
 import ListDepartment from "./ListDepartment";
 import { apiGetAllCompanyforSelect } from "@/apis/company";
 import EditDepartment from "./EditDepartment";
+import SearchDepartment from "./SearchDepartment";
 
 const Departments = () => {
+  //search
+  const [search, setSearch] = useState("");
+  const searchDebounce = useDebounce(search, 800);
+  console.log(searchDebounce);
+
   //Add ///////////////
   const [openAddForm, setOpenAddForm] = useState(false);
   const handleOpenAddForm = () => setOpenAddForm(true);
@@ -30,6 +34,9 @@ const Departments = () => {
   const handleCloseEditForm = () => setOpenEditForm(false);
 
   const [department, setDepartment] = useState(null);
+
+  //set refresh department tai vi tri sau khi them va sua
+  const [reloadPage, setReloadPage] = useState(false);
 
   //load fetch departments
   const [departments, setDepartments] = useState([]);
@@ -46,8 +53,6 @@ const Departments = () => {
   const handleRowsPerPageChange = (event) => {
     setItemPerPage(event.target.value);
   };
-
-  const [search, setSearch] = useState("");
 
   const fetchDepartments = async (page, item_per_page, search) => {
     try {
@@ -67,7 +72,7 @@ const Departments = () => {
 
   useEffect(() => {
     fetchDepartments(page, itemPerPage, search);
-  }, [page, itemPerPage, search]);
+  }, [page, itemPerPage, searchDebounce, reloadPage]);
 
   //lay danh sach company de truyen den add va edit form
   const getCompanyList = async () => {
@@ -79,7 +84,7 @@ const Departments = () => {
     getCompanyList();
   }, []);
 
-  console.log("deparment render");
+  console.log("deparment render", reloadPage);
   return (
     <DashboardLayout>
       <Box
@@ -107,11 +112,7 @@ const Departments = () => {
                 </Button>
               </div>
             </Stack>
-            {/* <SearchBar
-              onSearchName={setSearchName}
-              selected={selected}
-              handleDeleteAll={handleDeleteAll}
-            /> */}
+            <SearchDepartment onSearch={setSearch} />
             <ListDepartment
               onLoading={loadingData}
               count={departments?.meta?.total}
@@ -120,11 +121,9 @@ const Departments = () => {
               rowsPerPage={itemPerPage}
               onRowsPerPageChange={handleRowsPerPageChange}
               onPageChange={handlePageChange}
-              // selected={selected}
-              // onSelected={setSelected}
-              // handleDeleteOne={handleDeleteOne}
               handleOpenEditForm={handleOpenEditForm}
               setDepartment={setDepartment}
+              setReloadPage={setReloadPage}
             />
           </Stack>
         </Container>
@@ -132,17 +131,15 @@ const Departments = () => {
       <AddDepartment
         openAddForm={openAddForm}
         handleCloseAddForm={handleCloseAddForm}
-        handleRefreshData={fetchDepartments}
         companyList={companyList}
-        setPageMui={setPageMui}
+        setReloadPage={setReloadPage}
       />
       <EditDepartment
         openEditForm={openEditForm}
         handleCloseEditForm={handleCloseEditForm}
-        handleRefreshData={fetchDepartments}
         companyList={companyList}
         department={department}
-        setPageMui={setPageMui}
+        setReloadPage={setReloadPage}
       />
     </DashboardLayout>
   );

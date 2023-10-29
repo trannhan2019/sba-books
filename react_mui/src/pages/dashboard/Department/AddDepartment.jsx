@@ -20,7 +20,6 @@ import {
   Switch,
 } from "@mui/material";
 import { apiGetCountDepartment, apiStoreDepartment } from "@/apis/department";
-import { apiGetAllCompanyforSelect } from "@/apis/company";
 
 const scheme = Yup.object({
   name: Yup.string().required("Tên Phòng ban không để trống"),
@@ -32,9 +31,8 @@ const scheme = Yup.object({
 const AddDepartment = ({
   openAddForm,
   handleCloseAddForm,
-  handleRefreshData,
   companyList,
-  setPageMui,
+  setReloadPage,
 }) => {
   const [countDepartment, setcountDepartment] = useState(0);
 
@@ -55,10 +53,8 @@ const AddDepartment = ({
       await apiStoreDepartment(values);
       reset();
       handleCloseAddForm();
-      setPageMui(0); //set lai panigation cua MUI
+      setReloadPage((preState) => !preState);
       toast.success("Tạo mới thành công");
-      //refresh Data
-      handleRefreshData();
     } catch (error) {
       console.log("add department", error);
       toast.error("Lỗi không thêm được thông tin");

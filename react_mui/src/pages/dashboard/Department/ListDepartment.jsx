@@ -1,6 +1,6 @@
-import { useEffect } from "react";
 import {
   Box,
+  Button,
   Card,
   Checkbox,
   Chip,
@@ -14,11 +14,14 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { toast } from "react-toastify";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import { Scrollbar } from "@/components/Scrollbar";
 import TableLoader from "@/components/TableLoader";
 import Swal from "sweetalert2";
+import { apiDeleteDepartment, apiDeleteDepartments } from "@/apis/department";
+import { useSelection } from "@/hooks/useSelection";
 
 const ListDepartment = (props) => {
   const {
@@ -29,20 +32,83 @@ const ListDepartment = (props) => {
     onRowsPerPageChange,
     page = 0,
     rowsPerPage = 0,
-    // selected = [],
-    // onSelected,
-    // handleDeleteOne,
     handleOpenEditForm,
     setDepartment,
+    setReloadPage,
   } = props;
+
+  //seleted
+  const departmentSelected = useSelection(items);
+  const selectedSome =
+    departmentSelected.selected.length > 0 &&
+    departmentSelected.selected.length < items.length;
+  const selectedAll =
+    items.length > 0 && departmentSelected.selected.length === items.length;
 
   //show edit
   const showEdit = async (department) => {
     setDepartment(department);
     handleOpenEditForm();
   };
+  //handel Del single
+  const handleDeleteDepartment = (id) => {
+    Swal.fire({
+      icon: "info",
+      title: "Bạn có muốn xóa dữ liệu ?",
+      showCancelButton: true,
+      confirmButtonText: "Xác nhận",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await apiDeleteDepartment(id);
+          setReloadPage((preState) => !preState);
+          Swal.fire("Saved!", "", "success");
+        } catch (error) {
+          console.log("delete department", error);
+          // Swal.showValidationMessage("Lỗi không xóa được thông tin");
+          toast.error("Lỗi không xóa được thông tin");
+        }
+      }
+    });
+  };
+  const handleDeleteAllDepartment = () => {
+    Swal.fire({
+      icon: "info",
+      title: "Bạn có muốn xóa dữ liệu ?",
+      showCancelButton: true,
+      confirmButtonText: "Xác nhận",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await apiDeleteDepartments({ ids: departmentSelected.selected });
+          setReloadPage((preState) => !preState);
+          Swal.fire("Saved!", "", "success");
+        } catch (error) {
+          console.log("delete department", error);
+          // Swal.showValidationMessage("Lỗi không xóa được thông tin");
+          toast.error("Lỗi không xóa được thông tin");
+        }
+      }
+    });
+  };
+
   return (
     <Card>
+      {departmentSelected.selected.length > 0 && (
+        <Box
+          sx={{ display: "flex", justifyContent: "end", pr: 7, paddingY: 1 }}
+        >
+          <Button
+            onClick={() => handleDeleteAllDepartment()}
+            size="small"
+            startIcon={<DeleteOutlinedIcon />}
+            variant="contained"
+            color="error"
+          >
+            Delete
+          </Button>
+        </Box>
+      )}
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
           <Table>
@@ -50,15 +116,15 @@ const ListDepartment = (props) => {
               <TableRow>
                 <TableCell padding="checkbox">
                   <Checkbox
-                  // checked={selectedAll}
-                  // indeterminate={selectedSome}
-                  // onChange={(event) => {
-                  //   if (event.target.checked) {
-                  //     handleSelectAll?.();
-                  //   } else {
-                  //     handleDeselectAll?.();
-                  //   }
-                  // }}
+                    checked={selectedAll}
+                    indeterminate={selectedSome}
+                    onChange={(event) => {
+                      if (event.target.checked) {
+                        departmentSelected.handleSelectAll?.();
+                      } else {
+                        departmentSelected.handleDeselectAll?.();
+                      }
+                    }}
                   />
                 </TableCell>
                 <TableCell>Tên Phòng ban</TableCell>
@@ -69,7 +135,7 @@ const ListDepartment = (props) => {
               </TableRow>
             </TableHead>
             {onLoading ? (
-              <TableLoader rowsNum={8} />
+              <TableLoader rowsNum={8} colsNum={5} />
             ) : (
               <TableBody>
                 {items.length <= 0 ? (
@@ -82,24 +148,26 @@ const ListDepartment = (props) => {
                   </TableRow>
                 ) : (
                   items.map((department) => {
-                    // const isSelected = selected.includes(company.id);
+                    const isSelected = departmentSelected.selected.includes(
+                      department.id
+                    );
 
                     return (
-                      <TableRow
-                        hover
-                        key={department.id}
-                        //   selected={isSelected}
-                      >
+                      <TableRow hover key={department.id} selected={isSelected}>
                         <TableCell padding="checkbox">
                           <Checkbox
-                          // checked={isSelected}
-                          // onChange={(event) => {
-                          //   if (event.target.checked) {
-                          //     handleSelectOne?.(company);
-                          //   } else {
-                          //     handleDeselectOne?.(company);
-                          //   }
-                          // }}
+                            checked={isSelected}
+                            onChange={(event) => {
+                              if (event.target.checked) {
+                                departmentSelected.handleSelectOne?.(
+                                  department
+                                );
+                              } else {
+                                departmentSelected.handleDeselectOne?.(
+                                  department
+                                );
+                              }
+                            }}
                           />
                         </TableCell>
                         <TableCell>
@@ -130,7 +198,9 @@ const ListDepartment = (props) => {
                               <EditNoteOutlinedIcon color="indigo" />
                             </IconButton>
                             <IconButton
-                            // onClick={() => onDelete(company.id)}
+                              onClick={() =>
+                                handleDeleteDepartment(department.id)
+                              }
                             >
                               <DeleteOutlinedIcon color="error" />
                             </IconButton>

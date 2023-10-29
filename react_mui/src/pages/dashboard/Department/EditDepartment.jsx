@@ -31,10 +31,9 @@ const scheme = Yup.object({
 const EditDepartment = ({
   openEditForm,
   handleCloseEditForm,
-  handleRefreshData,
   companyList,
   department,
-  setPageMui,
+  setReloadPage,
 }) => {
   const { control, handleSubmit, reset, setValue } = useForm({
     // defaultValues: {
@@ -53,10 +52,8 @@ const EditDepartment = ({
       await apiUpdateDepartment(values, department.id);
       reset();
       handleCloseEditForm();
-      setPageMui(0); //set lai panigation cua MUI
+      setReloadPage((preState) => !preState);
       toast.success("Sửa thông tin thành công");
-      //refresh Data
-      handleRefreshData();
     } catch (error) {
       console.log("edit department", error);
       toast.error("Lỗi không sửa được thông tin");
@@ -167,7 +164,7 @@ const EditDepartment = ({
               render={({ field: { value, onChange } }) => (
                 <FormControlLabel
                   sx={{ justifyContent: "start", ml: 0, mt: 1 }}
-                  control={<Switch checked={value} onChange={onChange} />}
+                  control={<Switch checked={!!value} onChange={onChange} />}
                   label="Trạng thái"
                   labelPlacement="start"
                 />
