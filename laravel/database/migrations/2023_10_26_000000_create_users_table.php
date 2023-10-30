@@ -17,8 +17,13 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('isActive')->default(true);
+            $table->integer('location')->default(0);
             $table->rememberToken();
+            $table->string('photo')->nullable();
             $table->timestamps();
+            $table->unsignedBigInteger('department_id');
+            $table->foreign('department_id')->references('id')->on('departments');
         });
     }
 

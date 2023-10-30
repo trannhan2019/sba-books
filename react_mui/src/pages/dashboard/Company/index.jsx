@@ -26,7 +26,7 @@ import useDebounce from "@/hooks/useDebounce";
 import { toast } from "react-toastify";
 import EditCompany from "./EditCompany";
 
-const Companies = () => {
+const Company = () => {
   //Add modal
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
@@ -210,4 +210,4 @@ const Companies = () => {
   );
 };
 
-export default Companies;
+export default Company;

@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Company;
 use App\Models\Department;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,7 +22,15 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        Company::factory(10)->create();
-        Department::factory(50)->create();
+        // Company::factory()->create();
+
+        // Department::factory()->create();
+
+
+        // Role::factory()->create([
+        //     ['name' => 'user', 'guard_name' => 'web'],
+        //     ['name' => 'manager', 'guard_name' => 'web'],
+        //     ['name' => 'administrator', 'guard_name' => 'web'],
+        // ]);
     }
 }

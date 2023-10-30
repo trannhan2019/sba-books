@@ -10,14 +10,14 @@ import {
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import useDebounce from "@/hooks/useDebounce";
 import DashboardLayout from "@/layouts/DashboardLayout";
-import AddDepartment from "./AddDepartment";
-import { apiGetAllDepartment } from "@/apis/department";
-import ListDepartment from "./ListDepartment";
-import { apiGetAllCompanyforSelect } from "@/apis/company";
-import EditDepartment from "./EditDepartment";
-import SearchDepartment from "./SearchDepartment";
+import AddUser from "./AddUser";
+// import { apiGetAllDepartment } from "@/apis/department";
+// import ListDepartment from "./ListDepartment";
+// import { apiGetAllCompanyforSelect } from "@/apis/company";
+// import EditDepartment from "./EditDepartment";
+// import SearchDepartment from "./SearchDepartment";
 
-const Department = () => {
+const User = () => {
   //search
   const [search, setSearch] = useState("");
   const searchDebounce = useDebounce(search, 800);
@@ -25,8 +25,6 @@ const Department = () => {
 
   //Add ///////////////
   const [openAddForm, setOpenAddForm] = useState(false);
-  const handleOpenAddForm = () => setOpenAddForm(true);
-  const handleCloseAddForm = () => setOpenAddForm(false);
 
   //Edit ///////////////
   const [openEditForm, setOpenEditForm] = useState(false);
@@ -75,14 +73,14 @@ const Department = () => {
   }, [page, itemPerPage, searchDebounce, reloadPage]);
 
   //lay danh sach company de truyen den add va edit form
-  const getCompanyList = async () => {
-    const response = await apiGetAllCompanyforSelect();
-    setCompanyList(response.data);
-  };
-  const [companyList, setCompanyList] = useState([]);
-  useEffect(() => {
-    getCompanyList();
-  }, []);
+  // const getCompanyList = async () => {
+  //   const response = await apiGetAllCompanyforSelect();
+  //   setCompanyList(response.data);
+  // };
+  // const [companyList, setCompanyList] = useState([]);
+  // useEffect(() => {
+  //   getCompanyList();
+  // }, []);
 
   console.log("deparment render", reloadPage);
   return (
@@ -97,10 +95,10 @@ const Department = () => {
         <Container maxWidth="xl">
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
-              <Typography variant="h4">Danh sách Phòng Ban</Typography>
+              <Typography variant="h4">Danh sách người dùng</Typography>
               <div>
                 <Button
-                  onClick={handleOpenAddForm}
+                  onClick={() => setOpenAddForm(true)}
                   startIcon={
                     <SvgIcon fontSize="small">
                       <PlusIcon />
@@ -112,7 +110,7 @@ const Department = () => {
                 </Button>
               </div>
             </Stack>
-            <SearchDepartment onSearch={setSearch} />
+            {/* <SearchDepartment onSearch={setSearch} />
             <ListDepartment
               onLoading={loadingData}
               count={departments?.meta?.total}
@@ -124,25 +122,25 @@ const Department = () => {
               handleOpenEditForm={handleOpenEditForm}
               setDepartment={setDepartment}
               setReloadPage={setReloadPage}
-            />
+            /> */}
           </Stack>
         </Container>
       </Box>
-      <AddDepartment
+      <AddUser
         openAddForm={openAddForm}
-        handleCloseAddForm={handleCloseAddForm}
-        companyList={companyList}
-        setReloadPage={setReloadPage}
+        setOpenAddForm={setOpenAddForm}
+        // companyList={companyList}
+        // setReloadPage={setReloadPage}
       />
-      <EditDepartment
+      {/* <EditDepartment
         openEditForm={openEditForm}
         handleCloseEditForm={handleCloseEditForm}
         companyList={companyList}
         department={department}
         setReloadPage={setReloadPage}
-      />
+      /> */}
     </DashboardLayout>
   );
 };
 
-export default Department;
+export default User;

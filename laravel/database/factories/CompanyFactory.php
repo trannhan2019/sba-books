@@ -17,9 +17,9 @@ class CompanyFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'alias' => fake()->title(),
-            'isActive' => fake()->boolean(),
+            'name' => 'Công ty cổ phần Sông Ba',
+            'alias' => 'SBA',
+            'isActive' => true
         ];
     }
 }
