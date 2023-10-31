@@ -14,6 +14,12 @@ export const apiGetAllDepartment = (params) =>
     params,
   });
 
+export const apiGetListDepartment = () =>
+  axiosClient({
+    url: "/department/all",
+    method: "get",
+  });
+
 export const apiDeleteDepartment = (id) =>
   axiosClient({
     url: `/department/${id}`,

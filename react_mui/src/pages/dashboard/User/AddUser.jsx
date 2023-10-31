@@ -23,31 +23,36 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { apiGetCountDepartment, apiStoreDepartment } from "@/apis/department";
+import { apiStoreUser } from "@/apis/user";
 
 const scheme = Yup.object({
-  name: Yup.string().required("Tên Phòng ban không để trống"),
-  alias: Yup.string().required("Tên viết tắt không để trống"),
+  name: Yup.string().required("Tên người dùng không để trống"),
+  username: Yup.string().required("Tên đăng nhậP không để trống"),
+  password: Yup.string().min(6).required("Mật khẩu không để trống"),
   location: Yup.number().required("Thứ tự không được để trống"),
-  company_id: Yup.string().required("Chọn Công ty"),
+  isActive: Yup.boolean().required(),
+  department_id: Yup.string().required("Chọn phòng ban"),
+  role: Yup.string().required("Chọn quuyền"),
 }).required();
 
 const AddUser = ({
   openAddForm,
   setOpenAddForm,
-  companyList,
+  departmentList,
   setReloadPage,
+  roleList,
 }) => {
-  const [countDepartment, setcountDepartment] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { control, handleSubmit, reset, setValue } = useForm({
+  const { control, handleSubmit, reset, setError } = useForm({
     defaultValues: {
       name: "",
-      alias: "",
+      username: "",
       isActive: true,
-      location: countDepartment > 0 ? countDepartment : 0,
-      company_id: "",
+      location: 0,
+      department_id: "",
+      role: "",
+      password: "",
     },
     resolver: yupResolver(scheme),
   });
@@ -55,41 +60,28 @@ const AddUser = ({
   const onSubmit = async (values) => {
     // console.log(values);
     try {
-      await apiStoreDepartment(values);
+      await apiStoreUser(values);
       reset();
-      handleCloseAddForm();
+      setOpenAddForm(false);
       setReloadPage((preState) => !preState);
       toast.success("Tạo mới thành công");
     } catch (error) {
-      console.log("add department", error);
-      toast.error("Lỗi không thêm được thông tin");
+      if (error.status === 422 && error.data.errors.username) {
+        setError("username", error.data.message);
+        toast.error("Tên đăng nhập đã tồn tại");
+      } else {
+        console.log("add department", error);
+        toast.error("Lỗi không thêm được thông tin");
+      }
     }
   };
-
-  const fetchData = async () => {
-    try {
-      const rescountDepartment = await apiGetCountDepartment();
-      setcountDepartment(rescountDepartment + 1);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    setValue("location", countDepartment);
-  }, [openAddForm]);
-
-  console.log("add department render");
 
   return (
     <Box>
       <Dialog
         open={openAddForm}
         onClose={() => false}
-        sx={{ top: "-30%" }}
+        sx={{ top: "-15%" }}
         maxWidth="sm"
         fullWidth
       >
@@ -180,7 +172,7 @@ const AddUser = ({
             />
 
             <Controller
-              name="company_id"
+              name="department_id"
               control={control}
               render={({
                 field: { onChange, value },
@@ -196,8 +188,8 @@ const AddUser = ({
                     onChange={onChange}
                     error={!!error}
                   >
-                    {companyList?.length > 0 &&
-                      companyList.map((item) => (
+                    {departmentList?.length > 0 &&
+                      departmentList.map((item) => (
                         <MenuItem key={item.id} value={item.id}>
                           {item.name}
                         </MenuItem>
@@ -209,7 +201,7 @@ const AddUser = ({
             />
 
             <Controller
-              name="company_id"
+              name="role"
               control={control}
               render={({
                 field: { onChange, value },
@@ -225,9 +217,9 @@ const AddUser = ({
                     onChange={onChange}
                     error={!!error}
                   >
-                    {companyList?.length > 0 &&
-                      companyList.map((item) => (
-                        <MenuItem key={item.id} value={item.id}>
+                    {roleList?.length > 0 &&
+                      roleList.map((item) => (
+                        <MenuItem key={item.id} value={item.name}>
                           {item.name}
                         </MenuItem>
                       ))}
@@ -286,7 +278,7 @@ const AddUser = ({
             <Button
               onClick={() => {
                 reset();
-                handleCloseAddForm();
+                setOpenAddForm(false);
               }}
             >
               Cancel

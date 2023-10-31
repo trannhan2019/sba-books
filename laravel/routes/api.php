@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\SeedingDataController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,7 @@ Route::prefix('department')->group(function () {
     Route::put('/{id}', [DepartmentController::class, 'update']);
     Route::delete('/', [DepartmentController::class, 'destroyAll']);
     Route::delete('/{id}', [DepartmentController::class, 'destroy']);
+    Route::get('/all', [DepartmentController::class, 'getAll']);
 });
 
 Route::prefix('role')->group(function () {
@@ -46,6 +48,16 @@ Route::prefix('role')->group(function () {
     Route::get('/', [RoleController::class, 'index']);
     Route::put('/{id}', [RoleController::class, 'update']);
     Route::delete('/{id}', [RoleController::class, 'destroy']);
+});
+
+Route::prefix('user')->group(function () {
+    Route::post('/', [UserController::class, 'store']);
+    Route::get('/', [UserController::class, 'index']);
+    // Route::get('/count', [DepartmentController::class, 'getCount']);
+    // Route::put('/{id}', [DepartmentController::class, 'update']);
+    // Route::delete('/', [DepartmentController::class, 'destroyAll']);
+    // Route::delete('/{id}', [DepartmentController::class, 'destroy']);
+    // Route::get('/all', [DepartmentController::class, 'getAll']);
 });
 
 //seed data

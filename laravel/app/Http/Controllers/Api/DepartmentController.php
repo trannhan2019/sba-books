@@ -70,4 +70,9 @@ class DepartmentController extends Controller
         Department::destroy($ids);
         return response()->json('Companies deleted', 201);
     }
+
+    public function getAll()
+    {
+        return response()->json(Department::orderBy('location')->select('id', 'name', 'alias')->get());
+    }
 }

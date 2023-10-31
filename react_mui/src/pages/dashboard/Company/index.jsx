@@ -72,7 +72,7 @@ const Company = () => {
         item_per_page,
         search_name,
       });
-      setCompanies(response);
+      setCompanies(response.data);
       setLoadingData(false);
     } catch (error) {
       setLoadingData(false);

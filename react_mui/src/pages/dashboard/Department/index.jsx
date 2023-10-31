@@ -62,7 +62,7 @@ const Department = () => {
         item_per_page,
         search,
       });
-      setDepartments(response);
+      setDepartments(response.data);
       setLoadingData(false);
     } catch (error) {
       setLoadingData(false);
@@ -77,14 +77,14 @@ const Department = () => {
   //lay danh sach company de truyen den add va edit form
   const getCompanyList = async () => {
     const response = await apiGetAllCompanyforSelect();
-    setCompanyList(response.data);
+    setCompanyList(response.data.data);
   };
   const [companyList, setCompanyList] = useState([]);
   useEffect(() => {
     getCompanyList();
   }, []);
 
-  console.log("deparment render", reloadPage);
+  console.log("deparment render", companyList);
   return (
     <DashboardLayout>
       <Box

@@ -11,9 +11,12 @@ import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import useDebounce from "@/hooks/useDebounce";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import AddUser from "./AddUser";
-// import { apiGetAllDepartment } from "@/apis/department";
+import { apiGetListDepartment } from "@/apis/department";
+import { apiGetAllRole } from "@/apis/role";
+import { apiGetAllUser } from "@/apis/user";
+import ListUser from "./ListUser";
+import SearchUser from "./SearchUser";
 // import ListDepartment from "./ListDepartment";
-// import { apiGetAllCompanyforSelect } from "@/apis/company";
 // import EditDepartment from "./EditDepartment";
 // import SearchDepartment from "./SearchDepartment";
 
@@ -21,7 +24,8 @@ const User = () => {
   //search
   const [search, setSearch] = useState("");
   const searchDebounce = useDebounce(search, 800);
-  console.log(searchDebounce);
+  // console.log(searchDebounce);
+  const [selectDepartment, setSelectDepartment] = useState("");
 
   //Add ///////////////
   const [openAddForm, setOpenAddForm] = useState(false);
@@ -31,13 +35,13 @@ const User = () => {
   const handleOpenEditForm = () => setOpenEditForm(true);
   const handleCloseEditForm = () => setOpenEditForm(false);
 
-  const [department, setDepartment] = useState(null);
+  const [user, setUser] = useState(null);
 
   //set refresh department tai vi tri sau khi them va sua
   const [reloadPage, setReloadPage] = useState(false);
 
-  //load fetch departments
-  const [departments, setDepartments] = useState([]);
+  //load fetch user list
+  const [users, setUsers] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
 
   const [pageMui, setPageMui] = useState(0);
@@ -52,37 +56,42 @@ const User = () => {
     setItemPerPage(event.target.value);
   };
 
-  const fetchDepartments = async (page, item_per_page, search) => {
+  const fetchUsers = async (page, item_per_page, search, selectDepartment) => {
     try {
       setLoadingData(true);
-      const response = await apiGetAllDepartment({
+      const response = await apiGetAllUser({
         page,
         item_per_page,
         search,
+        selectDepartment,
       });
-      setDepartments(response);
+      setUsers(response.data);
       setLoadingData(false);
     } catch (error) {
       setLoadingData(false);
-      console.log("get all department", error);
+      console.log("get all user", error);
     }
   };
 
   useEffect(() => {
-    fetchDepartments(page, itemPerPage, search);
-  }, [page, itemPerPage, searchDebounce, reloadPage]);
+    fetchUsers(page, itemPerPage, search, selectDepartment);
+  }, [page, itemPerPage, searchDebounce, reloadPage, selectDepartment]);
 
-  //lay danh sach company de truyen den add va edit form
-  // const getCompanyList = async () => {
-  //   const response = await apiGetAllCompanyforSelect();
-  //   setCompanyList(response.data);
-  // };
-  // const [companyList, setCompanyList] = useState([]);
-  // useEffect(() => {
-  //   getCompanyList();
-  // }, []);
+  // get danh sách role và phòng ban truyền form add và edit
+  const [departmentList, setDepartmentList] = useState([]);
+  const [roleList, setRoleList] = useState([]);
+  const getDepartmentAndRoleList = async () => {
+    const departments = await apiGetListDepartment();
+    setDepartmentList(departments.data);
+    const roles = await apiGetAllRole();
+    setRoleList(roles.data);
+    // console.log(departments);
+  };
+  useEffect(() => {
+    getDepartmentAndRoleList();
+  }, []);
 
-  console.log("deparment render", reloadPage);
+  // console.log("deparment render", reloadPage);
   return (
     <DashboardLayout>
       <Box
@@ -110,27 +119,32 @@ const User = () => {
                 </Button>
               </div>
             </Stack>
-            {/* <SearchDepartment onSearch={setSearch} />
-            <ListDepartment
+            <SearchUser
+              onSearch={setSearch}
+              departmentList={departmentList}
+              setSelectDepartment={setSelectDepartment}
+            />
+            <ListUser
               onLoading={loadingData}
-              count={departments?.meta?.total}
-              items={departments?.data}
+              count={users?.total}
+              items={users?.data}
               page={pageMui}
               rowsPerPage={itemPerPage}
               onRowsPerPageChange={handleRowsPerPageChange}
               onPageChange={handlePageChange}
-              handleOpenEditForm={handleOpenEditForm}
-              setDepartment={setDepartment}
+              setOpenEditForm={setOpenEditForm}
+              setUser={setUser}
               setReloadPage={setReloadPage}
-            /> */}
+            />
           </Stack>
         </Container>
       </Box>
       <AddUser
         openAddForm={openAddForm}
         setOpenAddForm={setOpenAddForm}
-        // companyList={companyList}
-        // setReloadPage={setReloadPage}
+        departmentList={departmentList}
+        roleList={roleList}
+        setReloadPage={setReloadPage}
       />
       {/* <EditDepartment
         openEditForm={openEditForm}

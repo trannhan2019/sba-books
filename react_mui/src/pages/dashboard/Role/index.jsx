@@ -31,7 +31,7 @@ const Role = () => {
     try {
       setLoadingData(true);
       const response = await apiGetAllRole();
-      setRoles(response);
+      setRoles(response.data);
       setLoadingData(false);
     } catch (error) {
       setLoadingData(false);
