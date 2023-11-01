@@ -36,16 +36,10 @@ class UserController extends Controller
         $selected = $request->query('selectDepartment');
         $users = User::query();
         if (!empty($selected)) {
-            $users = $users->where('department_id', $selected);
+            $users->where('department_id', $selected)->where('name', 'like', '%' . $search . '%');
         }
-        if (!empty($search)) {
-            $users = $users->where('name', 'like', '%' . $search . '%')->orWhere('username', 'like', '%' . $search . '%');
-            // return response()->json('yes');
-        }
-
-
+        $users->where('name', 'like', '%' . $search . '%');
         return response()->json($users->with(['roles', 'department'])->orderBy('location')->paginate($itemPerPage));
-        // return response()->json('no');
     }
 
     // public function getCount()

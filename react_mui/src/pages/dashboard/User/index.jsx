@@ -18,7 +18,6 @@ import ListUser from "./ListUser";
 import SearchUser from "./SearchUser";
 // import ListDepartment from "./ListDepartment";
 // import EditDepartment from "./EditDepartment";
-// import SearchDepartment from "./SearchDepartment";
 
 const User = () => {
   //search
@@ -122,6 +121,7 @@ const User = () => {
             <SearchUser
               onSearch={setSearch}
               departmentList={departmentList}
+              selectDepartment={selectDepartment}
               setSelectDepartment={setSelectDepartment}
             />
             <ListUser

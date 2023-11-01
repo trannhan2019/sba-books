@@ -11,7 +11,12 @@ import {
   SvgIcon,
 } from "@mui/material";
 
-const SearchUser = ({ onSearch, departmentList, setSelectDepartment }) => {
+const SearchUser = ({
+  onSearch,
+  departmentList,
+  selectDepartment,
+  setSelectDepartment,
+}) => {
   return (
     <Card
       sx={{
@@ -25,11 +30,16 @@ const SearchUser = ({ onSearch, departmentList, setSelectDepartment }) => {
       <FormControl fullWidth>
         <InputLabel id="department_id">Chọn phòng ban</InputLabel>
         <Select
+          size="small"
           labelId="department_id"
           id="demo-simple-select"
+          value={selectDepartment}
           label="Chọn phòng ban"
           onChange={(event) => setSelectDepartment(event.target.value)}
         >
+          <MenuItem value="" selected>
+            --Tất cả --
+          </MenuItem>
           {departmentList?.length > 0 &&
             departmentList.map((item) => (
               <MenuItem key={item.id} value={item.id}>
@@ -43,7 +53,8 @@ const SearchUser = ({ onSearch, departmentList, setSelectDepartment }) => {
         onChange={(e) => onSearch(e.target.value)}
         defaultValue=""
         fullWidth
-        placeholder="Tìm kiếm theo tên người dùng hoặc tên đăng nhập ..."
+        size="small"
+        placeholder="Tìm kiếm theo tên người dùng ..."
         startAdornment={
           <InputAdornment position="start">
             <SvgIcon color="action" fontSize="small">

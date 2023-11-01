@@ -20,7 +20,6 @@ import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import { Scrollbar } from "@/components/Scrollbar";
 import TableLoader from "@/components/TableLoader";
 import Swal from "sweetalert2";
-import { apiDeleteDepartment, apiDeleteDepartments } from "@/apis/department";
 import { useSelection } from "@/hooks/useSelection";
 
 const ListUser = (props) => {
@@ -127,11 +126,37 @@ const ListUser = (props) => {
                     }}
                   />
                 </TableCell>
-                <TableCell>Tên người dùng</TableCell>
-                <TableCell>Tên đăng nhập</TableCell>
-                <TableCell>Quyền hạn</TableCell>
-                <TableCell>Trạng thái</TableCell>
-                <TableCell>Hành động</TableCell>
+                <TableCell>
+                  <Typography variant="caption" fontWeight="bold">
+                    Tên người dùng
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="caption" fontWeight="bold">
+                    Tên đăng nhập
+                  </Typography>
+                </TableCell>
+
+                <TableCell>
+                  <Typography variant="caption" fontWeight="bold">
+                    Quyền hạn
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="caption" fontWeight="bold">
+                    Phòng ban
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="caption" fontWeight="bold">
+                    Trạng thái
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="caption" fontWeight="bold">
+                    Hành động
+                  </Typography>
+                </TableCell>
               </TableRow>
             </TableHead>
             {onLoading ? (
@@ -171,6 +196,7 @@ const ListUser = (props) => {
                         </TableCell>
                         <TableCell>{user.username}</TableCell>
                         <TableCell>{user.roles[0].name}</TableCell>
+                        <TableCell>{user.department.name}</TableCell>
                         <TableCell>
                           {user.isActive ? (
                             <Chip
