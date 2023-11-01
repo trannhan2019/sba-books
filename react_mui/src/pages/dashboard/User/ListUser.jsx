@@ -21,6 +21,7 @@ import { Scrollbar } from "@/components/Scrollbar";
 import TableLoader from "@/components/TableLoader";
 import Swal from "sweetalert2";
 import { useSelection } from "@/hooks/useSelection";
+import { apiDeleteUser, apiDeleteUsers } from "@/apis/user";
 
 const ListUser = (props) => {
   const {
@@ -49,47 +50,45 @@ const ListUser = (props) => {
     setUser(user);
     setOpenEditForm(true);
   };
-  //handel Del single
-  //   const handleDeleteDepartment = (id) => {
-  //     Swal.fire({
-  //       icon: "info",
-  //       title: "Bạn có muốn xóa dữ liệu ?",
-  //       showCancelButton: true,
-  //       confirmButtonText: "Xác nhận",
-  //     }).then(async (result) => {
-  //       if (result.isConfirmed) {
-  //         try {
-  //           await apiDeleteDepartment(id);
-  //           setReloadPage((preState) => !preState);
-  //           Swal.fire("Saved!", "", "success");
-  //         } catch (error) {
-  //           console.log("delete department", error);
-  //           // Swal.showValidationMessage("Lỗi không xóa được thông tin");
-  //           toast.error("Lỗi không xóa được thông tin");
-  //         }
-  //       }
-  //     });
-  //   };
-  //   const handleDeleteAllDepartment = () => {
-  //     Swal.fire({
-  //       icon: "info",
-  //       title: "Bạn có muốn xóa dữ liệu ?",
-  //       showCancelButton: true,
-  //       confirmButtonText: "Xác nhận",
-  //     }).then(async (result) => {
-  //       if (result.isConfirmed) {
-  //         try {
-  //           await apiDeleteDepartments({ ids: departmentSelected.selected });
-  //           setReloadPage((preState) => !preState);
-  //           Swal.fire("Saved!", "", "success");
-  //         } catch (error) {
-  //           console.log("delete department", error);
-  //           // Swal.showValidationMessage("Lỗi không xóa được thông tin");
-  //           toast.error("Lỗi không xóa được thông tin");
-  //         }
-  //       }
-  //     });
-  //   };
+  // handel Del single
+  const handleDeleteUser = (id) => {
+    Swal.fire({
+      icon: "info",
+      title: "Bạn có muốn xóa dữ liệu ?",
+      showCancelButton: true,
+      confirmButtonText: "Xác nhận",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await apiDeleteUser(id);
+          setReloadPage((preState) => !preState);
+          Swal.fire("Saved!", "", "success");
+        } catch (error) {
+          console.log("delete department", error);
+          toast.error("Lỗi không xóa được thông tin");
+        }
+      }
+    });
+  };
+  const handleDeleteAllUser = () => {
+    Swal.fire({
+      icon: "info",
+      title: "Bạn có muốn xóa dữ liệu ?",
+      showCancelButton: true,
+      confirmButtonText: "Xác nhận",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await apiDeleteUsers({ ids: userSelected.selected });
+          setReloadPage((preState) => !preState);
+          Swal.fire("Saved!", "", "success");
+        } catch (error) {
+          console.log("delete user", error);
+          toast.error("Lỗi không xóa được thông tin");
+        }
+      }
+    });
+  };
 
   return (
     <Card>
@@ -98,7 +97,7 @@ const ListUser = (props) => {
           sx={{ display: "flex", justifyContent: "end", pr: 7, paddingY: 1 }}
         >
           <Button
-            // onClick={() => handleDeleteAllDepartment()}
+            onClick={() => handleDeleteAllUser()}
             size="small"
             startIcon={<DeleteOutlinedIcon />}
             variant="contained"
@@ -214,9 +213,7 @@ const ListUser = (props) => {
                               <EditNoteOutlinedIcon color="indigo" />
                             </IconButton>
                             <IconButton
-                            //   onClick={() =>
-                            //     handleDeleteDepartment(department.id)
-                            //   }
+                              onClick={() => handleDeleteUser(user.id)}
                             >
                               <DeleteOutlinedIcon color="error" />
                             </IconButton>

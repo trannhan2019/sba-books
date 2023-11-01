@@ -20,25 +20,25 @@ export const apiGetAllUser = (params) =>
 //     method: "get",
 //   });
 
-// export const apiDeleteUser = (id) =>
-//   axiosClient({
-//     url: `/user/${id}`,
-//     method: "delete",
-//   });
+export const apiDeleteUser = (id) =>
+  axiosClient({
+    url: `/user/${id}`,
+    method: "delete",
+  });
 
-// export const apiDeleteUsers = (data) =>
-//   axiosClient({
-//     url: "/user",
-//     method: "delete",
-//     data,
-//   });
+export const apiDeleteUsers = (data) =>
+  axiosClient({
+    url: "/user",
+    method: "delete",
+    data,
+  });
 
-// export const apiUpdateDepartment = (data, id) =>
-//   axiosClient({
-//     url: `/department/${id}`,
-//     method: "put",
-//     data,
-//   });
+export const apiUpdateUser = (data, id) =>
+  axiosClient({
+    url: `/user/${id}`,
+    method: "put",
+    data,
+  });
 
 // export const apiGetDepartment = (id) =>
 //   axiosClient({

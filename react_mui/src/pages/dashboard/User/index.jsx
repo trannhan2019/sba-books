@@ -16,7 +16,7 @@ import { apiGetAllRole } from "@/apis/role";
 import { apiGetAllUser } from "@/apis/user";
 import ListUser from "./ListUser";
 import SearchUser from "./SearchUser";
-// import ListDepartment from "./ListDepartment";
+import EditUser from "./EditUser";
 // import EditDepartment from "./EditDepartment";
 
 const User = () => {
@@ -84,7 +84,6 @@ const User = () => {
     setDepartmentList(departments.data);
     const roles = await apiGetAllRole();
     setRoleList(roles.data);
-    // console.log(departments);
   };
   useEffect(() => {
     getDepartmentAndRoleList();
@@ -146,13 +145,14 @@ const User = () => {
         roleList={roleList}
         setReloadPage={setReloadPage}
       />
-      {/* <EditDepartment
+      <EditUser
         openEditForm={openEditForm}
-        handleCloseEditForm={handleCloseEditForm}
-        companyList={companyList}
-        department={department}
+        setOpenEditForm={setOpenEditForm}
+        departmentList={departmentList}
+        user={user}
+        roleList={roleList}
         setReloadPage={setReloadPage}
-      /> */}
+      />
     </DashboardLayout>
   );
 };

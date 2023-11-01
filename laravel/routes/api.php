@@ -54,9 +54,9 @@ Route::prefix('user')->group(function () {
     Route::post('/', [UserController::class, 'store']);
     Route::get('/', [UserController::class, 'index']);
     // Route::get('/count', [DepartmentController::class, 'getCount']);
-    // Route::put('/{id}', [DepartmentController::class, 'update']);
-    // Route::delete('/', [DepartmentController::class, 'destroyAll']);
-    // Route::delete('/{id}', [DepartmentController::class, 'destroy']);
+    Route::put('/{id}', [UserController::class, 'update']);
+    Route::delete('/', [UserController::class, 'destroyAll']);
+    Route::delete('/{id}', [UserController::class, 'destroy']);
     // Route::get('/all', [DepartmentController::class, 'getAll']);
 });
 

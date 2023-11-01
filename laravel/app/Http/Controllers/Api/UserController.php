@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\DeleteUserRequest;
 use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -47,33 +49,37 @@ class UserController extends Controller
     //     return Department::count();
     // }
 
-    // public function update(UpdateDepartmentRequest $request, $id)
-    // {
-    //     $department = Department::findOrFail($id);
+    public function update(UpdateUserRequest $request, $id)
+    {
+        $user = User::findOrFail($id);
 
-    //     $department->name = $request->name;
-    //     $department->alias = $request->alias;
-    //     $department->isActive = $request->isActive;
-    //     $department->location = $request->location;
-    //     $department->company_id = $request->company_id;
+        $user->name = $request->name;
+        $user->isActive = $request->isActive;
+        $user->location = $request->location;
+        $user->department_id = $request->department_id;
+        //role
+        $user->syncRoles($request->role);
+        //changePassword
+        if (!empty($request->password)) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->save();
+        return response()->json('updated', 201);
+    }
 
-    //     $department->save();
-    //     return response()->json('Department updated', 201);
-    // }
+    public function destroy($id)
+    {
+        User::findOrFail($id)->delete();
+        return response()->json('User deleted', 201);
+    }
 
-    // public function destroy($id)
-    // {
-    //     Department::findOrFail($id)->delete();
-    //     return response()->json('Department deleted', 201);
-    // }
-
-    // public function destroyAll(DeleteDepartmentRequest $request)
-    // {
-    //     // return response()->json($request);
-    //     $ids = $request->ids;
-    //     Department::destroy($ids);
-    //     return response()->json('Companies deleted', 201);
-    // }
+    public function destroyAll(DeleteUserRequest $request)
+    {
+        // return response()->json($request);
+        $ids = $request->ids;
+        User::destroy($ids);
+        return response()->json('User list deleted', 201);
+    }
 
     // public function getAll()
     // {
