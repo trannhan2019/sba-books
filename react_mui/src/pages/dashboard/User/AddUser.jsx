@@ -219,7 +219,7 @@ const AddUser = ({
                   >
                     {roleList?.length > 0 &&
                       roleList.map((item) => (
-                        <MenuItem key={item.id} value={item.name}>
+                        <MenuItem key={item.id} value={item.id}>
                           {item.name}
                         </MenuItem>
                       ))}

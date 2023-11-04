@@ -1,7 +1,12 @@
-import React from "react";
+import MainLayout from "@/layouts/MainLayout";
+import { Outlet } from "react-router-dom";
 
 const Admin = () => {
-  return <div>Admin</div>;
+  return (
+    <MainLayout>
+      <Outlet />
+    </MainLayout>
+  );
 };
 
 export default Admin;

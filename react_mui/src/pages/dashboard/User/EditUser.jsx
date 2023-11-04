@@ -23,7 +23,6 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { apiUpdateDepartment } from "@/apis/department";
 import { apiUpdateUser } from "@/apis/user";
 
 const scheme = Yup.object({
@@ -71,7 +70,7 @@ const EditUser = ({
   useEffect(() => {
     setValue("name", user?.name);
     setValue("username", user?.username);
-    setValue("role", user?.roles[0].name);
+    setValue("role", user?.role.id);
     setValue("location", user?.location);
     setValue("isActive", user?.isActive);
     setValue("department_id", user?.department.id);
@@ -161,7 +160,7 @@ const EditUser = ({
                   >
                     {roleList?.length > 0 &&
                       roleList.map((item) => (
-                        <MenuItem key={item.id} value={item.name}>
+                        <MenuItem key={item.id} value={item.id}>
                           {item.name}
                         </MenuItem>
                       ))}

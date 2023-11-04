@@ -24,6 +24,8 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedBigInteger('department_id');
             $table->foreign('department_id')->references('id')->on('departments');
+            //viet tat khoa ngoai
+            $table->foreignId('role_id')->constrained('roles');
         });
     }
 

@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Department;
+use App\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
+
 
 class SeedingDataController extends Controller
 {
@@ -113,15 +114,18 @@ class SeedingDataController extends Controller
 
         Role::insert([
             [
-                'name' => 'user', 'guard_name' => 'web', 'created_at' => Carbon::now(),
+                'name' => 'người dùng',
+                'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'name' => 'manager', 'guard_name' => 'web', 'created_at' => Carbon::now(),
+                'name' => 'quản lý',
+                'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
             [
-                'name' => 'administrator', 'guard_name' => 'web', 'created_at' => Carbon::now(),
+                'name' => 'administrator',
+                'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
         ]);

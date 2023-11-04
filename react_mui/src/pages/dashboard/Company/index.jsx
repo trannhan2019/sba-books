@@ -10,7 +10,7 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
-import DashboardLayout from "@/layouts/DashboardLayout";
+import DashboardLayout from "@/layouts/MainLayout";
 
 import { CompaniesTable } from "./CompaniesTable";
 import { SearchBar } from "./SearchBar";

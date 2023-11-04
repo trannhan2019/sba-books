@@ -9,9 +9,11 @@ import { Navigate } from "react-router-dom";
 
 const AuthLayout = (props) => {
   const { children } = props;
+  let token = localStorage.getItem("token");
+  // token = JSON.parse(token);
   const { user } = useSelector((state) => state.user);
 
-  if (user) return <Navigate to={"/"} />;
+  if (token && user) return <Navigate to={"/"} />;
 
   return (
     <Box

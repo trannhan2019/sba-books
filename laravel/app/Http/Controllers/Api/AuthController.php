@@ -18,7 +18,7 @@ class AuthController extends Controller
                 'message' => 'Tài khoản & Mật khẩu không đúng.',
             ], 401);
         }
-        $user = User::where('username', $request->username)->where('isActive', true)->with(['roles' => function ($s) {
+        $user = User::where('username', $request->username)->where('isActive', true)->with(['role' => function ($s) {
             $s->select('id', 'name');
         }, 'department' => function ($s) {
             $s->select('id', 'name', 'alias');

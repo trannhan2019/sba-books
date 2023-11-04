@@ -1,18 +1,21 @@
 import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import Admin from "./admin";
 import Manager from "./manager";
 import User from "./user";
 
 const WrapProtect = () => {
+  const navigate = useNavigate();
+  let token = localStorage.getItem("token");
+  // token = JSON.parse(token);
   const { user } = useSelector((state) => state.user);
 
-  if (user) {
-    const role = user.roles[0].name;
+  if (token && user) {
+    const role = user.role.name;
 
     if (role === "administrator") return <Admin />;
-    if (role === "manager") return <Manager />;
-    if (role === "user") return <User />;
+    if (role === "quản lý") return <Manager />;
+    if (role === "người dùng") return <User />;
   }
 
   return <Navigate to={"/login"} />;

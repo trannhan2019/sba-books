@@ -51,3 +51,9 @@ export const apiUpdateUser = (data, id) =>
 //     url: "/department/count",
 //     method: "get",
 //   });
+
+export const apiGetCurrentUser = () =>
+  axiosClient({
+    url: "/user-current",
+    method: "get",
+  });

@@ -24,7 +24,7 @@ class UserController extends Controller
         $user->location = $request->location;
         $user->department_id = $request->department_id;
         //role
-        $user->assignRole($request->role);
+        $user->role_id = $request->role;
 
         $user->save();
         return response()->json("New user created", 201);
@@ -41,7 +41,7 @@ class UserController extends Controller
             $users->where('department_id', $selected)->where('name', 'like', '%' . $search . '%');
         }
         $users->where('name', 'like', '%' . $search . '%');
-        return response()->json($users->with(['roles', 'department'])->orderBy('location')->paginate($itemPerPage));
+        return response()->json($users->with(['role', 'department'])->orderBy('location')->paginate($itemPerPage));
     }
 
     // public function getCount()
@@ -58,7 +58,7 @@ class UserController extends Controller
         $user->location = $request->location;
         $user->department_id = $request->department_id;
         //role
-        $user->syncRoles($request->role);
+        $user->role_id = $request->role;
         //changePassword
         if (!empty($request->password)) {
             $user->password = Hash::make($request->password);

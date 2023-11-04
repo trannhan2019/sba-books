@@ -9,7 +9,23 @@ const axiosClient = axios.create({
 });
 
 //request
-// axiosClient.interceptors.request.use()
+axiosClient.interceptors.request.use(
+  function (config) {
+    // Do something before request is sent
+    let localToken = window.localStorage.getItem("token");
+    console.log("token", localToken);
+    if (localToken && typeof localToken === "string") {
+      // localToken = JSON.parse(localToken);
+      config.headers = { authorization: `Bearer ${localToken}` };
+      return config;
+    } else return config;
+  },
+  function (error) {
+    console.log("error axios req", error);
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
 
 // Add a response interceptor
 axiosClient.interceptors.response.use(

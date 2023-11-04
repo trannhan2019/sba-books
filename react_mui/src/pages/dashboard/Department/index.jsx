@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import useDebounce from "@/hooks/useDebounce";
-import DashboardLayout from "@/layouts/DashboardLayout";
+import DashboardLayout from "@/layouts/MainLayout";
 import AddDepartment from "./AddDepartment";
 import { apiGetAllDepartment } from "@/apis/department";
 import ListDepartment from "./ListDepartment";

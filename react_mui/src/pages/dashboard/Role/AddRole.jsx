@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { useForm, Controller } from "react-hook-form";
@@ -10,12 +9,18 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Box, Button } from "@mui/material";
 import { apiStoreRole } from "@/apis/role";
+import LoadingButton from "@mui/lab/LoadingButton";
+import AddIcon from "@mui/icons-material/Add";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "@/store/app/appSlice";
 
 const scheme = Yup.object({
-  name: Yup.string().required("Tên Quyền không để trống"),
+  name: Yup.string().required("Tên quyền không để trống"),
 }).required();
 
 const AddRole = ({ openAddForm, setOpenAddForm, setReloadPage }) => {
+  const { isLoading } = useSelector((state) => state.app);
+  const dispatch = useDispatch();
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
       name: "",
@@ -25,15 +30,22 @@ const AddRole = ({ openAddForm, setOpenAddForm, setReloadPage }) => {
 
   const onSubmit = async (values) => {
     // console.log(values);
+    dispatch(setLoading(true));
     try {
       await apiStoreRole(values);
       reset();
       setOpenAddForm(false);
       setReloadPage((preState) => !preState);
+      dispatch(setLoading(false));
       toast.success("Tạo mới thành công");
     } catch (error) {
-      console.log("add role", error);
-      toast.error("Lỗi không thêm được thông tin");
+      dispatch(setLoading(false));
+      if (error.status === 401) {
+        toast.error(error.data.message);
+      } else {
+        console.log("add role", error);
+        toast.error("Lỗi không thêm được thông tin");
+      }
     }
   };
 
@@ -81,9 +93,15 @@ const AddRole = ({ openAddForm, setOpenAddForm, setReloadPage }) => {
             >
               Cancel
             </Button>
-            <Button variant="contained" type="submit">
-              Subscribe
-            </Button>
+            <LoadingButton
+              loading={isLoading}
+              loadingPosition="start"
+              startIcon={<AddIcon />}
+              variant="contained"
+              type="submit"
+            >
+              Continue
+            </LoadingButton>
           </DialogActions>
         </form>
       </Dialog>

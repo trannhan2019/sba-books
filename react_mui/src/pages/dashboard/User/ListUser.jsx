@@ -194,7 +194,7 @@ const ListUser = (props) => {
                           </Typography>
                         </TableCell>
                         <TableCell>{user.username}</TableCell>
-                        <TableCell>{user.roles[0].name}</TableCell>
+                        <TableCell>{user.role.name}</TableCell>
                         <TableCell>{user.department.name}</TableCell>
                         <TableCell>
                           {user.isActive ? (

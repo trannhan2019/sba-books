@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
-import DashboardLayout from "@/layouts/DashboardLayout";
+import DashboardLayout from "@/layouts/MainLayout";
 import AddRole from "./AddRole";
 import ListRole from "./ListRole";
 import { apiGetAllRole } from "@/apis/role";

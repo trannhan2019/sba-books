@@ -20,8 +20,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware(['auth:sanctum', 'role:user'])->get('/user-current', function (Request $request) {
+//     // return $request->user();
+//     return response()->json('sadfsadf');
+// });
+Route::middleware(['auth:sanctum', 'can:isManager'])->get('/user-current', function (Request $request) {
+    return response()->json(auth()->user());
 });
 
 Route::prefix('auth')->group(function () {
