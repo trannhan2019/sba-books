@@ -1,28 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
-import { styled } from "@mui/material/styles";
-import { useLocation, Outlet } from "react-router-dom";
-import { TopNav } from "@/components/layouts/TopNav";
-import { SideNav } from "@/components/layouts/SideNav";
-import { users, manages } from "./SideNavData";
+import { useCallback, useState, useEffect } from "react";
 import AdminGuard from "@/components/guards/AdminGuard";
-
-const SIDE_NAV_WIDTH = 280;
-
-const LayoutRoot = styled("div")(({ theme }) => ({
-  display: "flex",
-  flex: "1 1 auto",
-  maxWidth: "100%",
-  [theme.breakpoints.up("lg")]: {
-    paddingLeft: SIDE_NAV_WIDTH,
-  },
-}));
-
-const LayoutContainer = styled("div")({
-  display: "flex",
-  flex: "1 1 auto",
-  flexDirection: "column",
-  width: "100%",
-});
+import { TopNav } from "@/components/layouts/TopNav";
+import { Outlet, useLocation } from "react-router-dom";
+import { SideNav } from "@/components/layouts/SideNav";
+import MainLayout from "@/components/layouts/MainLayout";
+import { users, manages } from "./SideNavData";
 
 const Admin = () => {
   const [openNav, setOpenNav] = useState(false);
@@ -43,7 +25,8 @@ const Admin = () => {
   );
 
   return (
-    <AdminGuard>
+    // <AdminGuard>
+    <>
       <TopNav onNavOpen={() => setOpenNav(true)} />
       <SideNav
         onClose={() => setOpenNav(false)}
@@ -51,12 +34,11 @@ const Admin = () => {
         dataManageLink={manages}
         dataUserLink={users}
       />
-      <LayoutRoot>
-        <LayoutContainer>
-          <Outlet />
-        </LayoutContainer>
-      </LayoutRoot>
-    </AdminGuard>
+      <MainLayout>
+        <Outlet />
+      </MainLayout>
+    </>
+    // </AdminGuard>
   );
 };
 

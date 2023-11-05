@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import useDebounce from "@/hooks/useDebounce";
-import DashboardLayout from "@/layouts/MainLayout";
 import AddDepartment from "./AddDepartment";
 import { apiGetAllDepartment } from "@/apis/department";
 import ListDepartment from "./ListDepartment";
@@ -63,6 +62,7 @@ const Department = () => {
         search,
       });
       setDepartments(response.data);
+      console.log("deparment render", response);
       setLoadingData(false);
     } catch (error) {
       setLoadingData(false);
@@ -75,18 +75,17 @@ const Department = () => {
   }, [page, itemPerPage, searchDebounce, reloadPage]);
 
   //lay danh sach company de truyen den add va edit form
+  const [companyList, setCompanyList] = useState([]);
   const getCompanyList = async () => {
     const response = await apiGetAllCompanyforSelect();
     setCompanyList(response.data.data);
   };
-  const [companyList, setCompanyList] = useState([]);
   useEffect(() => {
     getCompanyList();
   }, []);
 
-  console.log("deparment render", companyList);
   return (
-    <DashboardLayout>
+    <>
       <Box
         component="main"
         sx={{
@@ -141,7 +140,7 @@ const Department = () => {
         department={department}
         setReloadPage={setReloadPage}
       />
-    </DashboardLayout>
+    </>
   );
 };
 

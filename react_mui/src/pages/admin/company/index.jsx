@@ -1,7 +1,8 @@
+import Company from "@/components/features/Company";
 import React from "react";
 
 const AdminCompany = () => {
-  return <div>AdminCompany</div>;
+  return <Company />;
 };
 
 export default AdminCompany;

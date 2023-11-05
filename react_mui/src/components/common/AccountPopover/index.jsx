@@ -1,6 +1,5 @@
 // import { useCallback } from "react";
 // import { useRouter } from "react-router-dom";
-// import PropTypes from "prop-types";
 import {
   Box,
   Divider,
@@ -61,9 +60,3 @@ export const AccountPopover = (props) => {
     </Popover>
   );
 };
-
-// AccountPopover.propTypes = {
-//   anchorEl: PropTypes.any,
-//   onClose: PropTypes.func,
-//   open: PropTypes.bool.isRequired,
-// };

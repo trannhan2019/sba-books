@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import useDebounce from "@/hooks/useDebounce";
-import DashboardLayout from "@/layouts/MainLayout";
 import AddUser from "./AddUser";
 import { apiGetListDepartment } from "@/apis/department";
 import { apiGetAllRole } from "@/apis/role";
@@ -91,7 +90,7 @@ const User = () => {
 
   // console.log("deparment render", reloadPage);
   return (
-    <DashboardLayout>
+    <>
       <Box
         component="main"
         sx={{
@@ -153,7 +152,7 @@ const User = () => {
         roleList={roleList}
         setReloadPage={setReloadPage}
       />
-    </DashboardLayout>
+    </>
   );
 };
 

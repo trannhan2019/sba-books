@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { usePopover } from "@/hooks/use-popover";
-import { AccountPopover } from "./AccountPopover";
+import { AccountPopover } from "@/components/common/AccountPopover";
 import UserAvata from "@/assets/avatars/avatar-anika-visser.png";
 
 const SIDE_NAV_WIDTH = 280;

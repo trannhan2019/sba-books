@@ -1,5 +1,5 @@
-import { Scrollbar } from "@/components/Scrollbar";
-import TableLoader from "@/components/TableLoader";
+import { Scrollbar } from "@/components/common/Scrollbar";
+import TableLoader from "@/components/common/TableLoader";
 import {
   Box,
   Card,

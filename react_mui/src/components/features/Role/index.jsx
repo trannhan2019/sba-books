@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
-import DashboardLayout from "@/layouts/MainLayout";
+import DashboardLayout from "@/components/layouts/MainLayout";
 import AddRole from "./AddRole";
 import ListRole from "./ListRole";
 import { apiGetAllRole } from "@/apis/role";
@@ -44,7 +44,7 @@ const Role = () => {
   console.log(roles);
 
   return (
-    <DashboardLayout>
+    <>
       <Box
         component="main"
         sx={{
@@ -92,7 +92,7 @@ const Role = () => {
         role={role}
         setReloadPage={setReloadPage}
       />
-    </DashboardLayout>
+    </>
   );
 };
 

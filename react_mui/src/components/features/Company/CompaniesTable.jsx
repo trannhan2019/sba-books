@@ -15,8 +15,8 @@ import {
 } from "@mui/material";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
-import { Scrollbar } from "@/components/Scrollbar";
-import TableLoader from "@/components/TableLoader";
+import { Scrollbar } from "@/components/common/Scrollbar";
+import TableLoader from "@/components/common/TableLoader";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
 import { useSelection } from "@/hooks/useSelection";

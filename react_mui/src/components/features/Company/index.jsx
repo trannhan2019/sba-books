@@ -10,7 +10,6 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
-import DashboardLayout from "@/layouts/MainLayout";
 
 import { CompaniesTable } from "./CompaniesTable";
 import { SearchBar } from "./SearchBar";
@@ -123,7 +122,7 @@ const Company = () => {
   };
 
   return (
-    <DashboardLayout>
+    <>
       <Box
         component="main"
         sx={{
@@ -206,7 +205,7 @@ const Company = () => {
         company={company}
         handleEditCompany={handleEditCompany}
       />
-    </DashboardLayout>
+    </>
   );
 };
 

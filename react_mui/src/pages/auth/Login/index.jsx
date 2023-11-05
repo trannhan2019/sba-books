@@ -13,7 +13,7 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import AuthLayout from "@/layouts/AuthLayout";
+import AuthLayout from "@/components/layouts/AuthLayout";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { apiLogin } from "@/apis/auth";

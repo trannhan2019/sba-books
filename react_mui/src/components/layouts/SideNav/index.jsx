@@ -1,6 +1,4 @@
 import { Link, useLocation } from "react-router-dom";
-// import { usePathname } from "next/navigation";
-// import PropTypes from "prop-types";
 import ChevronUpDownIcon from "@heroicons/react/24/solid/ChevronUpDownIcon";
 import {
   Box,
@@ -11,14 +9,12 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import Logo from "@/components/Logo";
-import { Scrollbar } from "@/components/Scrollbar";
-import { items } from "./sideNavData";
+import Logo from "@/components/common/Logo";
+import { Scrollbar } from "@/components/common/Scrollbar";
 import { SideNavItem } from "./SideNavItem";
 
 export const SideNav = (props) => {
-  const { open, onClose } = props;
-  //   const pathname = usePathname();
+  const { open, onClose, dataManageLink, dataUserLink } = props;
   const location = useLocation();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
@@ -82,7 +78,7 @@ export const SideNav = (props) => {
         <Box
           component="nav"
           sx={{
-            flexGrow: 1,
+            flexGrow: 0,
             px: 2,
             py: 3,
           }}
@@ -99,7 +95,7 @@ export const SideNav = (props) => {
               m: 0,
             }}
           >
-            {items.map((item) => {
+            {dataUserLink.map((item) => {
               const active = item.path
                 ? location.pathname === item.path
                 : false;
@@ -139,7 +135,7 @@ export const SideNav = (props) => {
               m: 0,
             }}
           >
-            {items.map((item) => {
+            {dataManageLink.map((item) => {
               const active = item.path
                 ? location.pathname === item.path
                 : false;
@@ -158,48 +154,6 @@ export const SideNav = (props) => {
             })}
           </Stack>
         </Box>
-        {/* <Divider sx={{ borderColor: "neutral.700" }} />
-        <Box
-          sx={{
-            px: 2,
-            py: 3,
-          }}
-        >
-          <Typography color="neutral.100" variant="subtitle2">
-            Need more features?
-          </Typography>
-          <Typography color="neutral.500" variant="body2">
-            Check out our Pro solution template.
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              mt: 2,
-              mx: "auto",
-              width: "160px",
-              "& img": {
-                width: "100%",
-              },
-            }}
-          >
-            <img alt="Go to pro" src={DeviasLogo} />
-          </Box>
-          <Button
-            component="a"
-            endIcon={
-              <SvgIcon fontSize="small">
-                <ArrowTopRightOnSquareIcon />
-              </SvgIcon>
-            }
-            fullWidth
-            href="https://material-kit-pro-react.devias.io/"
-            sx={{ mt: 2 }}
-            target="_blank"
-            variant="contained"
-          >
-            Pro Live Preview
-          </Button>
-        </Box> */}
       </Box>
     </Scrollbar>
   );
@@ -242,8 +196,3 @@ export const SideNav = (props) => {
     </Drawer>
   );
 };
-
-// SideNav.propTypes = {
-//   onClose: PropTypes.func,
-//   open: PropTypes.bool,
-// };

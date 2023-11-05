@@ -17,13 +17,13 @@ import {
 import { toast } from "react-toastify";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
-import { Scrollbar } from "@/components/Scrollbar";
-import TableLoader from "@/components/TableLoader";
+import { Scrollbar } from "@/components/common/Scrollbar";
+import TableLoader from "@/components/common/TableLoader";
 import Swal from "sweetalert2";
-import { apiDeleteDepartment, apiDeleteDepartments } from "@/apis/department";
 import { useSelection } from "@/hooks/useSelection";
+import { apiDeleteUser, apiDeleteUsers } from "@/apis/user";
 
-const ListDepartment = (props) => {
+const ListUser = (props) => {
   const {
     onLoading,
     count = 0,
@@ -32,26 +32,26 @@ const ListDepartment = (props) => {
     onRowsPerPageChange,
     page = 0,
     rowsPerPage = 0,
-    handleOpenEditForm,
-    setDepartment,
+    setOpenEditForm,
+    setUser,
     setReloadPage,
   } = props;
 
   //seleted
-  const departmentSelected = useSelection(items);
+  const userSelected = useSelection(items);
   const selectedSome =
-    departmentSelected.selected.length > 0 &&
-    departmentSelected.selected.length < items.length;
+    userSelected.selected.length > 0 &&
+    userSelected.selected.length < items.length;
   const selectedAll =
-    items.length > 0 && departmentSelected.selected.length === items.length;
+    items.length > 0 && userSelected.selected.length === items.length;
 
   //show edit
-  const showEdit = async (department) => {
-    setDepartment(department);
-    handleOpenEditForm();
+  const showEdit = async (user) => {
+    setUser(user);
+    setOpenEditForm(true);
   };
-  //handel Del single
-  const handleDeleteDepartment = (id) => {
+  // handel Del single
+  const handleDeleteUser = (id) => {
     Swal.fire({
       icon: "info",
       title: "Bạn có muốn xóa dữ liệu ?",
@@ -60,18 +60,17 @@ const ListDepartment = (props) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await apiDeleteDepartment(id);
+          await apiDeleteUser(id);
           setReloadPage((preState) => !preState);
           Swal.fire("Saved!", "", "success");
         } catch (error) {
           console.log("delete department", error);
-          // Swal.showValidationMessage("Lỗi không xóa được thông tin");
           toast.error("Lỗi không xóa được thông tin");
         }
       }
     });
   };
-  const handleDeleteAllDepartment = () => {
+  const handleDeleteAllUser = () => {
     Swal.fire({
       icon: "info",
       title: "Bạn có muốn xóa dữ liệu ?",
@@ -80,12 +79,11 @@ const ListDepartment = (props) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await apiDeleteDepartments({ ids: departmentSelected.selected });
+          await apiDeleteUsers({ ids: userSelected.selected });
           setReloadPage((preState) => !preState);
           Swal.fire("Saved!", "", "success");
         } catch (error) {
-          console.log("delete department", error);
-          // Swal.showValidationMessage("Lỗi không xóa được thông tin");
+          console.log("delete user", error);
           toast.error("Lỗi không xóa được thông tin");
         }
       }
@@ -94,12 +92,12 @@ const ListDepartment = (props) => {
 
   return (
     <Card>
-      {departmentSelected.selected.length > 0 && (
+      {userSelected.selected.length > 0 && (
         <Box
           sx={{ display: "flex", justifyContent: "end", pr: 7, paddingY: 1 }}
         >
           <Button
-            onClick={() => handleDeleteAllDepartment()}
+            onClick={() => handleDeleteAllUser()}
             size="small"
             startIcon={<DeleteOutlinedIcon />}
             variant="contained"
@@ -120,18 +118,44 @@ const ListDepartment = (props) => {
                     indeterminate={selectedSome}
                     onChange={(event) => {
                       if (event.target.checked) {
-                        departmentSelected.handleSelectAll?.();
+                        userSelected.handleSelectAll?.();
                       } else {
-                        departmentSelected.handleDeselectAll?.();
+                        userSelected.handleDeselectAll?.();
                       }
                     }}
                   />
                 </TableCell>
-                <TableCell>Tên Phòng ban</TableCell>
-                <TableCell>Tên viết tắt</TableCell>
-                <TableCell>Thuộc Công ty</TableCell>
-                <TableCell>Trạng thái</TableCell>
-                <TableCell>Hành động</TableCell>
+                <TableCell>
+                  <Typography variant="caption" fontWeight="bold">
+                    Tên người dùng
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="caption" fontWeight="bold">
+                    Tên đăng nhập
+                  </Typography>
+                </TableCell>
+
+                <TableCell>
+                  <Typography variant="caption" fontWeight="bold">
+                    Quyền hạn
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="caption" fontWeight="bold">
+                    Phòng ban
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="caption" fontWeight="bold">
+                    Trạng thái
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="caption" fontWeight="bold">
+                    Hành động
+                  </Typography>
+                </TableCell>
               </TableRow>
             </TableHead>
             {onLoading ? (
@@ -147,60 +171,49 @@ const ListDepartment = (props) => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  items.map((department) => {
-                    const isSelected = departmentSelected.selected.includes(
-                      department.id
-                    );
+                  items.map((user) => {
+                    const isSelected = userSelected.selected.includes(user.id);
 
                     return (
-                      <TableRow hover key={department.id} selected={isSelected}>
+                      <TableRow hover key={user.id} selected={isSelected}>
                         <TableCell padding="checkbox">
                           <Checkbox
                             checked={isSelected}
                             onChange={(event) => {
                               if (event.target.checked) {
-                                departmentSelected.handleSelectOne?.(
-                                  department
-                                );
+                                userSelected.handleSelectOne?.(user);
                               } else {
-                                departmentSelected.handleDeselectOne?.(
-                                  department
-                                );
+                                userSelected.handleDeselectOne?.(user);
                               }
                             }}
                           />
                         </TableCell>
                         <TableCell>
                           <Typography variant="subtitle2">
-                            {department.name}
+                            {user.name}
                           </Typography>
                         </TableCell>
-                        <TableCell>{department.alias}</TableCell>
-                        <TableCell>{department.company.name}</TableCell>
+                        <TableCell>{user.username}</TableCell>
+                        <TableCell>{user.role.name}</TableCell>
+                        <TableCell>{user.department.name}</TableCell>
                         <TableCell>
-                          {department.isActive ? (
+                          {user.isActive ? (
                             <Chip
                               label="Hoạt động"
                               color="success"
                               size="small"
                             />
                           ) : (
-                            <Chip
-                              label="Tạm dừng"
-                              color="warning"
-                              size="small"
-                            />
+                            <Chip label="Tạm dừng" color="error" size="small" />
                           )}
                         </TableCell>
                         <TableCell>
                           <Stack direction="row" gap={1}>
-                            <IconButton onClick={() => showEdit(department)}>
+                            <IconButton onClick={() => showEdit(user)}>
                               <EditNoteOutlinedIcon color="indigo" />
                             </IconButton>
                             <IconButton
-                              onClick={() =>
-                                handleDeleteDepartment(department.id)
-                              }
+                              onClick={() => handleDeleteUser(user.id)}
                             >
                               <DeleteOutlinedIcon color="error" />
                             </IconButton>
@@ -230,4 +243,4 @@ const ListDepartment = (props) => {
   );
 };
 
-export default ListDepartment;
+export default ListUser;
