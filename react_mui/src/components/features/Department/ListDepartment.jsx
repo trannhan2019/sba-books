@@ -22,12 +22,13 @@ import TableLoader from "@/components/common/TableLoader";
 import Swal from "sweetalert2";
 import { apiDeleteDepartment, apiDeleteDepartments } from "@/apis/department";
 import { useSelection } from "@/hooks/useSelection";
+import { useEffect } from "react";
 
 const ListDepartment = (props) => {
   const {
     onLoading,
     count = 0,
-    items = [],
+    items,
     onPageChange = () => {},
     onRowsPerPageChange,
     page = 0,
@@ -90,7 +91,7 @@ const ListDepartment = (props) => {
     departmentSelected.selected.length > 0 &&
     departmentSelected.selected.length < items.length;
   const selectedAll =
-    items.length > 0 && departmentSelected.selected.length === items.length;
+    items?.length > 0 && departmentSelected.selected.length === items.length;
 
   return (
     <Card>
@@ -138,7 +139,7 @@ const ListDepartment = (props) => {
               <TableLoader rowsNum={8} colsNum={5} />
             ) : (
               <TableBody>
-                {items.length <= 0 ? (
+                {items?.length <= 0 ? (
                   <TableRow>
                     <TableCell colSpan={4}>
                       <Typography variant="body1">
@@ -147,7 +148,7 @@ const ListDepartment = (props) => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  items.map((department) => {
+                  items?.map((department) => {
                     const isSelected = departmentSelected.selected.includes(
                       department.id
                     );

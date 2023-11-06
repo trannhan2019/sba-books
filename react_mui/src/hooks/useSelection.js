@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const useSelection = (items = []) => {
+export const useSelection = (items) => {
   const [selected, setSelected] = useState([]);
   const getItemIds = (arrayItems) => arrayItems.map((item) => item.id);
 
@@ -30,5 +30,6 @@ export const useSelection = (items = []) => {
     handleSelectAll,
     handleSelectOne,
     selected,
+    setSelected,
   };
 };
