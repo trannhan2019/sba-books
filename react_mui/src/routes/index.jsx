@@ -11,6 +11,7 @@ import AdminCompany from "@/pages/admin/company";
 import AdminDepartment from "@/pages/admin/department";
 import AdminRole from "@/pages/admin/role";
 import AdminUser from "@/pages/admin/user";
+import AdminCategoryBook from "@/pages/admin/category_book";
 
 const AppRoutes = () => {
   return (
@@ -23,6 +24,7 @@ const AppRoutes = () => {
           <Route path="department" element={<AdminDepartment />} />
           <Route path="role" element={<AdminRole />} />
           <Route path="user" element={<AdminUser />} />
+          <Route path="category-book" element={<AdminCategoryBook />} />
         </Route>
 
         <Route

@@ -3,6 +3,7 @@ import RectangleGroupIcon from "@heroicons/react/24/solid/RectangleGroupIcon";
 import BuildingOffice2Icon from "@heroicons/react/24/solid/BuildingOffice2Icon";
 import { SvgIcon } from "@mui/material";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import CategoryIcon from "@mui/icons-material/Category";
 
 export const users = [
   {
@@ -57,5 +58,10 @@ export const manages = [
         <UserGroupIcon />
       </SvgIcon>
     ),
+  },
+  {
+    title: "Danh mục sách",
+    path: "/admin/category-book",
+    icon: <CategoryIcon fontSize="small" />,
   },
 ];

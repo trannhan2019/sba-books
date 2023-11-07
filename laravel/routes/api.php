@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\SeedingDataController;
+use App\Http\Controllers\Api\CategoryBookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -66,6 +67,16 @@ Route::prefix('user')->group(function () {
     Route::put('/{id}', [UserController::class, 'update']);
     Route::delete('/', [UserController::class, 'destroyAll']);
     Route::delete('/{id}', [UserController::class, 'destroy']);
+    // Route::get('/all', [DepartmentController::class, 'getAll']);
+});
+
+Route::prefix('category-book')->group(function () {
+    Route::post('/', [CategoryBookController::class, 'store']);
+    Route::get('/', [CategoryBookController::class, 'index']);
+    // Route::get('/count', [DepartmentController::class, 'getCount']);
+    // Route::put('/{id}', [UserController::class, 'update']);
+    // Route::delete('/', [UserController::class, 'destroyAll']);
+    // Route::delete('/{id}', [UserController::class, 'destroy']);
     // Route::get('/all', [DepartmentController::class, 'getAll']);
 });
 
