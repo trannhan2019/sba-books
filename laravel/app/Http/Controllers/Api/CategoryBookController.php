@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\CategoryBook;
 use App\Http\Requests\CategoryBook\StoreUpdateCategoryBookRequest;
+use App\Http\Requests\CategoryBook\DeleteCategoryBookRequest;
 
 class CategoryBookController extends Controller
 {
@@ -29,7 +30,7 @@ class CategoryBookController extends Controller
         // return response()->json(CategoryBook::all());
     }
 
-    public function update(StoreUpdateRoleRequest $request, $id)
+    public function update(StoreUpdateCategoryBookRequest $request, $id)
     {
         $category = CategoryBook::findOrFail($id);
         $category->name = $request->name;
@@ -41,5 +42,13 @@ class CategoryBookController extends Controller
     {
         CategoryBook::findOrFail($id)->delete();
         return response()->json('CategoryBook deleted', 201);
+    }
+
+    public function destroyAll(DeleteCategoryBookRequest $request)
+    {
+        // return response()->json($request);
+        $ids = $request->ids;
+        CategoryBook::destroy($ids);
+        return response()->json('CategoryBooks deleted', 201);
     }
 }

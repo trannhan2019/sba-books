@@ -14,6 +14,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import { apiStoreCompany } from "@/apis/company";
 
 const style = {
   position: "absolute",
@@ -30,7 +31,7 @@ const scheme = Yup.object({
   // isActive:Yup.boolean()
 }).required();
 
-const AddCompany = ({ openModal, handleCloseModal, handleAddCompany }) => {
+const AddCompany = ({ openModal, handleCloseModal, setReloadPage }) => {
   const { control, handleSubmit, setValue, reset } = useForm({
     defaultValues: {
       name: "",
@@ -41,10 +42,16 @@ const AddCompany = ({ openModal, handleCloseModal, handleAddCompany }) => {
   });
 
   const onSubmit = async (values) => {
-    await handleAddCompany(values);
-    reset();
-    handleCloseModal();
-    // console.log(values);
+    try {
+      await apiStoreCompany(values);
+      reset();
+      toast.success("Tạo mới thành công");
+      setReloadPage((preState) => !preState);
+      handleCloseModal();
+    } catch (error) {
+      console.log("add company", error);
+      toast.error("Lỗi không thêm được thông tin");
+    }
   };
 
   return (

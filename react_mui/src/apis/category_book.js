@@ -20,6 +20,13 @@ export const apiDeleteCategoryBook = (id) =>
     method: "delete",
   });
 
+export const apiDeleteCategoryBooks = (data) =>
+  axiosClient({
+    url: "/category-book",
+    method: "delete",
+    data,
+  });
+
 export const apiUpdateCategoryBook = (data, id) =>
   axiosClient({
     url: `/category-book/${id}`,

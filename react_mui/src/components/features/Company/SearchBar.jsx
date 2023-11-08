@@ -1,37 +1,11 @@
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
-import {
-  Button,
-  Card,
-  InputAdornment,
-  OutlinedInput,
-  SvgIcon,
-} from "@mui/material";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import Swal from "sweetalert2";
+import { Card, InputAdornment, OutlinedInput, SvgIcon } from "@mui/material";
 
-export const SearchBar = ({ onSearchName, selected, handleDeleteAll }) => {
-  //handle Delete
-  const onDelete = () => {
-    Swal.fire({
-      icon: "info",
-      title: "Bạn có muốn xóa dữ liệu ?",
-      showCancelButton: true,
-      confirmButtonText: "Xác nhận",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        handleDeleteAll();
-        Swal.fire("Saved!", "", "success");
-      }
-    });
-  };
-
+export const SearchBar = ({ onSearchName }) => {
   return (
     <Card
       sx={{
         p: 2,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
       }}
     >
       <OutlinedInput
@@ -48,18 +22,6 @@ export const SearchBar = ({ onSearchName, selected, handleDeleteAll }) => {
         }
         sx={{ maxWidth: 450 }}
       />
-      {selected.length > 0 && (
-        <div>
-          <Button
-            onClick={() => onDelete()}
-            startIcon={<DeleteOutlinedIcon />}
-            variant="contained"
-            color="error"
-          >
-            Delete
-          </Button>
-        </div>
-      )}
     </Card>
   );
 };

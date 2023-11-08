@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('quantity')->default(0);
             $table->string('author')->nullable();
+            $table->string('photo')->nullable();
             $table->string('code');
             $table->string('storage_location');
             $table->string('more_info');

@@ -2,11 +2,9 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 const MainGuard = () => {
-  let token = localStorage.getItem("token");
-  // token = JSON.parse(token);
-  const { user } = useSelector((state) => state.user);
+  const { user, isLoggedIn } = useSelector((state) => state.user);
 
-  if (token && user) {
+  if (isLoggedIn && user) {
     const role = user.role.name;
 
     if (role === "administrator") return <Navigate to={"/admin"} />;

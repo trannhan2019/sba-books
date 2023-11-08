@@ -20,7 +20,7 @@ import { apiLogin } from "@/apis/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setLoading } from "@/store/app/appSlice";
-import { setUser } from "@/store/user/userSlice";
+import { setUser, setIsLoggedIn } from "@/store/user/userSlice";
 
 const scheme = Yup.object({
   username: Yup.string().required("Tên đăng nhập không để trống"),
@@ -47,6 +47,7 @@ const Login = () => {
     try {
       const response = await apiLogin(values);
       dispatch(setUser(response.data.user));
+      dispatch(setIsLoggedIn(true));
       localStorage.setItem("token", response.data.token);
       reset();
       dispatch(setLoading(false));

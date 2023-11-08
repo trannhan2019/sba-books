@@ -74,11 +74,10 @@ Route::prefix('category-book')->group(function () {
     Route::post('/', [CategoryBookController::class, 'store']);
     Route::get('/', [CategoryBookController::class, 'index']);
     // Route::get('/count', [DepartmentController::class, 'getCount']);
-    // Route::put('/{id}', [UserController::class, 'update']);
-    // Route::delete('/', [UserController::class, 'destroyAll']);
-    // Route::delete('/{id}', [UserController::class, 'destroy']);
+    Route::put('/{id}', [CategoryBookController::class, 'update']);
+    Route::delete('/', [CategoryBookController::class, 'destroyAll']);
+    Route::delete('/{id}', [CategoryBookController::class, 'destroy']);
     // Route::get('/all', [DepartmentController::class, 'getAll']);
 });
 
-//seed data
-Route::post('seed-data', [SeedingDataController::class, 'seed']);
+

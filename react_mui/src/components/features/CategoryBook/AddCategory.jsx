@@ -16,7 +16,7 @@ const scheme = Yup.object({
 }).required();
 
 const AddCategory = ({ openAddForm, setOpenAddForm, setReloadPage }) => {
-  const { control, handleSubmit, reset, setError } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     defaultValues: {
       name: "",
     },

@@ -7,16 +7,21 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import useDebounce from "@/hooks/useDebounce";
-import { apiGetListDepartment } from "@/apis/department";
-import { apiGetAllRole } from "@/apis/role";
-import { apiGetAllUser } from "@/apis/user";
+import { apiGetAllCategoryBook } from "@/apis/category_book";
 import AddCategory from "./AddCategory";
+import { setLoading } from "@/store/app/appSlice";
+import {
+  setCateBooks,
+  setTotalCate,
+} from "@/store/category_book/catebookSlice";
+import ListCategory from "./ListCategory";
+import EditCategory from "./EditCategory";
+import SearchCategory from "./SearchCategory";
 
 const CategoryBook = () => {
-  const { isLoading } = useSelector((state) => state.app);
   const dispatch = useDispatch();
   //search
   const [search, setSearch] = useState("");
@@ -28,8 +33,6 @@ const CategoryBook = () => {
 
   //Edit ///////////////
   const [openEditForm, setOpenEditForm] = useState(false);
-  const handleOpenEditForm = () => setOpenEditForm(true);
-  const handleCloseEditForm = () => setOpenEditForm(false);
 
   //set refresh department tai vi tri sau khi them va sua
   const [reloadPage, setReloadPage] = useState(false);
@@ -46,26 +49,26 @@ const CategoryBook = () => {
     setItemPerPage(event.target.value);
   };
 
-  //   const fetchUsers = async (page, item_per_page, search, selectDepartment) => {
-  //     try {
-  //       setLoadingData(true);
-  //       const response = await apiGetAllUser({
-  //         page,
-  //         item_per_page,
-  //         search,
-  //         selectDepartment,
-  //       });
-  //       setUsers(response.data);
-  //       setLoadingData(false);
-  //     } catch (error) {
-  //       setLoadingData(false);
-  //       console.log("get all user", error);
-  //     }
-  //   };
+  const fetchcateBooks = async (page, item_per_page, search) => {
+    try {
+      dispatch(setLoading(true));
+      const response = await apiGetAllCategoryBook({
+        page,
+        item_per_page,
+        search,
+      });
+      dispatch(setCateBooks(response.data.data));
+      dispatch(setTotalCate(response.data.total));
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setLoading(false));
+      console.log("get all user", error);
+    }
+  };
 
-  //   useEffect(() => {
-  //     fetchUsers(page, itemPerPage, search, selectDepartment);
-  //   }, [page, itemPerPage, searchDebounce, reloadPage, selectDepartment]);
+  useEffect(() => {
+    fetchcateBooks(page, itemPerPage, search);
+  }, [page, itemPerPage, searchDebounce, reloadPage]);
 
   // console.log("deparment render", reloadPage);
   return (
@@ -95,24 +98,15 @@ const CategoryBook = () => {
                 </Button>
               </div>
             </Stack>
-            {/* <SearchUser
-              onSearch={setSearch}
-              departmentList={departmentList}
-              selectDepartment={selectDepartment}
-              setSelectDepartment={setSelectDepartment}
-            /> */}
-            {/* <ListUser
-              onLoading={loadingData}
-              count={users?.total}
-              items={users?.data}
+            <SearchCategory onSearch={setSearch} />
+            <ListCategory
               page={pageMui}
               rowsPerPage={itemPerPage}
               onRowsPerPageChange={handleRowsPerPageChange}
               onPageChange={handlePageChange}
               setOpenEditForm={setOpenEditForm}
-              setUser={setUser}
               setReloadPage={setReloadPage}
-            /> */}
+            />
           </Stack>
         </Container>
       </Box>
@@ -121,14 +115,11 @@ const CategoryBook = () => {
         setOpenAddForm={setOpenAddForm}
         setReloadPage={setReloadPage}
       />
-      {/* <EditUser
+      <EditCategory
         openEditForm={openEditForm}
         setOpenEditForm={setOpenEditForm}
-        departmentList={departmentList}
-        user={user}
-        roleList={roleList}
         setReloadPage={setReloadPage}
-      /> */}
+      />
     </>
   );
 };

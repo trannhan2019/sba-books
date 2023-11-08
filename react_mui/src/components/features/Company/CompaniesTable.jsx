@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Card,
   Checkbox,
   Chip,
@@ -17,77 +18,100 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import { Scrollbar } from "@/components/common/Scrollbar";
 import TableLoader from "@/components/common/TableLoader";
-import { useEffect } from "react";
 import Swal from "sweetalert2";
 import { useSelection } from "@/hooks/useSelection";
+import { useDispatch, useSelector } from "react-redux";
+import { setCompany } from "@/store/company/companySlice";
+import { apiDeleteCompanies, apiDeleteCompany } from "@/apis/company";
+import { toast } from "react-toastify";
 
 export const CompaniesTable = (props) => {
   const {
-    onLoading,
-    count = 0,
-    items = [],
     onPageChange = () => {},
     onRowsPerPageChange,
     page = 0,
     rowsPerPage = 0,
-    selected = [],
-    onSelected,
-    handleDeleteOne,
     handleOpenDialogEdit,
-    setCompany,
+    setReloadPage,
   } = props;
 
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.app);
+  const { companies, total } = useSelector((state) => state.company);
+
   //Selected
-  const getItemIds = (arrayItems) => arrayItems.map((item) => item.id);
+  const listSelected = useSelection(companies);
 
-  const handleSelectAll = () => {
-    onSelected([...getItemIds(items)]);
-  };
+  const selectedSome =
+    listSelected.selected.length > 0 &&
+    listSelected.selected.length < companies.length;
+  const selectedAll =
+    companies.length > 0 && listSelected.selected.length === companies.length;
 
-  const handleSelectOne = (item) => {
-    onSelected((prevState) => [...prevState, item.id]);
-  };
-
-  const handleDeselectAll = () => {
-    onSelected([]);
-  };
-
-  const handleDeselectOne = (item) => {
-    onSelected((prevState) => {
-      return prevState.filter((_item) => _item !== item.id);
-    });
-  };
-
-  const selectedSome = selected.length > 0 && selected.length < items.length;
-  const selectedAll = items.length > 0 && selected.length === items.length;
-
-  useEffect(() => {
-    onSelected([]);
-  }, [items]);
-
-  //delete Fire Swal
-  const onDelete = (id) => {
+  //handle Delete
+  const handleDelete = async (id) => {
     Swal.fire({
       icon: "info",
       title: "Bạn có muốn xóa dữ liệu ?",
       showCancelButton: true,
       confirmButtonText: "Xác nhận",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        handleDeleteOne(id);
-        Swal.fire("Saved!", "", "success");
+        try {
+          await apiDeleteCompany(id);
+          setReloadPage((preState) => !preState);
+          Swal.fire("Saved!", "", "success");
+        } catch (error) {
+          console.log("delete", error);
+          toast.error("Lỗi không xóa được thông tin");
+        }
       }
     });
   };
 
-  //show edit
-  const showEdit = async (company) => {
-    setCompany(company);
+  const handleDeleteAll = async () => {
+    Swal.fire({
+      icon: "info",
+      title: "Bạn có muốn xóa dữ liệu ?",
+      showCancelButton: true,
+      confirmButtonText: "Xác nhận",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await apiDeleteCompanies({ ids: listSelected.selected });
+          setReloadPage((preState) => !preState);
+          Swal.fire("Saved!", "", "success");
+        } catch (error) {
+          console.log("delete", error);
+          toast.error("Lỗi không xóa được thông tin");
+        }
+      }
+    });
+  };
+
+  // show edit
+  const showEdit = (company) => {
+    dispatch(setCompany(company));
     handleOpenDialogEdit();
   };
 
   return (
     <Card>
+      {listSelected.selected.length > 0 && (
+        <Box
+          sx={{ display: "flex", justifyContent: "end", pr: 7, paddingY: 1 }}
+        >
+          <Button
+            onClick={() => handleDeleteAll()}
+            size="small"
+            startIcon={<DeleteOutlinedIcon />}
+            variant="contained"
+            color="error"
+          >
+            Delete
+          </Button>
+        </Box>
+      )}
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
           <Table>
@@ -99,9 +123,9 @@ export const CompaniesTable = (props) => {
                     indeterminate={selectedSome}
                     onChange={(event) => {
                       if (event.target.checked) {
-                        handleSelectAll?.();
+                        listSelected.handleSelectAll?.();
                       } else {
-                        handleDeselectAll?.();
+                        listSelected.handleDeselectAll?.();
                       }
                     }}
                   />
@@ -112,11 +136,11 @@ export const CompaniesTable = (props) => {
                 <TableCell>Hành động</TableCell>
               </TableRow>
             </TableHead>
-            {onLoading ? (
+            {isLoading ? (
               <TableLoader rowsNum={5} colsNum={4} />
             ) : (
               <TableBody>
-                {items.length <= 0 ? (
+                {companies.length <= 0 ? (
                   <TableRow>
                     <TableCell colSpan={4}>
                       <Typography variant="body1">
@@ -125,9 +149,10 @@ export const CompaniesTable = (props) => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  items.map((company) => {
-                    const isSelected = selected.includes(company.id);
-                    // const createdAt = format(customer.createdAt, "dd/MM/yyyy");
+                  companies.map((company) => {
+                    const isSelected = listSelected.selected.includes(
+                      company.id
+                    );
 
                     return (
                       <TableRow hover key={company.id} selected={isSelected}>
@@ -136,9 +161,9 @@ export const CompaniesTable = (props) => {
                             checked={isSelected}
                             onChange={(event) => {
                               if (event.target.checked) {
-                                handleSelectOne?.(company);
+                                listSelected.handleSelectOne?.(company);
                               } else {
-                                handleDeselectOne?.(company);
+                                listSelected.handleDeselectOne?.(company);
                               }
                             }}
                           />
@@ -169,7 +194,9 @@ export const CompaniesTable = (props) => {
                             <IconButton onClick={() => showEdit(company)}>
                               <EditNoteOutlinedIcon color="indigo" />
                             </IconButton>
-                            <IconButton onClick={() => onDelete(company.id)}>
+                            <IconButton
+                              onClick={() => handleDelete(company.id)}
+                            >
                               <DeleteOutlinedIcon color="error" />
                             </IconButton>
                           </Stack>
@@ -185,7 +212,7 @@ export const CompaniesTable = (props) => {
       </Scrollbar>
       <TablePagination
         component="div"
-        count={count}
+        count={total}
         page={page}
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}

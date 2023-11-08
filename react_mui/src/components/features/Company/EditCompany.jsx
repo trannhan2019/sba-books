@@ -10,6 +10,8 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useSelector } from "react-redux";
+import { apiUpdateCompany } from "@/apis/company";
 
 const scheme = Yup.object({
   name: Yup.string().required("Tên Công ty không để trống"),
@@ -20,17 +22,25 @@ const scheme = Yup.object({
 const EditCompany = ({
   openDialogEdit,
   handleCloseDialogEdit,
-  handleEditCompany,
-  company,
+  setReloadPage,
 }) => {
+  const { company } = useSelector((state) => state.company);
   const { control, handleSubmit, setValue, reset } = useForm({
     resolver: yupResolver(scheme),
   });
 
   const onSubmit = async (values) => {
-    await handleEditCompany(values, company.id);
-    reset();
-    handleCloseDialogEdit();
+    try {
+      await apiUpdateCompany(values, company.id);
+
+      reset();
+      setReloadPage((preState) => !preState);
+      toast.success("Sửa thông tin thành công");
+      handleCloseDialogEdit();
+    } catch (error) {
+      console.log("edit company", error);
+      toast.error("Lỗi không sửa được thông tin");
+    }
   };
 
   useEffect(() => {
