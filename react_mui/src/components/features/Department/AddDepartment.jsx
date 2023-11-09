@@ -20,6 +20,8 @@ import {
   Switch,
 } from "@mui/material";
 import { apiGetCountDepartment, apiStoreDepartment } from "@/apis/department";
+import { useDispatch, useSelector } from "react-redux";
+import { setCountDepartment } from "@/store/department/departmentSlice";
 
 const scheme = Yup.object({
   name: Yup.string().required("Tên Phòng ban không để trống"),
@@ -28,20 +30,16 @@ const scheme = Yup.object({
   company_id: Yup.string().required("Chọn Công ty"),
 }).required();
 
-const AddDepartment = ({
-  openAddForm,
-  handleCloseAddForm,
-  companyList,
-  setReloadPage,
-}) => {
-  const [countDepartment, setcountDepartment] = useState(0);
-
+const AddDepartment = ({ openAddForm, handleCloseAddForm, setReloadPage }) => {
+  const dispatch = useDispatch();
+  const { count } = useSelector((state) => state.department);
+  const { companies } = useSelector((state) => state.company);
   const { control, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
       name: "",
       alias: "",
       isActive: true,
-      location: countDepartment > 0 ? countDepartment : 0,
+      location: count > 0 ? count : 0,
       company_id: "",
     },
     resolver: yupResolver(scheme),
@@ -64,20 +62,19 @@ const AddDepartment = ({
   const fetchData = async () => {
     try {
       const rescountDepartment = await apiGetCountDepartment();
-      setcountDepartment(rescountDepartment + 1);
+
+      dispatch(setCountDepartment(rescountDepartment.data + 1));
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    setValue("location", countDepartment);
   }, [openAddForm]);
 
-  console.log("add department render");
+  useEffect(() => {
+    setValue("location", count);
+  }, [openAddForm]);
 
   return (
     <Box>
@@ -110,8 +107,8 @@ const AddDepartment = ({
                     onChange={onChange}
                     error={!!error}
                   >
-                    {companyList.length > 0 &&
-                      companyList.map((item) => (
+                    {companies.length > 0 &&
+                      companies.map((item) => (
                         <MenuItem key={item.id} value={item.id}>
                           {item.name}
                         </MenuItem>

@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const ManagerGuard = ({ children }) => {
-  const { user, isLoggedIn } = useSelector((state) => state.user);
+  const { user, isLoggedIn } = useSelector((state) => state.auth);
 
   if (
     (isLoggedIn && user.role.name === "quản lý") ||

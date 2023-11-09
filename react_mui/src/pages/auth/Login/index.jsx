@@ -20,7 +20,7 @@ import { apiLogin } from "@/apis/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setLoading } from "@/store/app/appSlice";
-import { setUser, setIsLoggedIn } from "@/store/user/userSlice";
+import { setUser, setIsLoggedIn } from "@/store/auth/authSlice";
 
 const scheme = Yup.object({
   username: Yup.string().required("Tên đăng nhập không để trống"),

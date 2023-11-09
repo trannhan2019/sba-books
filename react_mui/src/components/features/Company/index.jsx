@@ -62,7 +62,6 @@ const Company = () => {
       });
       dispatch(setCompanies(response.data.data));
       dispatch(setTotalCompany(response.data.meta?.total));
-      console.log(response.data.meta.total);
       dispatch(setLoading(false));
     } catch (error) {
       dispatch(setLoading(false));

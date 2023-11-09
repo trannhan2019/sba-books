@@ -1,28 +1,7 @@
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
-import {
-  Button,
-  Card,
-  InputAdornment,
-  OutlinedInput,
-  SvgIcon,
-} from "@mui/material";
+import { Card, InputAdornment, OutlinedInput, SvgIcon } from "@mui/material";
 
 const SearchDepartment = ({ onSearch }) => {
-  //handle Delete
-  //   const onDelete = () => {
-  //     Swal.fire({
-  //       icon: "info",
-  //       title: "Bạn có muốn xóa dữ liệu ?",
-  //       showCancelButton: true,
-  //       confirmButtonText: "Xác nhận",
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         handleDeleteAll();
-  //         Swal.fire("Saved!", "", "success");
-  //       }
-  //     });
-  //   };
-
   return (
     <Card
       sx={{

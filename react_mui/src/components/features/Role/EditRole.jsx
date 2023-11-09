@@ -10,16 +10,18 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Box, Button } from "@mui/material";
 import { apiUpdateRole } from "@/apis/role";
+import { useSelector } from "react-redux";
 
 const scheme = Yup.object({
   name: Yup.string().required("Tên quyền không để trống"),
 }).required();
 
-const EditRole = ({ openEditForm, setOpenEditForm, role, setReloadPage }) => {
+const EditRole = ({ openEditForm, setOpenEditForm, setReloadPage }) => {
   const { control, handleSubmit, reset, setValue } = useForm({
     resolver: yupResolver(scheme),
   });
 
+  const { role } = useSelector((state) => state.role);
   const onSubmit = async (values) => {
     // console.log(values);
     try {

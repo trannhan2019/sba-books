@@ -14,21 +14,27 @@ import {
   REGISTER,
 } from "redux-persist";
 import companySlice from "./company/companySlice";
+import departmentSlice from "./department/departmentSlice";
+import roleSlice from "./role/roleSlice";
+import authSlice from "./auth/authSlice";
 
 const commonConfig = {
   storage,
 };
-const userConfig = {
+const authConfig = {
   ...commonConfig,
-  key: "book/user",
+  key: "book/auth",
 };
 
 export const store = configureStore({
   reducer: {
     app: appSlice,
-    user: persistReducer(userConfig, userSlice),
+    auth: persistReducer(authConfig, authSlice),
+    user: userSlice,
     cateBook: catebookSlice,
     company: companySlice,
+    department: departmentSlice,
+    role: roleSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

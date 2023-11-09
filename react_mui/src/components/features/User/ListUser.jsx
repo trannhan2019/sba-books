@@ -22,32 +22,33 @@ import TableLoader from "@/components/common/TableLoader";
 import Swal from "sweetalert2";
 import { useSelection } from "@/hooks/useSelection";
 import { apiDeleteUser, apiDeleteUsers } from "@/apis/user";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserCurrent } from "@/store/user/userSlice";
 
 const ListUser = (props) => {
   const {
-    onLoading,
-    count = 0,
-    items = [],
     onPageChange = () => {},
     onRowsPerPageChange,
     page = 0,
     rowsPerPage = 0,
     setOpenEditForm,
-    setUser,
     setReloadPage,
   } = props;
 
+  const { isLoading } = useSelector((state) => state.app);
+  const { total, userList } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   //seleted
-  const userSelected = useSelection(items);
+  const userSelected = useSelection(userList);
   const selectedSome =
     userSelected.selected.length > 0 &&
-    userSelected.selected.length < items.length;
+    userSelected.selected.length < userList.length;
   const selectedAll =
-    items.length > 0 && userSelected.selected.length === items.length;
+    userList.length > 0 && userSelected.selected.length === userList.length;
 
   //show edit
   const showEdit = async (user) => {
-    setUser(user);
+    dispatch(setUserCurrent(user));
     setOpenEditForm(true);
   };
   // handel Del single
@@ -158,11 +159,11 @@ const ListUser = (props) => {
                 </TableCell>
               </TableRow>
             </TableHead>
-            {onLoading ? (
+            {isLoading ? (
               <TableLoader rowsNum={8} colsNum={5} />
             ) : (
               <TableBody>
-                {items.length <= 0 ? (
+                {userList.length <= 0 ? (
                   <TableRow>
                     <TableCell colSpan={4}>
                       <Typography variant="body1">
@@ -171,7 +172,7 @@ const ListUser = (props) => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  items.map((user) => {
+                  userList.map((user) => {
                     const isSelected = userSelected.selected.includes(user.id);
 
                     return (
@@ -230,7 +231,7 @@ const ListUser = (props) => {
       </Scrollbar>
       <TablePagination
         component="div"
-        count={count}
+        count={total}
         page={page}
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}

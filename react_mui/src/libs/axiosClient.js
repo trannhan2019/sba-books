@@ -13,7 +13,6 @@ axiosClient.interceptors.request.use(
   function (config) {
     // Do something before request is sent
     let localToken = window.localStorage.getItem("token");
-    console.log("token", localToken);
     if (localToken && typeof localToken === "string") {
       // localToken = JSON.parse(localToken);
       config.headers = { authorization: `Bearer ${localToken}` };

@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 const AdminGuard = ({ children }) => {
-  const { user, isLoggedIn } = useSelector((state) => state.user);
+  const { user, isLoggedIn } = useSelector((state) => state.auth);
 
   if (isLoggedIn && user.role.name === "administrator") return <>{children}</>;
   return <Navigate to={"/"} />;

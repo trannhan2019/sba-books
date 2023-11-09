@@ -24,6 +24,7 @@ import {
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { apiStoreUser } from "@/apis/user";
+import { useSelector } from "react-redux";
 
 const scheme = Yup.object({
   name: Yup.string().required("Tên người dùng không để trống"),
@@ -35,14 +36,10 @@ const scheme = Yup.object({
   role: Yup.string().required("Chọn quuyền"),
 }).required();
 
-const AddUser = ({
-  openAddForm,
-  setOpenAddForm,
-  departmentList,
-  setReloadPage,
-  roleList,
-}) => {
+const AddUser = ({ openAddForm, setOpenAddForm, setReloadPage }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const { departments } = useSelector((state) => state.department);
+  const { roles } = useSelector((state) => state.role);
 
   const { control, handleSubmit, reset, setError } = useForm({
     defaultValues: {
@@ -188,8 +185,8 @@ const AddUser = ({
                     onChange={onChange}
                     error={!!error}
                   >
-                    {departmentList?.length > 0 &&
-                      departmentList.map((item) => (
+                    {departments?.length > 0 &&
+                      departments.map((item) => (
                         <MenuItem key={item.id} value={item.id}>
                           {item.name}
                         </MenuItem>
@@ -217,8 +214,8 @@ const AddUser = ({
                     onChange={onChange}
                     error={!!error}
                   >
-                    {roleList?.length > 0 &&
-                      roleList.map((item) => (
+                    {roles?.length > 0 &&
+                      roles.map((item) => (
                         <MenuItem key={item.id} value={item.id}>
                           {item.name}
                         </MenuItem>

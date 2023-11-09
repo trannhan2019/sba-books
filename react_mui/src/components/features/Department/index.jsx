@@ -15,8 +15,16 @@ import ListDepartment from "./ListDepartment";
 import { apiGetAllCompanyforSelect } from "@/apis/company";
 import EditDepartment from "./EditDepartment";
 import SearchDepartment from "./SearchDepartment";
+import { useDispatch } from "react-redux";
+import { setCompanies } from "@/store/company/companySlice";
+import { setLoading } from "@/store/app/appSlice";
+import {
+  setDepartments,
+  setTotalDepartment,
+} from "@/store/department/departmentSlice";
 
 const Department = () => {
+  const dispatch = useDispatch();
   //search
   const [search, setSearch] = useState("");
   const searchDebounce = useDebounce(search, 800);
@@ -32,14 +40,10 @@ const Department = () => {
   const handleOpenEditForm = () => setOpenEditForm(true);
   const handleCloseEditForm = () => setOpenEditForm(false);
 
-  const [department, setDepartment] = useState(null);
-
   //set refresh department tai vi tri sau khi them va sua
   const [reloadPage, setReloadPage] = useState(false);
 
   //load fetch departments
-  const [departments, setDepartments] = useState([]);
-  const [loadingData, setLoadingData] = useState(false);
 
   const [pageMui, setPageMui] = useState(0);
   const [page, setPage] = useState(1);
@@ -55,17 +59,17 @@ const Department = () => {
 
   const fetchDepartments = async (page, item_per_page, search) => {
     try {
-      setLoadingData(true);
+      dispatch(setLoading(true));
       const response = await apiGetAllDepartment({
         page,
         item_per_page,
         search,
       });
-      setDepartments(response.data);
-      console.log("deparment render", response);
-      setLoadingData(false);
+      dispatch(setDepartments(response.data.data));
+      dispatch(setTotalDepartment(response.data.meta.total));
+      dispatch(setLoading(false));
     } catch (error) {
-      setLoadingData(false);
+      dispatch(setLoading(false));
       console.log("get all department", error);
     }
   };
@@ -75,10 +79,9 @@ const Department = () => {
   }, [page, itemPerPage, searchDebounce, reloadPage]);
 
   //lay danh sach company de truyen den add va edit form
-  const [companyList, setCompanyList] = useState([]);
   const getCompanyList = async () => {
     const response = await apiGetAllCompanyforSelect();
-    setCompanyList(response.data.data);
+    dispatch(setCompanies(response.data.data));
   };
   useEffect(() => {
     getCompanyList();
@@ -113,15 +116,11 @@ const Department = () => {
             </Stack>
             <SearchDepartment onSearch={setSearch} />
             <ListDepartment
-              onLoading={loadingData}
-              count={departments?.meta?.total}
-              items={departments?.data}
               page={pageMui}
               rowsPerPage={itemPerPage}
               onRowsPerPageChange={handleRowsPerPageChange}
               onPageChange={handlePageChange}
               handleOpenEditForm={handleOpenEditForm}
-              setDepartment={setDepartment}
               setReloadPage={setReloadPage}
             />
           </Stack>
@@ -130,14 +129,11 @@ const Department = () => {
       <AddDepartment
         openAddForm={openAddForm}
         handleCloseAddForm={handleCloseAddForm}
-        companyList={companyList}
         setReloadPage={setReloadPage}
       />
       <EditDepartment
         openEditForm={openEditForm}
         handleCloseEditForm={handleCloseEditForm}
-        companyList={companyList}
-        department={department}
         setReloadPage={setReloadPage}
       />
     </>

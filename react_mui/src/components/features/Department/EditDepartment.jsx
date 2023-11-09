@@ -20,6 +20,7 @@ import {
   Switch,
 } from "@mui/material";
 import { apiUpdateDepartment } from "@/apis/department";
+import { useSelector } from "react-redux";
 
 const scheme = Yup.object({
   name: Yup.string().required("Tên Phòng ban không để trống"),
@@ -31,18 +32,11 @@ const scheme = Yup.object({
 const EditDepartment = ({
   openEditForm,
   handleCloseEditForm,
-  companyList,
-  department,
   setReloadPage,
 }) => {
+  const { department } = useSelector((state) => state.department);
+  const { companies } = useSelector((state) => state.company);
   const { control, handleSubmit, reset, setValue } = useForm({
-    // defaultValues: {
-    //   name: "",
-    //   alias: "",
-    //   isActive: true,
-    //   location: countDepartment > 0 ? countDepartment : 0,
-    //   company_id: "",
-    // },
     resolver: yupResolver(scheme),
   });
 
@@ -67,8 +61,6 @@ const EditDepartment = ({
     setValue("location", department?.location);
     setValue("isActive", department?.isActive);
   }, [openEditForm]);
-
-  console.log("edit department render");
 
   return (
     <Box>
@@ -101,8 +93,8 @@ const EditDepartment = ({
                     onChange={onChange}
                     error={!!error}
                   >
-                    {companyList.length > 0 &&
-                      companyList.map((item) => (
+                    {companies.length > 0 &&
+                      companies.map((item) => (
                         <MenuItem key={item.id} value={item.id}>
                           {item.name}
                         </MenuItem>

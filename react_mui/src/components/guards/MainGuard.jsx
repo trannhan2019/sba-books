@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 const MainGuard = () => {
-  const { user, isLoggedIn } = useSelector((state) => state.user);
+  const { user, isLoggedIn } = useSelector((state) => state.auth);
 
   if (isLoggedIn && user) {
     const role = user.role.name;

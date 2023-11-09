@@ -3,19 +3,28 @@ import { createSlice } from "@reduxjs/toolkit";
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    isLoggedIn: false,
-    user: null,
+    userList: [],
+    userCurrent: null,
+    total: 0,
+    count: 0,
   },
   reducers: {
-    setUser: (state, action) => {
-      state.user = action.payload;
+    setUserList: (state, action) => {
+      state.userList = action.payload;
     },
-    setIsLoggedIn: (state, action) => {
-      state.isLoggedIn = action.payload;
+    setUserCurrent: (state, action) => {
+      state.userCurrent = action.payload;
+    },
+    setTotalUser: (state, action) => {
+      state.total = action.payload;
+    },
+    setCountUser: (state, action) => {
+      state.count = action.payload;
     },
   },
 });
 
-export const { setUser, setIsLoggedIn } = userSlice.actions;
+export const { setUserList, setUserCurrent, setTotalUser, setCountUser } =
+  userSlice.actions;
 
 export default userSlice.reducer;

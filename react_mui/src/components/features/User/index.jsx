@@ -16,14 +16,20 @@ import { apiGetAllUser } from "@/apis/user";
 import ListUser from "./ListUser";
 import SearchUser from "./SearchUser";
 import EditUser from "./EditUser";
+import { useDispatch, useSelector } from "react-redux";
+import { setDepartments } from "@/store/department/departmentSlice";
+import { setRoles } from "@/store/role/roleSlice";
+import { setTotalUser, setUserList } from "@/store/user/userSlice";
+import { setLoading } from "@/store/app/appSlice";
 // import EditDepartment from "./EditDepartment";
 
 const User = () => {
+  const dispatch = useDispatch();
   //search
   const [search, setSearch] = useState("");
   const searchDebounce = useDebounce(search, 800);
   // console.log(searchDebounce);
-  const [selectDepartment, setSelectDepartment] = useState("");
+  const { departmentId } = useSelector((state) => state.department);
 
   //Add ///////////////
   const [openAddForm, setOpenAddForm] = useState(false);
@@ -33,14 +39,8 @@ const User = () => {
   const handleOpenEditForm = () => setOpenEditForm(true);
   const handleCloseEditForm = () => setOpenEditForm(false);
 
-  const [user, setUser] = useState(null);
-
   //set refresh department tai vi tri sau khi them va sua
   const [reloadPage, setReloadPage] = useState(false);
-
-  //load fetch user list
-  const [users, setUsers] = useState([]);
-  const [loadingData, setLoadingData] = useState(false);
 
   const [pageMui, setPageMui] = useState(0);
   const [page, setPage] = useState(1);
@@ -56,33 +56,32 @@ const User = () => {
 
   const fetchUsers = async (page, item_per_page, search, selectDepartment) => {
     try {
-      setLoadingData(true);
+      dispatch(setLoading(true));
       const response = await apiGetAllUser({
         page,
         item_per_page,
         search,
         selectDepartment,
       });
-      setUsers(response.data);
-      setLoadingData(false);
+      dispatch(setUserList(response.data.data));
+      dispatch(setTotalUser(response.data.total));
+      dispatch(setLoading(false));
     } catch (error) {
-      setLoadingData(false);
+      dispatch(setLoading(false));
       console.log("get all user", error);
     }
   };
 
   useEffect(() => {
-    fetchUsers(page, itemPerPage, search, selectDepartment);
-  }, [page, itemPerPage, searchDebounce, reloadPage, selectDepartment]);
+    fetchUsers(page, itemPerPage, search, departmentId);
+  }, [page, itemPerPage, searchDebounce, reloadPage, departmentId]);
 
   // get danh sách role và phòng ban truyền form add và edit
-  const [departmentList, setDepartmentList] = useState([]);
-  const [roleList, setRoleList] = useState([]);
   const getDepartmentAndRoleList = async () => {
-    const departments = await apiGetListDepartment();
-    setDepartmentList(departments.data);
-    const roles = await apiGetAllRole();
-    setRoleList(roles.data);
+    const resDep = await apiGetListDepartment();
+    dispatch(setDepartments(resDep.data));
+    const resRoles = await apiGetAllRole();
+    dispatch(setRoles(resRoles.data));
   };
   useEffect(() => {
     getDepartmentAndRoleList();
@@ -116,22 +115,13 @@ const User = () => {
                 </Button>
               </div>
             </Stack>
-            <SearchUser
-              onSearch={setSearch}
-              departmentList={departmentList}
-              selectDepartment={selectDepartment}
-              setSelectDepartment={setSelectDepartment}
-            />
+            <SearchUser onSearch={setSearch} />
             <ListUser
-              onLoading={loadingData}
-              count={users?.total}
-              items={users?.data}
               page={pageMui}
               rowsPerPage={itemPerPage}
               onRowsPerPageChange={handleRowsPerPageChange}
               onPageChange={handlePageChange}
               setOpenEditForm={setOpenEditForm}
-              setUser={setUser}
               setReloadPage={setReloadPage}
             />
           </Stack>
@@ -140,16 +130,11 @@ const User = () => {
       <AddUser
         openAddForm={openAddForm}
         setOpenAddForm={setOpenAddForm}
-        departmentList={departmentList}
-        roleList={roleList}
         setReloadPage={setReloadPage}
       />
       <EditUser
         openEditForm={openEditForm}
         setOpenEditForm={setOpenEditForm}
-        departmentList={departmentList}
-        user={user}
-        roleList={roleList}
         setReloadPage={setReloadPage}
       />
     </>

@@ -73,6 +73,6 @@ class DepartmentController extends Controller
 
     public function getAll()
     {
-        return response()->json(Department::orderBy('location')->select('id', 'name', 'alias')->get());
+        return response()->json(Department::orderBy('location')->select('id', 'name', 'alias','company_id')->with('company')->get());
     }
 }

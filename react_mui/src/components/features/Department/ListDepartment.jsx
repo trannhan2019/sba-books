@@ -23,23 +23,26 @@ import Swal from "sweetalert2";
 import { apiDeleteDepartment, apiDeleteDepartments } from "@/apis/department";
 import { useSelection } from "@/hooks/useSelection";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setDepartment } from "@/store/department/departmentSlice";
 
 const ListDepartment = (props) => {
   const {
-    onLoading,
-    count = 0,
-    items,
     onPageChange = () => {},
     onRowsPerPageChange,
     page = 0,
     rowsPerPage = 0,
     handleOpenEditForm,
-    setDepartment,
     setReloadPage,
   } = props;
 
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.app);
+  const { total, departments } = useSelector((state) => state.department);
+
   //show edit
   const showEdit = async (department) => {
+    dispatch(setDepartment(department));
     setDepartment(department);
     handleOpenEditForm();
   };
@@ -86,12 +89,13 @@ const ListDepartment = (props) => {
   };
 
   //seleted
-  const departmentSelected = useSelection(items);
+  const departmentSelected = useSelection(departments);
   const selectedSome =
     departmentSelected.selected.length > 0 &&
-    departmentSelected.selected.length < items.length;
+    departmentSelected.selected.length < departments.length;
   const selectedAll =
-    items?.length > 0 && departmentSelected.selected.length === items.length;
+    departments?.length > 0 &&
+    departmentSelected.selected.length === departments.length;
 
   return (
     <Card>
@@ -135,11 +139,11 @@ const ListDepartment = (props) => {
                 <TableCell>Hành động</TableCell>
               </TableRow>
             </TableHead>
-            {onLoading ? (
+            {isLoading ? (
               <TableLoader rowsNum={8} colsNum={5} />
             ) : (
               <TableBody>
-                {items?.length <= 0 ? (
+                {departments?.length <= 0 ? (
                   <TableRow>
                     <TableCell colSpan={4}>
                       <Typography variant="body1">
@@ -148,7 +152,7 @@ const ListDepartment = (props) => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  items?.map((department) => {
+                  departments?.map((department) => {
                     const isSelected = departmentSelected.selected.includes(
                       department.id
                     );
@@ -218,7 +222,7 @@ const ListDepartment = (props) => {
       </Scrollbar>
       <TablePagination
         component="div"
-        count={count}
+        count={total}
         page={page}
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}

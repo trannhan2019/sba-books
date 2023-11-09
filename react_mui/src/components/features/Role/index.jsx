@@ -13,35 +13,34 @@ import AddRole from "./AddRole";
 import ListRole from "./ListRole";
 import { apiGetAllRole } from "@/apis/role";
 import EditRole from "./EditRole";
+import { useDispatch } from "react-redux";
+import { setLoading } from "@/store/app/appSlice";
+import { setRoles } from "@/store/role/roleSlice";
 
 const Role = () => {
+  const dispatch = useDispatch();
   //Add
   const [openAddForm, setOpenAddForm] = useState(false);
   //Edit
   const [openEditForm, setOpenEditForm] = useState(false);
-  const [role, setRole] = useState(null);
   //Reload
   const [reloadPage, setReloadPage] = useState(false);
-  //role list
-  const [roles, setRoles] = useState([]);
-  //loading
-  const [loadingData, setLoadingData] = useState(false);
+
   //fetch data
   const fetchRoles = async () => {
     try {
-      setLoadingData(true);
+      dispatch(setLoading(true));
       const response = await apiGetAllRole();
-      setRoles(response.data);
-      setLoadingData(false);
+      dispatch(setRoles(response.data));
+      dispatch(setLoading(false));
     } catch (error) {
-      setLoadingData(false);
+      dispatch(setLoading(false));
       console.log("get all role", error);
     }
   };
   useEffect(() => {
     fetchRoles();
   }, [reloadPage]);
-  console.log(roles);
 
   return (
     <>
@@ -72,10 +71,7 @@ const Role = () => {
             </Stack>
             {/* <SearchDepartment onSearch={setSearch} /> */}
             <ListRole
-              onLoading={loadingData}
-              items={roles}
               setOpenEditForm={setOpenEditForm}
-              setRole={setRole}
               setReloadPage={setReloadPage}
             />
           </Stack>
@@ -89,7 +85,6 @@ const Role = () => {
       <EditRole
         openEditForm={openEditForm}
         setOpenEditForm={setOpenEditForm}
-        role={role}
         setReloadPage={setReloadPage}
       />
     </>

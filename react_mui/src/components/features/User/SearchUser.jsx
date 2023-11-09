@@ -1,6 +1,9 @@
+import {
+  setDepartment,
+  setDepartmentId,
+} from "@/store/department/departmentSlice";
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
 import {
-  Button,
   Card,
   FormControl,
   InputAdornment,
@@ -10,13 +13,11 @@ import {
   Select,
   SvgIcon,
 } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 
-const SearchUser = ({
-  onSearch,
-  departmentList,
-  selectDepartment,
-  setSelectDepartment,
-}) => {
+const SearchUser = ({ onSearch }) => {
+  const dispatch = useDispatch();
+  const { departments } = useSelector((state) => state.department);
   return (
     <Card
       sx={{
@@ -31,17 +32,17 @@ const SearchUser = ({
         <InputLabel id="department_id">Chọn phòng ban</InputLabel>
         <Select
           size="small"
+          value={""}
           labelId="department_id"
           id="demo-simple-select"
-          value={selectDepartment}
           label="Chọn phòng ban"
-          onChange={(event) => setSelectDepartment(event.target.value)}
+          onChange={(event) => dispatch(setDepartmentId(event.target.value))}
         >
-          <MenuItem value="" selected>
+          <MenuItem value={null} selected>
             --Tất cả --
           </MenuItem>
-          {departmentList?.length > 0 &&
-            departmentList.map((item) => (
+          {departments?.length > 0 &&
+            departments.map((item) => (
               <MenuItem key={item.id} value={item.id}>
                 {item.name}
               </MenuItem>

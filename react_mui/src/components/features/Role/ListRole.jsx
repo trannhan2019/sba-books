@@ -17,14 +17,13 @@ import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import { apiDeleteRole } from "@/apis/role";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { setRole } from "@/store/role/roleSlice";
 
-const ListRole = ({
-  onLoading,
-  items,
-  setRole,
-  setOpenEditForm,
-  setReloadPage,
-}) => {
+const ListRole = ({ setOpenEditForm, setReloadPage }) => {
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.app);
+  const { roles } = useSelector((state) => state.role);
   //handel Del single
   const handleDelete = (id) => {
     Swal.fire({
@@ -58,11 +57,11 @@ const ListRole = ({
                 <TableCell>Hành động</TableCell>
               </TableRow>
             </TableHead>
-            {onLoading ? (
+            {isLoading ? (
               <TableLoader rowsNum={5} colsNum={3} />
             ) : (
               <TableBody>
-                {items?.length <= 0 ? (
+                {roles?.length <= 0 ? (
                   <TableRow>
                     <TableCell colSpan={4}>
                       <Typography variant="body1">
@@ -71,7 +70,7 @@ const ListRole = ({
                     </TableCell>
                   </TableRow>
                 ) : (
-                  items?.map((role) => {
+                  roles?.map((role) => {
                     return (
                       <TableRow hover key={role.id}>
                         <TableCell>
@@ -84,7 +83,7 @@ const ListRole = ({
                             <IconButton
                               onClick={() => {
                                 setOpenEditForm(true);
-                                setRole(role);
+                                dispatch(setRole(role));
                               }}
                             >
                               <EditNoteOutlinedIcon color="indigo" />
