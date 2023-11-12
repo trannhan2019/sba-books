@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('photo')->nullable();
             $table->string('code');
             $table->string('storage_location');
-            $table->string('more_info');
+            $table->string('more_info')->nullable();
             $table->foreignId('category_book_id')->constrained('category_books');
             $table->timestamps();
         });

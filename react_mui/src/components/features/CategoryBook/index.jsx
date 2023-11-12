@@ -10,7 +10,7 @@ import {
 import { useDispatch } from "react-redux";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import useDebounce from "@/hooks/useDebounce";
-import { apiGetAllCategoryBook } from "@/apis/category_book";
+import { apiGetCategoryBook } from "@/apis/category_book";
 import AddCategory from "./AddCategory";
 import { setLoading } from "@/store/app/appSlice";
 import {
@@ -52,7 +52,7 @@ const CategoryBook = () => {
   const fetchcateBooks = async (page, item_per_page, search) => {
     try {
       dispatch(setLoading(true));
-      const response = await apiGetAllCategoryBook({
+      const response = await apiGetCategoryBook({
         page,
         item_per_page,
         search,

@@ -7,11 +7,17 @@ export const apiStoreCategoryBook = (data) =>
     data,
   });
 
-export const apiGetAllCategoryBook = (params) =>
+export const apiGetCategoryBook = (params) =>
   axiosClient({
     url: "/category-book",
     method: "get",
     params,
+  });
+
+export const apiGetAllCategoryBook = () =>
+  axiosClient({
+    url: "/category-book/all",
+    method: "get",
   });
 
 export const apiDeleteCategoryBook = (id) =>

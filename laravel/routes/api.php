@@ -5,8 +5,8 @@ use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\SeedingDataController;
 use App\Http\Controllers\Api\CategoryBookController;
+use App\Http\Controllers\Api\BookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -77,7 +77,18 @@ Route::prefix('category-book')->group(function () {
     Route::put('/{id}', [CategoryBookController::class, 'update']);
     Route::delete('/', [CategoryBookController::class, 'destroyAll']);
     Route::delete('/{id}', [CategoryBookController::class, 'destroy']);
-    // Route::get('/all', [DepartmentController::class, 'getAll']);
+    Route::get('/all', [CategoryBookController::class, 'getAll']);
+});
+
+Route::prefix('book')->group(function () {
+    Route::post('/', [BookController::class, 'store']);
+//    Route::get('/2', [BookController::class, 'test2']);
+    // Route::get('/', [CategoryBookController::class, 'index']);
+    // // Route::get('/count', [DepartmentController::class, 'getCount']);
+    // Route::put('/{id}', [CategoryBookController::class, 'update']);
+    // Route::delete('/', [CategoryBookController::class, 'destroyAll']);
+    // Route::delete('/{id}', [CategoryBookController::class, 'destroy']);
+    // Route::get('/all', [CategoryBookController::class, 'getAll']);
 });
 
 

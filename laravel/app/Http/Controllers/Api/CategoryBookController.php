@@ -51,4 +51,9 @@ class CategoryBookController extends Controller
         CategoryBook::destroy($ids);
         return response()->json('CategoryBooks deleted', 201);
     }
+
+    public function getAll()
+    {
+        return response()->json(CategoryBook::orderBy('name')->get());
+    }
 }

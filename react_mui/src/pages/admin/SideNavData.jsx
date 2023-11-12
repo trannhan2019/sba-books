@@ -4,6 +4,7 @@ import BuildingOffice2Icon from "@heroicons/react/24/solid/BuildingOffice2Icon";
 import { SvgIcon } from "@mui/material";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import CategoryIcon from "@mui/icons-material/Category";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 
 export const users = [
   {
@@ -63,5 +64,10 @@ export const manages = [
     title: "Danh mục sách",
     path: "/admin/category-book",
     icon: <CategoryIcon fontSize="small" />,
+  },
+  {
+    title: "Quản lý sách",
+    path: "/admin/book",
+    icon: <AutoStoriesIcon fontSize="small" />,
   },
 ];
