@@ -11,6 +11,14 @@ const ImageInput = (props) => {
 
   const onDrop = useCallback(
     (droppedFiles) => {
+      // console.log(
+      //   droppedFiles.map((file) =>
+      //     Object.assign(file, {
+      //       preview: URL.createObjectURL(file),
+      //     })
+      //   )
+      // ); //gop them thuoc tinh preview vào droppedFiles
+
       let newFiles =
         mode === "update" ? droppedFiles : [...(files || []), ...droppedFiles];
       if (mode === "append") {
@@ -41,6 +49,7 @@ const ImageInput = (props) => {
     accept: {
       "image/*": [],
     },
+    maxSize: 3000000,
     multiple: false,
   });
 
@@ -50,7 +59,7 @@ const ImageInput = (props) => {
       unregister(name);
     };
   }, [register, unregister, name]);
-
+  // console.log({ ...getInputProps() });
   return (
     <Box>
       <Typography>Chọn hình ảnh</Typography>

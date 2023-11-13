@@ -26,14 +26,15 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useSelector } from "react-redux";
 import ImageInput from "@/components/common/ImageInput";
 import { apiStoreBook } from "@/apis/book";
+import ImageInput2 from "@/components/common/ImageInput/index2,";
 
 const scheme = Yup.object({
-  title: Yup.string().required("Tiêu đề sách không để trống"),
-  description: Yup.string().required("Mô tả không để trống"),
-  quantity: Yup.number().required(),
-  code: Yup.string().required("Mã sách không được để trống"),
-  storage_location: Yup.string().required("Nơi lưu trữ không được để trống"),
-  category_book_id: Yup.string().required("Chọn danh mục"),
+  // title: Yup.string().required("Tiêu đề sách không để trống"),
+  // description: Yup.string().required("Mô tả không để trống"),
+  // quantity: Yup.number().required(),
+  // code: Yup.string().required("Mã sách không được để trống"),
+  // storage_location: Yup.string().required("Nơi lưu trữ không được để trống"),
+  // category_book_id: Yup.string().required("Chọn danh mục"),
 }).required();
 
 const AddBook = ({ openAddForm, setOpenAddForm }) => {
@@ -42,42 +43,41 @@ const AddBook = ({ openAddForm, setOpenAddForm }) => {
   const hookForm = useForm({
     defaultValues: {
       title: "",
-      description: "",
-      quantity: 0,
-      author: "",
-      photo: "",
-      code: "",
-      storage_location: "",
-      more_info: "",
-      category_book_id: "",
+      // description: "",
+      // quantity: 0,
+      // author: "",
+      // photo: "",
+      // code: "",
+      // storage_location: "",
+      // more_info: "",
+      // category_book_id: "",
       photo: [],
     },
     resolver: yupResolver(scheme),
   });
 
-  const { control, handleSubmit, reset, setValue } = hookForm;
+  const { control, handleSubmit, reset, setValue, register } = hookForm;
 
   const onSubmit = async (values) => {
-    // console.log(values);
-    try {
-      const formData = new FormData();
-      for (const key in values) {
-        if (key === "field") {
-          formData.append(key, values[key][1]);
-        } else {
-          formData.append(key, values[key]);
-        }
-      }
-      //   console.log(formData.getAll);
-      await apiStoreBook(formData);
-      reset();
-      setOpenAddForm(false);
-      //   setReloadPage((preState) => !preState);
-      toast.success("Tạo mới thành công");
-    } catch (error) {
-      console.log("add book", error);
-      toast.error("Lỗi không thêm được thông tin");
-    }
+    console.log(values);
+    // try {
+    //   const formData = new FormData();
+    //   for (const key in values) {
+    //     if (key === "photo") {
+    //       formData.append(key, values[key][0]);
+    //     } else {
+    //       formData.append(key, values[key]);
+    //     }
+    //   }
+    //   await apiStoreBook(formData);
+    //   // reset();
+    //   // setOpenAddForm(false);
+    //   //   setReloadPage((preState) => !preState);
+    //   toast.success("Tạo mới thành công");
+    // } catch (error) {
+    //   console.log("add book", error);
+    //   toast.error("Lỗi không thêm được thông tin");
+    // }
   };
 
   return (
@@ -110,7 +110,7 @@ const AddBook = ({ openAddForm, setOpenAddForm }) => {
               )}
             />
 
-            <Controller
+            {/* <Controller
               name="category_book_id"
               control={control}
               render={({
@@ -135,7 +135,7 @@ const AddBook = ({ openAddForm, setOpenAddForm }) => {
                   <FormHelperText>{error?.message}</FormHelperText>
                 </FormControl>
               )}
-            />
+            /> */}
 
             <Controller
               name="description"
@@ -162,8 +162,22 @@ const AddBook = ({ openAddForm, setOpenAddForm }) => {
               )}
             />
 
-            <ImageInput form={hookForm} name="photo" />
-
+            {/* <ImageInput form={hookForm} name="photo" mode="update" /> */}
+            <ImageInput2 name="photo" form={hookForm} />
+            {/* <Controller
+              name="photo"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  type="file"
+                  onChange={(e) => {
+                    setValue("photo", e.target.files[0].name);
+                    field.onChange(e.target.files);
+                  }}
+                />
+              )}
+            /> */}
             <Controller
               name="author"
               control={control}
