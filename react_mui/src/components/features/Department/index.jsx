@@ -28,7 +28,6 @@ const Department = () => {
   //search
   const [search, setSearch] = useState("");
   const searchDebounce = useDebounce(search, 800);
-  console.log(searchDebounce);
 
   //Add ///////////////
   const [openAddForm, setOpenAddForm] = useState(false);

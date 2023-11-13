@@ -17,6 +17,7 @@ import companySlice from "./company/companySlice";
 import departmentSlice from "./department/departmentSlice";
 import roleSlice from "./role/roleSlice";
 import authSlice from "./auth/authSlice";
+import bookSlice from "./book/bookSlice";
 
 const commonConfig = {
   storage,
@@ -35,6 +36,7 @@ export const store = configureStore({
     company: companySlice,
     department: departmentSlice,
     role: roleSlice,
+    book: bookSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

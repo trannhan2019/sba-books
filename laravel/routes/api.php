@@ -82,7 +82,7 @@ Route::prefix('category-book')->group(function () {
 
 Route::prefix('book')->group(function () {
     Route::post('/', [BookController::class, 'store']);
-//    Route::get('/2', [BookController::class, 'test2']);
+    Route::get('/', [BookController::class, 'index']);
     // Route::get('/', [CategoryBookController::class, 'index']);
     // // Route::get('/count', [DepartmentController::class, 'getCount']);
     // Route::put('/{id}', [CategoryBookController::class, 'update']);

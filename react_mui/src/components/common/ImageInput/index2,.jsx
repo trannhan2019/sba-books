@@ -1,3 +1,6 @@
+import { Box, Typography, FormHelperText } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
 import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
@@ -24,6 +27,7 @@ const thumbInner = {
   display: "flex",
   minWidth: 0,
   overflow: "hidden",
+  position: "relative",
 };
 
 const img = {
@@ -36,11 +40,13 @@ export default function ImageInput2(props) {
   const { form, name } = props;
   const { setValue } = form;
   const [files, setFiles] = useState([]);
+  const [error, setError] = useState();
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": [],
     },
-    onDrop: (acceptedFiles) => {
+    maxSize: 5242880, //5MB
+    onDrop: (acceptedFiles, rejected) => {
       setFiles(
         acceptedFiles.map((file) =>
           Object.assign(file, {
@@ -49,12 +55,35 @@ export default function ImageInput2(props) {
         )
       );
       setValue(name, acceptedFiles);
+      if (rejected) {
+        setError(rejected[0]?.errors[0].message);
+      } else {
+        setError(null);
+      }
     },
   });
+
+  const removeImage = () => {
+    setFiles([]);
+    setValue(name, []);
+  };
 
   const thumbs = files.map((file) => (
     <div style={thumb} key={file.name}>
       <div style={thumbInner}>
+        <IconButton
+          onClick={() => removeImage()}
+          aria-label="delete"
+          sx={{
+            position: "absolute",
+            top: -10,
+            right: -10,
+            opacity: 0.3,
+            ":hover": { color: "red", opacity: 0.7 },
+          }}
+        >
+          <DeleteIcon />
+        </IconButton>
         <img
           src={file.preview}
           style={img}
@@ -71,14 +100,21 @@ export default function ImageInput2(props) {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
   }, []);
-
   return (
-    <section className="container">
-      <div {...getRootProps({ className: "dropzone" })}>
+    <Box mt={1}>
+      <Typography fontWeight="bold" variant="body1">
+        Chọn ảnh{" "}
+      </Typography>
+      <Box {...getRootProps()}>
         <input {...getInputProps()} />
-        <p>Drag 'n' drop some files here, or click to select files</p>
-      </div>
+        <Typography
+          sx={{ fontStyle: "italic", padding: 1, border: "1px dashed #cccc" }}
+        >
+          Drag 'n' drop some files here, or click to select files
+        </Typography>
+        <FormHelperText sx={{ color: "red" }}>{error && error}</FormHelperText>
+      </Box>
       <aside style={thumbsContainer}>{thumbs}</aside>
-    </section>
+    </Box>
   );
 }
