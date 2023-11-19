@@ -1,55 +1,64 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "@/pages/auth/Login";
-import Admin from "@/pages/admin";
-import Manager from "@/pages/manager";
-import User from "@/pages/user";
-
+import AdminGuard from "@/components/guards/AdminGuard";
 import ManagerGuard from "@/components/guards/ManagerGuard";
-import UserGuard from "@/components/guards/UserGuard";
-import MainGuard from "@/components/guards/MainGuard";
-import AdminCompany from "@/pages/admin/company";
-import AdminDepartment from "@/pages/admin/department";
-import AdminRole from "@/pages/admin/role";
-import AdminUser from "@/pages/admin/user";
-import AdminCategoryBook from "@/pages/admin/category_book";
-import AdminBook from "@/pages/admin/book/indexl";
+import PrivateLayout from "@/components/layouts/private-layout";
+import Company from "@/pages/private/company";
+import Department from "@/pages/private/department";
+import Role from "@/pages/private/role";
+import User from "@/pages/private/user";
+import CategoryBook from "@/pages/private/category-book";
+import Book from "@/pages/private/book";
 
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<MainGuard />} />
-        <Route path="/admin" element={<Admin />}>
-          <Route path="company" element={<AdminCompany />} />
-          <Route path="department" element={<AdminDepartment />} />
-          <Route path="role" element={<AdminRole />} />
-          <Route path="user" element={<AdminUser />} />
-          <Route path="category-book" element={<AdminCategoryBook />} />
-          <Route path="book" element={<AdminBook />} />
+
+        <Route path="/" element={<PrivateLayout />}>
+          <Route
+            path="company"
+            element={
+              <AdminGuard>
+                <Company />
+              </AdminGuard>
+            }
+          />
+          <Route
+            path="department"
+            element={
+              <AdminGuard>
+                <Department />
+              </AdminGuard>
+            }
+          />
+          <Route
+            path="role"
+            element={
+              <AdminGuard>
+                <Role />
+              </AdminGuard>
+            }
+          />
+          <Route
+            path="user"
+            element={
+              <AdminGuard>
+                <User />
+              </AdminGuard>
+            }
+          />
+          <Route
+            path="category-book"
+            element={
+              <ManagerGuard>
+                <CategoryBook />
+              </ManagerGuard>
+            }
+          />
+          <Route path="book" element={<Book />} />
         </Route>
-
-        <Route
-          path="/manager"
-          element={
-            <ManagerGuard>
-              <Manager />
-            </ManagerGuard>
-          }
-        ></Route>
-        <Route
-          path="/user"
-          element={
-            <UserGuard>
-              <User />
-            </UserGuard>
-          }
-        ></Route>
-
-        {/* <Route path="/company" element={<Company />} />
-        <Route path="/department" element={<Department />} />
-        <Route path="/role" element={<Role />} />
-        <Route path="/user" element={<User />} /> */}
 
         {/* <Route path="*" element={<PageNotFound />} /> */}
       </Routes>
