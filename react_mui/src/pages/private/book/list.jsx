@@ -5,7 +5,13 @@ import {
   Checkbox,
   Chip,
   IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  MenuList,
   Stack,
+  SvgIcon,
   Table,
   TableBody,
   TableCell,
@@ -17,11 +23,14 @@ import {
 import { toast } from "react-toastify";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
+import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
+import HideImageIcon from "@mui/icons-material/HideImage";
 import { Scrollbar } from "@/components/common/Scrollbar";
 import TableLoader from "@/components/common/TableLoader";
 import Swal from "sweetalert2";
 import { useSelection } from "@/hooks/useSelection";
 import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 
 const ListBook = (props) => {
   const {
@@ -34,22 +43,55 @@ const ListBook = (props) => {
   } = props;
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.app);
-  const { total, users } = useSelector((state) => state.book);
+  const { total, books } = useSelector((state) => state.book);
 
   //seleted
-  const bookSelected = useSelection(users);
+  const bookSelected = useSelection(books);
   const selectedSome =
     bookSelected.selected.length > 0 &&
-    bookSelected.selected.length < users.length;
+    bookSelected.selected.length < books.length;
   const selectedAll =
-    users?.length > 0 && bookSelected.selected.length === users.length;
+    books?.length > 0 && bookSelected.selected.length === books.length;
+  const enableBulkActions = bookSelected.selected.length > 0;
+
+  //open action menu
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
-    <Card>
-      {bookSelected.selected.length > 0 && (
-        <Box
-          sx={{ display: "flex", justifyContent: "end", pr: 7, paddingY: 1 }}
+    <Box sx={{ position: "relative" }}>
+      {enableBulkActions > 0 && (
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{
+            alignItems: "center",
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark" ? "neutral.800" : "neutral.50",
+            display: enableBulkActions ? "flex" : "none",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            px: 2,
+            py: 0.5,
+            zIndex: 10,
+          }}
         >
+          <Checkbox
+            checked={selectedAll}
+            indeterminate={selectedSome}
+            onChange={handleToggleAll}
+          />
+          <Button color="inherit" size="small">
+            Delete
+          </Button>
           {/* <Button
         onClick={() => handleDeleteAllDepartment()}
         size="small"
@@ -59,15 +101,14 @@ const ListBook = (props) => {
       >
         Delete
       </Button> */}
-        </Box>
+        </Stack>
       )}
       <Scrollbar>
-        <Box sx={{ minWidth: 800 }}>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell padding="checkbox">
-                  {/* <Checkbox
+        <Table sx={{ minWidth: 1200 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell padding="checkbox">
+                {/* <Checkbox
                 checked={selectedAll}
                 indeterminate={selectedSome}
                 onChange={(event) => {
@@ -78,90 +119,193 @@ const ListBook = (props) => {
                   }
                 }}
               /> */}
-                </TableCell>
-                <TableCell>Tên Phòng ban</TableCell>
-                <TableCell>Tên viết tắt</TableCell>
-                <TableCell>Thuộc Công ty</TableCell>
-                <TableCell>Trạng thái</TableCell>
-                <TableCell>Hành động</TableCell>
-              </TableRow>
-            </TableHead>
-            {isLoading ? (
-              <TableLoader rowsNum={8} colsNum={5} />
-            ) : (
-              <TableBody>
-                {users?.length <= 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={4}>
-                      <Typography variant="body1">
-                        Không tìm thấy dữ liệu ...
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  users?.map((department) => {
-                    const isSelected = bookSelected.selected.includes(
-                      department.id
-                    );
+              </TableCell>
+              <TableCell>Tiều đề</TableCell>
+              <TableCell>Thuộc thể loại</TableCell>
+              <TableCell>Tác giả</TableCell>
+              <TableCell>Tình trạng / Số lượng</TableCell>
+              <TableCell>Mã sách</TableCell>
+              <TableCell>Thao tác</TableCell>
+            </TableRow>
+          </TableHead>
+          {isLoading ? (
+            <TableLoader rowsNum={8} colsNum={5} />
+          ) : (
+            <TableBody>
+              {books?.length <= 0 ? (
+                <TableRow>
+                  <TableCell colSpan={4}>
+                    <Typography variant="body1">
+                      Không tìm thấy dữ liệu ...
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                books?.map((book) => {
+                  const isSelected = bookSelected.selected.includes(book.id);
 
-                    return (
-                      <TableRow hover key={department.id} selected={isSelected}>
-                        <TableCell padding="checkbox">
-                          <Checkbox
-                            checked={isSelected}
-                            onChange={(event) => {
-                              if (event.target.checked) {
-                                bookSelected.handleSelectOne?.(department);
-                              } else {
-                                bookSelected.handleDeselectOne?.(department);
-                              }
+                  return (
+                    <TableRow hover key={book.id} selected={isSelected}>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isSelected}
+                          onChange={(event) => {
+                            if (event.target.checked) {
+                              bookSelected.handleSelectOne?.(book);
+                            } else {
+                              bookSelected.handleDeselectOne?.(book);
+                            }
+                          }}
+                        />
+                      </TableCell>
+
+                      <TableCell width="25%">
+                        <Box
+                          sx={{
+                            alignItems: "center",
+                            display: "flex",
+                          }}
+                        >
+                          {book.photo ? (
+                            <Box
+                              sx={{
+                                alignItems: "center",
+                                backgroundColor: "neutral.50",
+                                backgroundImage: `url(${book.photo})`,
+                                backgroundPosition: "center",
+                                backgroundSize: "cover",
+                                borderRadius: 1,
+                                display: "flex",
+                                height: 80,
+                                justifyContent: "center",
+                                overflow: "hidden",
+                                width: 80,
+                              }}
+                            />
+                          ) : (
+                            <Box
+                              sx={{
+                                alignItems: "center",
+                                backgroundColor: "neutral.50",
+                                borderRadius: 1,
+                                display: "flex",
+                                height: 80,
+                                justifyContent: "center",
+                                width: 80,
+                              }}
+                            >
+                              <HideImageIcon />
+                            </Box>
+                          )}
+                          <div
+                            style={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              width: "12rem",
                             }}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant="subtitle2">
-                            {department.name}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>{department.alias}</TableCell>
-                        <TableCell>{department.company.name}</TableCell>
-                        <TableCell>
-                          {department.isActive ? (
+                          >
+                            <Typography
+                              variant="subtitle2"
+                              sx={{
+                                cursor: "pointer",
+                                ml: 1,
+                              }}
+                            >
+                              {book.title}
+                            </Typography>
+                          </div>
+                        </Box>
+                      </TableCell>
+
+                      <TableCell width="15%">
+                        <Typography variant="body2">
+                          {book.cate_book.name}
+                        </Typography>
+                      </TableCell>
+
+                      <TableCell width="15%">
+                        <Typography variant="body2">{book.author}</Typography>
+                      </TableCell>
+
+                      <TableCell width="10%">
+                        {book.quantity > 0 ? (
+                          <Stack>
                             <Chip
-                              label="Hoạt động"
+                              label="Còn trên kệ"
                               color="success"
                               size="small"
                             />
-                          ) : (
-                            <Chip
-                              label="Tạm dừng"
-                              color="warning"
-                              size="small"
-                            />
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <Stack direction="row" gap={1}>
-                            {/* <IconButton onClick={() => showEdit(department)}>
+                            <Typography variant="body2" textAlign="center">
+                              {book.quantity} cuốn
+                            </Typography>
+                          </Stack>
+                        ) : (
+                          <Chip
+                            label="Đã mượn hết"
+                            color="error"
+                            size="small"
+                          />
+                        )}
+                      </TableCell>
+
+                      <TableCell>
+                        <Typography variant="subtitle2">{book.code}</Typography>
+                      </TableCell>
+
+                      <TableCell>
+                        <IconButton onClick={handleClick}>
+                          <MoreHorizOutlinedIcon />
+                        </IconButton>
+                        <Menu
+                          id="basic-menu"
+                          anchorEl={anchorEl}
+                          open={open}
+                          onClose={handleClose}
+                          MenuListProps={{
+                            "aria-labelledby": "basic-button",
+                          }}
+                        >
+                          <MenuList>
+                            <MenuItem onClick={handleClose}>
+                              <ListItemIcon>
+                                <EditNoteOutlinedIcon fontSize="small" />
+                              </ListItemIcon>
+                              <ListItemText>Edit</ListItemText>
+                            </MenuItem>
+                            <MenuItem onClick={handleClose}>
+                              <ListItemIcon>
+                                <DeleteOutlinedIcon
+                                  fontSize="small"
+                                  color="error"
+                                />
+                              </ListItemIcon>
+                              <ListItemText>Delete</ListItemText>
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </TableCell>
+
+                      {/* <TableCell>
+                        <Stack direction="row" gap={1}>
+                          <IconButton onClick={() => showEdit(user)}>
                           <EditNoteOutlinedIcon color="indigo" />
-                        </IconButton> */}
-                            {/* <IconButton
+                        </IconButton>
+                          <IconButton
                           onClick={() =>
-                            handleDeleteDepartment(department.id)
+                            handleDeleteDepartment(user.id)
                           }
                         >
                           <DeleteOutlinedIcon color="error" />
-                        </IconButton> */}
-                          </Stack>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })
-                )}
-              </TableBody>
-            )}
-          </Table>
-        </Box>
+                        </IconButton>
+                        </Stack>
+                      </TableCell> */}
+                    </TableRow>
+                  );
+                })
+              )}
+            </TableBody>
+          )}
+        </Table>
       </Scrollbar>
       <TablePagination
         component="div"
@@ -174,7 +318,7 @@ const ListBook = (props) => {
         showFirstButton
         showLastButton
       />
-    </Card>
+    </Box>
   );
 };
 

@@ -53,8 +53,9 @@ const Book = () => {
         item_per_page,
         search,
       });
+      console.log(response);
       dispatch(setBooks(response.data.data));
-      dispatch(setTotalBook(response.data.meta.total));
+      dispatch(setTotalBook(response.data.total));
       dispatch(setLoading(false));
     } catch (error) {
       dispatch(setLoading(false));

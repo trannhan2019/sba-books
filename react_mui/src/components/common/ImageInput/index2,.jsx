@@ -1,6 +1,7 @@
-import { Box, Typography, FormHelperText } from "@mui/material";
+import { Box, Typography, FormHelperText, Stack, Avatar } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
@@ -37,11 +38,11 @@ const img = {
 };
 
 export default function ImageInput2(props) {
-  const { form, name } = props;
+  const { form, name, caption } = props;
   const { setValue } = form;
   const [files, setFiles] = useState([]);
   const [error, setError] = useState();
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
       "image/*": [],
     },
@@ -105,13 +106,58 @@ export default function ImageInput2(props) {
       <Typography fontWeight="bold" variant="body1">
         Chọn ảnh{" "}
       </Typography>
-      <Box {...getRootProps()}>
+      <Box
+        sx={{
+          alignItems: "center",
+          border: 1,
+          borderRadius: 1,
+          borderStyle: "dashed",
+          borderColor: "divider",
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          outline: "none",
+          p: 6,
+          ...(isDragActive && {
+            backgroundColor: "action.active",
+            opacity: 0.5,
+          }),
+          "&:hover": {
+            backgroundColor: "action.hover",
+            cursor: "pointer",
+            opacity: 0.5,
+          },
+        }}
+        {...getRootProps()}
+      >
         <input {...getInputProps()} />
-        <Typography
-          sx={{ fontStyle: "italic", padding: 1, border: "1px dashed #cccc" }}
-        >
-          Drag 'n' drop some files here, or click to select files
-        </Typography>
+        <Stack alignItems="center" direction="row" spacing={2}>
+          <Avatar
+            sx={{
+              height: 64,
+              width: 64,
+            }}
+          >
+            <CloudUploadIcon />
+          </Avatar>
+          <Stack spacing={1}>
+            <Typography
+              sx={{
+                "& span": {
+                  textDecoration: "underline",
+                },
+              }}
+              variant="h6"
+            >
+              <span>Click to upload</span> or drag and drop
+            </Typography>
+            {caption && (
+              <Typography color="text.secondary" variant="body2">
+                {caption}
+              </Typography>
+            )}
+          </Stack>
+        </Stack>
         <FormHelperText sx={{ color: "red" }}>{error && error}</FormHelperText>
       </Box>
       <aside style={thumbsContainer}>{thumbs}</aside>
