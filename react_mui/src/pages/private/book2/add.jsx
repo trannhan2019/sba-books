@@ -17,11 +17,7 @@ import {
   MenuItem,
   Select,
   Switch,
-  Stack,
-  Typography,
-  IconButton,
 } from "@mui/material";
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { useSelector } from "react-redux";
 // import ImageInput from "@/components/common/ImageInput";
 import { apiStoreBook } from "@/apis/book";
@@ -82,20 +78,7 @@ const AddBook = ({ openAddForm, setOpenAddForm, setReloadPage, cateBooks }) => {
     <Box>
       <Dialog open={openAddForm} onClose={() => false} maxWidth="md" fullWidth>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <DialogTitle sx={{ mb: 2 }}>
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="h5">Thêm thông tin</Typography>
-              <IconButton
-                aria-label="delete"
-                onClick={() => {
-                  reset();
-                  setOpenAddForm(false);
-                }}
-              >
-                <CloseOutlinedIcon />
-              </IconButton>
-            </Stack>
-          </DialogTitle>
+          <DialogTitle sx={{ mb: 2 }}>Thêm thông tin</DialogTitle>
           <DialogContent>
             <Controller
               name="title"

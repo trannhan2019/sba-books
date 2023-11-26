@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { useForm, Controller } from "react-hook-form";
@@ -37,59 +37,64 @@ const scheme = Yup.object({
   category_book_id: Yup.string().required("Chọn danh mục"),
 }).required();
 
-const AddBook = ({ openAddForm, setOpenAddForm, setReloadPage, cateBooks }) => {
+const EditBook = ({
+  openEditForm,
+  setOpenEditForm,
+  setReloadPage,
+  cateBooks,
+  book,
+}) => {
   const hookForm = useForm({
-    defaultValues: {
-      title: "",
-      description: "",
-      quantity: 0,
-      author: "",
-      photo: "",
-      code: "",
-      storage_location: "",
-      more_info: "",
-      category_book_id: "",
-      photo: [],
-    },
     resolver: yupResolver(scheme),
   });
 
-  const { control, handleSubmit, reset } = hookForm;
+  const { control, handleSubmit, reset, setValue } = hookForm;
 
   const onSubmit = async (values) => {
     console.log(values);
-    try {
-      const formData = new FormData();
-      for (const key in values) {
-        if (key === "photo") {
-          formData.append(key, values[key][0]);
-        } else {
-          formData.append(key, values[key]);
-        }
-      }
-      await apiStoreBook(formData);
-      reset();
-      setOpenAddForm(false);
-      setReloadPage();
-      toast.success("Tạo mới thành công");
-    } catch (error) {
-      console.log("add book", error);
-      toast.error("Lỗi không thêm được thông tin");
-    }
+    // try {
+    //   const formData = new FormData();
+    //   for (const key in values) {
+    //     if (key === "photo") {
+    //       formData.append(key, values[key][0]);
+    //     } else {
+    //       formData.append(key, values[key]);
+    //     }
+    //   }
+    //   await apiStoreBook(formData);
+    //   reset();
+    //   setOpenAddForm(false);
+    //   setReloadPage();
+    //   toast.success("Tạo mới thành công");
+    // } catch (error) {
+    //   console.log("add book", error);
+    //   toast.error("Lỗi không thêm được thông tin");
+    // }
   };
+
+  useEffect(() => {
+    setValue("title", book?.title);
+    setValue("description", book?.description);
+    setValue("category_book_id", book?.cate_book.id);
+    setValue("quantity", book?.quantity);
+    setValue("author", book?.author);
+    setValue("code", book?.code);
+    setValue("storage_location", book?.storage_location);
+    setValue("more_info", book?.more_info);
+  }, [openEditForm]);
 
   return (
     <Box>
-      <Dialog open={openAddForm} onClose={() => false} maxWidth="md" fullWidth>
+      <Dialog open={openEditForm} onClose={() => false} maxWidth="md" fullWidth>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <DialogTitle sx={{ mb: 2 }}>
             <Stack direction="row" justifyContent="space-between">
-              <Typography variant="h5">Thêm thông tin</Typography>
+              <Typography variant="h5">Sửa thông tin</Typography>
               <IconButton
                 aria-label="delete"
                 onClick={() => {
                   reset();
-                  setOpenAddForm(false);
+                  setOpenEditForm(false);
                 }}
               >
                 <CloseOutlinedIcon />
@@ -280,7 +285,7 @@ const AddBook = ({ openAddForm, setOpenAddForm, setReloadPage, cateBooks }) => {
             <Button
               onClick={() => {
                 reset();
-                setOpenAddForm(false);
+                setOpenEditForm(false);
               }}
             >
               Cancel
@@ -295,4 +300,4 @@ const AddBook = ({ openAddForm, setOpenAddForm, setReloadPage, cateBooks }) => {
   );
 };
 
-export default AddBook;
+export default EditBook;

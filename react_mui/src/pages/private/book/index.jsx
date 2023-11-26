@@ -17,6 +17,8 @@ import { apiGetListBook } from "@/apis/book";
 import { setBooks, setTotalBook } from "@/store/book/bookSlice";
 import useDebounce from "@/hooks/useDebounce";
 import ListBook from "./list";
+import SearchBook from "./search";
+import EditBook from "./edit";
 
 const Book = () => {
   const dispatch = useDispatch();
@@ -32,7 +34,13 @@ const Book = () => {
   //set refresh department tai vi tri sau khi them va sua
   const [reloadPage, setReloadPage] = useState(false);
 
-  //load fetch books
+  //cac state
+  const [bookList, setBookList] = useState({ books: [], total: 0 });
+  const [cateBooks, setCateBooks] = useState([]);
+  const [cateSelected, setCateSelected] = useState([]);
+  const [book, setBook] = useState(null);
+
+  //paginate
   const [pageMui, setPageMui] = useState(0);
   const [page, setPage] = useState(1);
   const handlePageChange = (event, value) => {
@@ -45,17 +53,18 @@ const Book = () => {
     setItemPerPage(event.target.value);
   };
 
-  const fetchBooks = async (page, item_per_page, search) => {
+  //featch data
+  const fetchBooks = async (page, itemPerPage, search, cateSelected) => {
     try {
       dispatch(setLoading(true));
       const response = await apiGetListBook({
         page,
-        item_per_page,
+        itemPerPage,
         search,
+        cateSelected,
       });
       console.log(response);
-      dispatch(setBooks(response.data.data));
-      dispatch(setTotalBook(response.data.total));
+      setBookList({ books: response.data.data, total: response.data.total });
       dispatch(setLoading(false));
     } catch (error) {
       dispatch(setLoading(false));
@@ -64,13 +73,13 @@ const Book = () => {
   };
 
   useEffect(() => {
-    fetchBooks(page, itemPerPage, search);
-  }, [page, itemPerPage, searchDebounce, reloadPage]);
+    fetchBooks(page, itemPerPage, search, cateSelected);
+  }, [page, itemPerPage, searchDebounce, reloadPage, cateSelected]);
 
   // get danh muc sach truyền form add và edit
   const getCategoryBookList = async () => {
     const res = await apiGetAllCategoryBook();
-    dispatch(setCateBooks(res.data));
+    setCateBooks(res.data);
   };
 
   useEffect(() => {
@@ -104,14 +113,21 @@ const Book = () => {
                 </Button>
               </div>
             </Stack>
-            {/* <SearchUser onSearch={setSearch} /> */}
+            <SearchBook
+              onSearch={setSearch}
+              cateBooks={cateBooks}
+              setCateSelected={setCateSelected}
+            />
             <ListBook
+              books={bookList.books}
+              total={bookList.total}
               page={pageMui}
               rowsPerPage={itemPerPage}
               onRowsPerPageChange={handleRowsPerPageChange}
               onPageChange={handlePageChange}
               setOpenEditForm={setOpenEditForm}
               setReloadPage={setReloadPage}
+              setBook={setBook}
             />
           </Stack>
         </Container>
@@ -120,12 +136,15 @@ const Book = () => {
         openAddForm={openAddForm}
         setOpenAddForm={setOpenAddForm}
         setReloadPage={setReloadPage}
+        cateBooks={cateBooks}
       />
-      {/* <EditUser
+      <EditBook
         openEditForm={openEditForm}
         setOpenEditForm={setOpenEditForm}
         setReloadPage={setReloadPage}
-      /> */}
+        book={book}
+        cateBooks={cateBooks}
+      />
     </>
   );
 };

@@ -17,7 +17,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 const SearchUser = ({ onSearch }) => {
   const dispatch = useDispatch();
-  const { departments } = useSelector((state) => state.department);
+  const { departments, departmentId } = useSelector(
+    (state) => state.department
+  );
   return (
     <Card
       sx={{
@@ -32,15 +34,14 @@ const SearchUser = ({ onSearch }) => {
         <InputLabel id="department_id">Chọn phòng ban</InputLabel>
         <Select
           size="small"
-          value={""}
+          value={departmentId}
           labelId="department_id"
           id="demo-simple-select"
           label="Chọn phòng ban"
+          displayEmpty
           onChange={(event) => dispatch(setDepartmentId(event.target.value))}
         >
-          <MenuItem value={null} selected>
-            --Tất cả --
-          </MenuItem>
+          <MenuItem>--Tất cả --</MenuItem>
           {departments?.length > 0 &&
             departments.map((item) => (
               <MenuItem key={item.id} value={item.id}>

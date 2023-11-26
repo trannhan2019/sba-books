@@ -9,6 +9,7 @@ import Role from "@/pages/private/role";
 import User from "@/pages/private/user";
 import CategoryBook from "@/pages/private/category-book";
 import Book from "@/pages/private/book";
+import Book2 from "@/pages/private/book2";
 
 const AppRoutes = () => {
   return (

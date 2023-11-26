@@ -11,13 +11,13 @@ const EditorTiny = ({ form, name, label = name }) => {
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange }, fieldState: { error } }) => (
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
         <FormControl fullWidth margin="normal">
           <InputLabel>{label}</InputLabel>
           <Editor
-            initialValue=""
+            value={value}
             apiKey={
-              import.meta.env.REACT_APP_TINY_API_KWY ||
+              import.meta.env.VITE_REACT_APP_TINY_API_KWY ||
               "rhb5n8q202crgevakp4n5yp5vcfdh9coo5fdpfivswde4f61"
             }
             onInit={(evt, editor) => (editorRef.current = editor)}

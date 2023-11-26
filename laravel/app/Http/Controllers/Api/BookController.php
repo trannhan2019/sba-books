@@ -30,10 +30,14 @@ class BookController extends Controller
         return response()->json('Created !!', 201);
     }
         public function index(Request $request){
-            $itemPerPage = $request->query('item_per_page', 5);
+            $itemPerPage = $request->query('itemPerPage', 5);
             //fill by company name or alias
+            $cateSelected = $request->query('cateSelected');
             $search = $request->query('search');
             $books = Book::query();
+            if(!empty($cateSelected)){
+                $books = $books->whereIn('category_book_id',$cateSelected);
+            }
             if (!empty($search)) {
                 $books = $books->where('title', 'like', '%' . $search . '%')->orWhere('author', 'like', '%' . $search . '%');
             }

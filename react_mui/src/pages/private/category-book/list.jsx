@@ -51,6 +51,7 @@ const ListCategory = (props) => {
     listSelected.selected.length < cateBooks.length;
   const selectedAll =
     cateBooks.length > 0 && listSelected.selected.length === cateBooks.length;
+  const enableBulkActions = listSelected.selected.length > 0;
 
   //show edit
   const showEdit = (cate) => {
@@ -98,11 +99,36 @@ const ListCategory = (props) => {
   };
 
   return (
-    <Card>
-      {listSelected.selected.length > 0 && (
-        <Box
-          sx={{ display: "flex", justifyContent: "end", pr: 7, paddingY: 1 }}
+    <Box sx={{ position: "relative" }}>
+      {enableBulkActions > 0 && (
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{
+            alignItems: "center",
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark" ? "neutral.800" : "neutral.50",
+            display: enableBulkActions ? "flex" : "none",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            px: 2,
+            py: 0.5,
+            zIndex: 10,
+          }}
         >
+          <Checkbox
+            checked={selectedAll}
+            indeterminate={selectedSome}
+            onChange={(event) => {
+              if (event.target.checked) {
+                listSelected.handleSelectAll?.();
+              } else {
+                listSelected.handleDeselectAll?.();
+              }
+            }}
+          />
           <Button
             onClick={() => handleDeleteAll()}
             size="small"
@@ -112,7 +138,7 @@ const ListCategory = (props) => {
           >
             Delete
           </Button>
-        </Box>
+        </Stack>
       )}
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
@@ -212,7 +238,7 @@ const ListCategory = (props) => {
         showFirstButton
         showLastButton
       />
-    </Card>
+    </Box>
   );
 };
 

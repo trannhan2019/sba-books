@@ -38,7 +38,7 @@ const img = {
 };
 
 export default function ImageInput2(props) {
-  const { form, name, caption } = props;
+  const { form, name, caption, photo } = props;
   const { setValue } = form;
   const [files, setFiles] = useState([]);
   const [error, setError] = useState();
