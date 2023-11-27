@@ -22,9 +22,8 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import { useSelector } from "react-redux";
 // import ImageInput from "@/components/common/ImageInput";
-import { apiStoreBook } from "@/apis/book";
+import { apiUpdateBook } from "@/apis/book";
 import ImageInput2 from "@/components/common/ImageInput/index2,";
 import EditorTiny from "@/components/common/EditorTiny";
 
@@ -45,31 +44,31 @@ const EditBook = ({
   book,
 }) => {
   const hookForm = useForm({
-    resolver: yupResolver(scheme),
+    // resolver: yupResolver(scheme),
   });
 
   const { control, handleSubmit, reset, setValue } = hookForm;
 
   const onSubmit = async (values) => {
-    console.log(values);
-    // try {
-    //   const formData = new FormData();
-    //   for (const key in values) {
-    //     if (key === "photo") {
-    //       formData.append(key, values[key][0]);
-    //     } else {
-    //       formData.append(key, values[key]);
-    //     }
-    //   }
-    //   await apiStoreBook(formData);
-    //   reset();
-    //   setOpenAddForm(false);
-    //   setReloadPage();
-    //   toast.success("Tạo mới thành công");
-    // } catch (error) {
-    //   console.log("add book", error);
-    //   toast.error("Lỗi không thêm được thông tin");
-    // }
+    // console.log(values);
+    try {
+      let formData = new FormData();
+      for (const key in values) {
+        if (key === "photo") {
+          formData.append(key, values[key][0]);
+        } else {
+          formData.append(key, values[key]);
+        }
+      }
+      console.log(formData.get("title"));
+      await apiUpdateBook(formData, book.id);
+      setOpenEditForm(false);
+      setReloadPage((preState) => !preState);
+      toast.success("Sửa thông tin thành công");
+    } catch (error) {
+      console.log(error);
+      toast.error("Lỗi không sửa được thông tin");
+    }
   };
 
   useEffect(() => {
@@ -160,7 +159,7 @@ const EditBook = ({
             />
 
             {/* <ImageInput form={hookForm} name="photo" mode="update" /> */}
-            <ImageInput2 name="photo" form={hookForm} />
+            <ImageInput2 name="photo" form={hookForm} photo={book?.photo} />
             <Controller
               name="author"
               control={control}

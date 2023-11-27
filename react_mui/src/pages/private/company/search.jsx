@@ -1,7 +1,12 @@
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
 import { Card, InputAdornment, OutlinedInput, SvgIcon } from "@mui/material";
 
-export const SearchBar = ({ onSearchName }) => {
+export const SearchBar = ({ onSearchName, handlePageReset }) => {
+  const handleSearch = (e) => {
+    onSearchName(e.target.value);
+    handlePageReset();
+  };
+
   return (
     <Card
       sx={{
@@ -9,7 +14,7 @@ export const SearchBar = ({ onSearchName }) => {
       }}
     >
       <OutlinedInput
-        onChange={(e) => onSearchName(e.target.value)}
+        onChange={(e) => handleSearch(e)}
         defaultValue=""
         fullWidth
         placeholder="Tìm kiếm theo tên Công ty ..."

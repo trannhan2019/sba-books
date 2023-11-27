@@ -11,26 +11,30 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
+  Stack,
   SvgIcon,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
-const SearchUser = ({ onSearch }) => {
+const SearchUser = ({ onSearch, handlePageReset }) => {
   const dispatch = useDispatch();
   const { departments, departmentId } = useSelector(
     (state) => state.department
   );
+
+  const handleChangeSelect = (event) => {
+    dispatch(setDepartmentId(event.target.value));
+    handlePageReset();
+  };
+
+  const handleChangeSearch = (event) => {
+    onSearch(event.target.value);
+    handlePageReset();
+  };
+
   return (
-    <Card
-      sx={{
-        p: 2,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: 5,
-      }}
-    >
-      <FormControl fullWidth>
+    <Stack direction="row" gap={5}>
+      <FormControl sx={{ width: 400 }}>
         <InputLabel id="department_id">Chọn phòng ban</InputLabel>
         <Select
           size="small"
@@ -39,7 +43,7 @@ const SearchUser = ({ onSearch }) => {
           id="demo-simple-select"
           label="Chọn phòng ban"
           displayEmpty
-          onChange={(event) => dispatch(setDepartmentId(event.target.value))}
+          onChange={(event) => handleChangeSelect(event)}
         >
           <MenuItem>--Tất cả --</MenuItem>
           {departments?.length > 0 &&
@@ -52,7 +56,7 @@ const SearchUser = ({ onSearch }) => {
       </FormControl>
 
       <OutlinedInput
-        onChange={(e) => onSearch(e.target.value)}
+        onChange={(event) => handleChangeSearch(event)}
         defaultValue=""
         fullWidth
         size="small"
@@ -66,7 +70,7 @@ const SearchUser = ({ onSearch }) => {
         }
         sx={{ maxWidth: 450 }}
       />
-    </Card>
+    </Stack>
   );
 };
 

@@ -8,12 +8,23 @@ import {
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
 import Select from "react-select";
 
-const SearchBook = ({ cateBooks, setCateSelected, onSearch }) => {
+const SearchBook = ({
+  cateBooks,
+  setCateSelected,
+  onSearch,
+  handlePageReset,
+}) => {
   let options = cateBooks.map(function (item) {
     return { value: item.id, label: item.name };
   });
-  const handleChange = (values) => {
+  const handleChangeSelect = (values) => {
     setCateSelected(values.map((item) => item.value));
+    handlePageReset();
+  };
+
+  const handleChangeSearch = (event) => {
+    onSearch(event.target.value);
+    handlePageReset();
   };
 
   return (
@@ -22,7 +33,7 @@ const SearchBook = ({ cateBooks, setCateSelected, onSearch }) => {
         <Select
           options={options}
           isMulti
-          onChange={handleChange}
+          onChange={handleChangeSelect}
           styles={{
             control: (baseStyles, state) => ({
               ...baseStyles,
@@ -33,7 +44,7 @@ const SearchBook = ({ cateBooks, setCateSelected, onSearch }) => {
         />
 
         <OutlinedInput
-          onChange={(e) => onSearch(e.target.value)}
+          onChange={(e) => handleChangeSearch(e)}
           defaultValue=""
           size="small"
           sx={{ width: "300px" }}

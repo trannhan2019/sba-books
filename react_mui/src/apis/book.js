@@ -20,3 +20,16 @@ export const apiGetListBook = (params) =>
     method: "get",
     params,
   });
+
+export const apiUpdateBook = (data, id) =>
+  axiosClient({
+    url: `/book/${id}`,
+    method: "post",
+    data,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    params: {
+      _method: "PUT",
+    },
+  });

@@ -43,6 +43,10 @@ const CategoryBook = () => {
     setPageMui(value);
     setPage(value + 1);
   };
+  const handlePageReset = () => {
+    setPageMui(0);
+    setPage(1);
+  };
 
   const [itemPerPage, setItemPerPage] = useState(5);
   const handleRowsPerPageChange = (event) => {
@@ -98,7 +102,10 @@ const CategoryBook = () => {
                 </Button>
               </div>
             </Stack>
-            <SearchCategory onSearch={setSearch} />
+            <SearchCategory
+              onSearch={setSearch}
+              handlePageReset={handlePageReset}
+            />
             <ListCategory
               page={pageMui}
               rowsPerPage={itemPerPage}

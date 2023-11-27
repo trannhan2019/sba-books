@@ -48,6 +48,10 @@ const User = () => {
     setPageMui(value);
     setPage(value + 1);
   };
+  const handlePageReset = () => {
+    setPageMui(0);
+    setPage(1);
+  };
 
   const [itemPerPage, setItemPerPage] = useState(5);
   const handleRowsPerPageChange = (event) => {
@@ -115,7 +119,10 @@ const User = () => {
                 </Button>
               </div>
             </Stack>
-            <SearchUser onSearch={setSearch} />
+            <SearchUser
+              onSearch={setSearch}
+              handlePageReset={handlePageReset}
+            />
             <ListUser
               page={pageMui}
               rowsPerPage={itemPerPage}

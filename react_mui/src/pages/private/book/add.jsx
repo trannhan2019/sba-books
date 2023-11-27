@@ -22,7 +22,6 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import { useSelector } from "react-redux";
 // import ImageInput from "@/components/common/ImageInput";
 import { apiStoreBook } from "@/apis/book";
 import ImageInput2 from "@/components/common/ImageInput/index2,";
@@ -70,7 +69,7 @@ const AddBook = ({ openAddForm, setOpenAddForm, setReloadPage, cateBooks }) => {
       await apiStoreBook(formData);
       reset();
       setOpenAddForm(false);
-      setReloadPage();
+      setReloadPage((preState) => !preState);
       toast.success("Tạo mới thành công");
     } catch (error) {
       console.log("add book", error);

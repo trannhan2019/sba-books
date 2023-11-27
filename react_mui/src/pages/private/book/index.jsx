@@ -47,6 +47,11 @@ const Book = () => {
     setPageMui(value);
     setPage(value + 1);
   };
+  //fix bug search hoac chon catebook khi page lon hon 1 se khong co ket qua
+  const handlePageReset = () => {
+    setPageMui(0);
+    setPage(1);
+  };
 
   const [itemPerPage, setItemPerPage] = useState(5);
   const handleRowsPerPageChange = (event) => {
@@ -117,6 +122,7 @@ const Book = () => {
               onSearch={setSearch}
               cateBooks={cateBooks}
               setCateSelected={setCateSelected}
+              handlePageReset={handlePageReset}
             />
             <ListBook
               books={bookList.books}

@@ -38,6 +38,10 @@ const Company = () => {
     setPageMui(value);
     setPage(value + 1);
   };
+  const handlePageReset = () => {
+    setPageMui(0);
+    setPage(1);
+  };
 
   const [itemPerPage, setItemPerPage] = useState(5);
   const handleRowsPerPageChange = (event) => {
@@ -123,7 +127,10 @@ const Company = () => {
                 </Button>
               </div>
             </Stack>
-            <SearchBar onSearchName={setSearchName} />
+            <SearchBar
+              onSearchName={setSearchName}
+              handlePageReset={handlePageReset}
+            />
             <CompanyList
               page={pageMui}
               rowsPerPage={itemPerPage}

@@ -50,6 +50,10 @@ const Department = () => {
     setPageMui(value);
     setPage(value + 1);
   };
+  const handlePageReset = () => {
+    setPageMui(0);
+    setPage(1);
+  };
 
   const [itemPerPage, setItemPerPage] = useState(5);
   const handleRowsPerPageChange = (event) => {
@@ -113,7 +117,10 @@ const Department = () => {
                 </Button>
               </div>
             </Stack>
-            <SearchDepartment onSearch={setSearch} />
+            <SearchDepartment
+              onSearch={setSearch}
+              handlePageReset={handlePageReset}
+            />
             <ListDepartment
               page={pageMui}
               rowsPerPage={itemPerPage}

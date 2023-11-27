@@ -161,6 +161,22 @@ export default function ImageInput2(props) {
         <FormHelperText sx={{ color: "red" }}>{error && error}</FormHelperText>
       </Box>
       <aside style={thumbsContainer}>{thumbs}</aside>
+      {photo && files.length <= 0 && (
+        <aside style={thumbsContainer}>
+          <div style={thumb}>
+            <div style={thumbInner}>
+              <img
+                src={`${import.meta.env.VITE_BACK_END_URL}/storage/${photo}`}
+                style={img}
+                // Revoke data uri after image is loaded
+                // onLoad={() => {
+                //   URL.revokeObjectURL(file.preview);
+                // }}
+              />
+            </div>
+          </div>
+        </aside>
+      )}
     </Box>
   );
 }
