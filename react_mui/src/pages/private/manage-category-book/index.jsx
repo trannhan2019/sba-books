@@ -21,7 +21,7 @@ import ListCategory from "./list";
 import EditCategory from "./edit";
 import SearchCategory from "./search";
 
-const CategoryBook = () => {
+const ManageCategoryBook = () => {
   const dispatch = useDispatch();
   //search
   const [search, setSearch] = useState("");
@@ -131,4 +131,4 @@ const CategoryBook = () => {
   );
 };
 
-export default CategoryBook;
+export default ManageCategoryBook;

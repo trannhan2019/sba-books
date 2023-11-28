@@ -23,7 +23,7 @@ import {
   setTotalDepartment,
 } from "@/store/department/departmentSlice";
 
-const Department = () => {
+const ManageDepartment = () => {
   const dispatch = useDispatch();
   //search
   const [search, setSearch] = useState("");
@@ -146,4 +146,4 @@ const Department = () => {
   );
 };
 
-export default Department;
+export default ManageDepartment;

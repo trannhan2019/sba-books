@@ -20,7 +20,7 @@ export const users = [
   },
   {
     title: "Lịch sử mượn trả",
-    path: "/",
+    path: "/history-book",
     icon: (
       <SvgIcon fontSize="small">
         <RectangleGroupIcon />
@@ -72,6 +72,8 @@ export const manages = [
     path: "/manage-book",
     icon: <AutoStoriesIcon fontSize="small" />,
   },
+  //quan ly muon tra
+  //thong ke sach muon nhieu, nguoi muon nhieu
 ];
 
 export function AdminContent() {

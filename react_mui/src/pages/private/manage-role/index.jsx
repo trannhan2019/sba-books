@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 import { setLoading } from "@/store/app/appSlice";
 import { setRoles } from "@/store/role/roleSlice";
 
-const Role = () => {
+const ManageRole = () => {
   const dispatch = useDispatch();
   //Add
   const [openAddForm, setOpenAddForm] = useState(false);
@@ -90,4 +90,4 @@ const Role = () => {
   );
 };
 
-export default Role;
+export default ManageRole;

@@ -23,7 +23,7 @@ import { setTotalUser, setUserList } from "@/store/user/userSlice";
 import { setLoading } from "@/store/app/appSlice";
 // import EditDepartment from "./EditDepartment";
 
-const User = () => {
+const ManageUser = () => {
   const dispatch = useDispatch();
   //search
   const [search, setSearch] = useState("");
@@ -148,4 +148,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default ManageUser;

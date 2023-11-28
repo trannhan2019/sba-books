@@ -88,16 +88,16 @@ class BookController extends Controller
         // return response()->json($request);
         $ids = $request->ids;
 
-        $bookList = Book::whereIn('id', $ids);
+        $bookList = Book::whereIn('id', $ids)->get();
 
-        // foreach ($bookList as $book) {
-        //     if (!empty($book->photo)) {
-        //         Storage::delete($book->photo);
-        //     }
-        // }
+         foreach ($bookList as $book) {
+             if (!empty($book->photo)) {
+                 Storage::delete($book->photo);
+             }
+         }
 
-        // Book::destroy($ids);
-        // return response()->json('Books deleted', 201);
-        return response()->json($bookList, 201);
+         Book::destroy($ids);
+         return response()->json('Books deleted', 201);
+//        return response()->json($bookList, 201);
     }
 }

@@ -3,13 +3,13 @@ import Login from "@/pages/auth/Login";
 import AdminGuard from "@/components/guards/AdminGuard";
 import ManagerGuard from "@/components/guards/ManagerGuard";
 import PrivateLayout from "@/components/layouts/private-layout";
-import Company from "@/pages/private/manage-company";
-import Department from "@/pages/private/manage-department";
-import Role from "@/pages/private/manage-role";
-import User from "@/pages/private/manage-user";
-import CategoryBook from "@/pages/private/category-book";
-import Book from "@/pages/private/manage-book";
-import Book2 from "@/pages/private/book";
+import ManageCompany from "@/pages/private/manage-company";
+import ManageDepartment from "@/pages/private/manage-department";
+import ManageRole from "@/pages/private/manage-role";
+import ManageUser from "@/pages/private/manage-user";
+import ManageCategoryBook from "@/pages/private/manage-category-book";
+import ManageBook from "@/pages/private/manage-book";
+import Book from "@/pages/private/book";
 
 const AppRoutes = () => {
   return (
@@ -18,11 +18,12 @@ const AppRoutes = () => {
         <Route path="/login" element={<Login />} />
 
         <Route path="/" element={<PrivateLayout />}>
+          <Route index element={<Book />} />
           <Route
             path="manage-company"
             element={
               <AdminGuard>
-                <Company />
+                <ManageCompany />
               </AdminGuard>
             }
           />
@@ -30,7 +31,7 @@ const AppRoutes = () => {
             path="manage-department"
             element={
               <AdminGuard>
-                <Department />
+                <ManageDepartment />
               </AdminGuard>
             }
           />
@@ -38,7 +39,7 @@ const AppRoutes = () => {
             path="manage-role"
             element={
               <AdminGuard>
-                <Role />
+                <ManageRole />
               </AdminGuard>
             }
           />
@@ -46,7 +47,7 @@ const AppRoutes = () => {
             path="manage-user"
             element={
               <AdminGuard>
-                <User />
+                <ManageUser />
               </AdminGuard>
             }
           />
@@ -54,11 +55,18 @@ const AppRoutes = () => {
             path="manage-category-book"
             element={
               <ManagerGuard>
-                <CategoryBook />
+                <ManageCategoryBook />
               </ManagerGuard>
             }
           />
-          <Route path="manage-book" element={<Book />} />
+          <Route
+            path="manage-book"
+            element={
+              <ManagerGuard>
+                <ManageBook />
+              </ManagerGuard>
+            }
+          />
         </Route>
 
         {/* <Route path="*" element={<PageNotFound />} /> */}

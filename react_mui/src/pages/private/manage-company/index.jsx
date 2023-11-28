@@ -21,7 +21,7 @@ import { useDispatch } from "react-redux";
 import { setCompanies, setTotalCompany } from "@/store/company/companySlice";
 import { setLoading } from "@/store/app/appSlice";
 
-const Company = () => {
+const ManageCompany = () => {
   const dispatch = useDispatch();
   //Add modal
   const [openModal, setOpenModal] = useState(false);
@@ -156,4 +156,4 @@ const Company = () => {
   );
 };
 
-export default Company;
+export default ManageCompany;

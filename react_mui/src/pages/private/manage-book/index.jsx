@@ -20,7 +20,7 @@ import ListBook from "./list";
 import SearchBook from "./search";
 import EditBook from "./edit";
 
-const Book = () => {
+const ManageBook = () => {
   const dispatch = useDispatch();
   //Add ///////////////
   const [openAddForm, setOpenAddForm] = useState(false);
@@ -155,4 +155,4 @@ const Book = () => {
   );
 };
 
-export default Book;
+export default ManageBook;
