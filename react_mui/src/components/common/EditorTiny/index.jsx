@@ -16,10 +16,11 @@ const EditorTiny = ({ form, name, label = name }) => {
           <InputLabel>{label}</InputLabel>
           <Editor
             value={value}
-            apiKey={
-              import.meta.env.VITE_REACT_APP_TINY_API_KWY ||
-              "rhb5n8q202crgevakp4n5yp5vcfdh9coo5fdpfivswde4f61"
-            }
+            // apiKey={
+            //   import.meta.env.VITE_REACT_APP_TINY_API_KWY ||
+            //   "rhb5n8q202crgevakp4n5yp5vcfdh9coo5fdpfivswde4f61"
+            // }
+            tinymceScriptSrc="/libs/tinymce/tinymce.min.js"
             onInit={(evt, editor) => (editorRef.current = editor)}
             init={{
               branding: false,

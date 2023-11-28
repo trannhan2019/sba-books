@@ -17,7 +17,7 @@ import { usePopover } from "@/hooks/use-popover";
 import { AccountPopover } from "@/components/common/AccountPopover";
 import UserAvata from "@/assets/avatars/avatar-anika-visser.png";
 
-const SIDE_NAV_WIDTH = 280;
+const SIDE_NAV_WIDTH = 270;
 const TOP_NAV_HEIGHT = 64;
 
 const Header = (props) => {

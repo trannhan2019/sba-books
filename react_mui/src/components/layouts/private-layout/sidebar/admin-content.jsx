@@ -11,7 +11,7 @@ import { SidebarItem } from "./sidebar-item";
 export const users = [
   {
     title: "Sách",
-    path: "/company",
+    path: "/",
     icon: (
       <SvgIcon fontSize="small">
         <BuildingOffice2Icon />
@@ -20,7 +20,7 @@ export const users = [
   },
   {
     title: "Lịch sử mượn trả",
-    path: "/department",
+    path: "/",
     icon: (
       <SvgIcon fontSize="small">
         <RectangleGroupIcon />
@@ -32,7 +32,7 @@ export const users = [
 export const manages = [
   {
     title: "Công ty",
-    path: "/company",
+    path: "/manage-company",
     icon: (
       <SvgIcon fontSize="small">
         <BuildingOffice2Icon />
@@ -41,7 +41,7 @@ export const manages = [
   },
   {
     title: "Phòng Ban",
-    path: "/department",
+    path: "/manage-department",
     icon: (
       <SvgIcon fontSize="small">
         <RectangleGroupIcon />
@@ -50,12 +50,12 @@ export const manages = [
   },
   {
     title: "Quyền tài khoản",
-    path: "/role",
+    path: "/manage-role",
     icon: <AdminPanelSettingsIcon fontSize="small" />,
   },
   {
     title: "Tài khoản",
-    path: "/user",
+    path: "/manage-user",
     icon: (
       <SvgIcon fontSize="small">
         <UserGroupIcon />
@@ -64,12 +64,12 @@ export const manages = [
   },
   {
     title: "Danh mục sách",
-    path: "/category-book",
+    path: "/manage-category-book",
     icon: <CategoryIcon fontSize="small" />,
   },
   {
     title: "Quản lý sách",
-    path: "/book",
+    path: "/manage-book",
     icon: <AutoStoriesIcon fontSize="small" />,
   },
 ];

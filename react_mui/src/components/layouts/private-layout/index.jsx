@@ -6,7 +6,7 @@ import { Box } from "@mui/material";
 import Header from "./header";
 import Sidebar from "./sidebar";
 
-const SIDE_NAV_WIDTH = 280;
+const SIDE_NAV_WIDTH = 270;
 
 const LayoutRoot = styled("div")(({ theme }) => ({
   display: "flex",

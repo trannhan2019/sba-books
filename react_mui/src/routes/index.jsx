@@ -3,13 +3,13 @@ import Login from "@/pages/auth/Login";
 import AdminGuard from "@/components/guards/AdminGuard";
 import ManagerGuard from "@/components/guards/ManagerGuard";
 import PrivateLayout from "@/components/layouts/private-layout";
-import Company from "@/pages/private/company";
-import Department from "@/pages/private/department";
-import Role from "@/pages/private/role";
-import User from "@/pages/private/user";
+import Company from "@/pages/private/manage-company";
+import Department from "@/pages/private/manage-department";
+import Role from "@/pages/private/manage-role";
+import User from "@/pages/private/manage-user";
 import CategoryBook from "@/pages/private/category-book";
-import Book from "@/pages/private/book";
-import Book2 from "@/pages/private/book2";
+import Book from "@/pages/private/manage-book";
+import Book2 from "@/pages/private/book";
 
 const AppRoutes = () => {
   return (
@@ -19,7 +19,7 @@ const AppRoutes = () => {
 
         <Route path="/" element={<PrivateLayout />}>
           <Route
-            path="company"
+            path="manage-company"
             element={
               <AdminGuard>
                 <Company />
@@ -27,7 +27,7 @@ const AppRoutes = () => {
             }
           />
           <Route
-            path="department"
+            path="manage-department"
             element={
               <AdminGuard>
                 <Department />
@@ -35,7 +35,7 @@ const AppRoutes = () => {
             }
           />
           <Route
-            path="role"
+            path="manage-role"
             element={
               <AdminGuard>
                 <Role />
@@ -43,7 +43,7 @@ const AppRoutes = () => {
             }
           />
           <Route
-            path="user"
+            path="manage-user"
             element={
               <AdminGuard>
                 <User />
@@ -51,14 +51,14 @@ const AppRoutes = () => {
             }
           />
           <Route
-            path="category-book"
+            path="manage-category-book"
             element={
               <ManagerGuard>
                 <CategoryBook />
               </ManagerGuard>
             }
           />
-          <Route path="book" element={<Book />} />
+          <Route path="manage-book" element={<Book />} />
         </Route>
 
         {/* <Route path="*" element={<PageNotFound />} /> */}

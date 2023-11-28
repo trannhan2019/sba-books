@@ -33,3 +33,16 @@ export const apiUpdateBook = (data, id) =>
       _method: "PUT",
     },
   });
+
+export const apiDeleteBook = (id) =>
+  axiosClient({
+    url: `/book/${id}`,
+    method: "delete",
+  });
+
+export const apiDeleteBookList = (data) =>
+  axiosClient({
+    url: "/book",
+    method: "delete",
+    data,
+  });

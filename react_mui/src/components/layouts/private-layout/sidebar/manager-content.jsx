@@ -9,7 +9,7 @@ import { SidebarItem } from "./sidebar-item";
 export const users = [
   {
     title: "Sách",
-    path: "/book",
+    path: "/",
     icon: (
       <SvgIcon fontSize="small">
         <BuildingOffice2Icon />
@@ -18,7 +18,7 @@ export const users = [
   },
   {
     title: "Lịch sử mượn trả",
-    path: "/department",
+    path: "/",
     icon: (
       <SvgIcon fontSize="small">
         <RectangleGroupIcon />
@@ -30,12 +30,12 @@ export const users = [
 export const manages = [
   {
     title: "Danh mục sách",
-    path: "/category-book",
+    path: "/manage-category-book",
     icon: <CategoryIcon fontSize="small" />,
   },
   {
     title: "Quản lý sách",
-    path: "/book",
+    path: "/manage-book",
     icon: <AutoStoriesIcon fontSize="small" />,
   },
 ];

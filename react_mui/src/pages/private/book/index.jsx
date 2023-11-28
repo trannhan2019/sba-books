@@ -1,95 +1,148 @@
-import { useState, useEffect } from "react";
+import { apiGetListBook } from "@/apis/book";
+import { useMounted } from "@/hooks/useMounted";
+import { useState, useCallback, useEffect } from "react";
+import { setLoading } from "@/store/app/appSlice";
 import { useDispatch } from "react-redux";
 import {
   Box,
   Button,
+  Card,
   Container,
   Stack,
   SvgIcon,
   Typography,
 } from "@mui/material";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
+import ListBook from "./list";
 import AddBook from "./add";
 import { apiGetAllCategoryBook } from "@/apis/category_book";
-import { setCateBooks } from "@/store/category_book/catebookSlice";
-import { setLoading } from "@/store/app/appSlice";
-import { apiGetListBook } from "@/apis/book";
-import { setBooks, setTotalBook } from "@/store/book/bookSlice";
-import useDebounce from "@/hooks/useDebounce";
-import ListBook from "./list";
-import SearchBook from "./search";
-import EditBook from "./edit";
+import { BookSearch } from "./search";
 
-const Book = () => {
+const useSearch = () => {
+  const [search, setSearch] = useState({
+    filters: {
+      query: undefined,
+      category: [],
+      // status: [],
+      // inStock: undefined
+    },
+    page: 1,
+    pageMui: 0,
+    rowsPerPage: 5,
+    isFetchData: false,
+  });
+
+  return {
+    search,
+    updateSearch: setSearch,
+  };
+};
+
+const useBooks = (search) => {
   const dispatch = useDispatch();
+  const isMounted = useMounted();
+  const [state, setState] = useState({
+    books: [],
+    booksCount: 0,
+  });
+
+  const getBooks = useCallback(async () => {
+    dispatch(setLoading(true));
+    try {
+      const response = await apiGetListBook(search);
+
+      if (isMounted()) {
+        setState({
+          books: response.data.data,
+          booksCount: response.data.total,
+        });
+        dispatch(setLoading(false));
+      }
+    } catch (err) {
+      dispatch(setLoading(false));
+      console.error(err);
+    }
+  }, [search, isMounted]);
+
+  useEffect(
+    () => {
+      getBooks();
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [search]
+  );
+
+  return state;
+};
+
+const useCateBook = () => {
+  const isMounted = useMounted();
+  const [cateBooks, setCateBooks] = useState([]);
+
+  const getData = useCallback(async () => {
+    try {
+      const response = await apiGetAllCategoryBook();
+
+      if (isMounted()) {
+        setCateBooks(response.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMounted]);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  return cateBooks;
+};
+
+const Book2 = () => {
+  const { search, updateSearch } = useSearch();
+  const { books, booksCount } = useBooks(search);
+  const cateBooks = useCateBook();
+
   //Add ///////////////
   const [openAddForm, setOpenAddForm] = useState(false);
-  //Edit ///////////////
-  const [openEditForm, setOpenEditForm] = useState(false);
 
-  //search
-  const [search, setSearch] = useState("");
-  const searchDebounce = useDebounce(search, 800);
+  const handleFiltersChange = useCallback(
+    (filters) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        filters,
+      }));
+    },
+    [updateSearch]
+  );
 
-  //set refresh department tai vi tri sau khi them va sua
-  const [reloadPage, setReloadPage] = useState(false);
+  const handlePageChange = useCallback(
+    (event, page) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        pageMui: page,
+        page: page + 1,
+      }));
+    },
+    [updateSearch]
+  );
 
-  //cac state
-  const [bookList, setBookList] = useState({ books: [], total: 0 });
-  const [cateBooks, setCateBooks] = useState([]);
-  const [cateSelected, setCateSelected] = useState([]);
-  const [book, setBook] = useState(null);
+  const handleRowsPerPageChange = useCallback(
+    (event) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        rowsPerPage: parseInt(event.target.value, 10),
+      }));
+    },
+    [updateSearch]
+  );
 
-  //paginate
-  const [pageMui, setPageMui] = useState(0);
-  const [page, setPage] = useState(1);
-  const handlePageChange = (event, value) => {
-    setPageMui(value);
-    setPage(value + 1);
-  };
-  //fix bug search hoac chon catebook khi page lon hon 1 se khong co ket qua
-  const handlePageReset = () => {
-    setPageMui(0);
-    setPage(1);
-  };
-
-  const [itemPerPage, setItemPerPage] = useState(5);
-  const handleRowsPerPageChange = (event) => {
-    setItemPerPage(event.target.value);
-  };
-
-  //featch data
-  const fetchBooks = async (page, itemPerPage, search, cateSelected) => {
-    try {
-      dispatch(setLoading(true));
-      const response = await apiGetListBook({
-        page,
-        itemPerPage,
-        search,
-        cateSelected,
-      });
-      console.log(response);
-      setBookList({ books: response.data.data, total: response.data.total });
-      dispatch(setLoading(false));
-    } catch (error) {
-      dispatch(setLoading(false));
-      console.log("get all department", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchBooks(page, itemPerPage, search, cateSelected);
-  }, [page, itemPerPage, searchDebounce, reloadPage, cateSelected]);
-
-  // get danh muc sach truyền form add và edit
-  const getCategoryBookList = async () => {
-    const res = await apiGetAllCategoryBook();
-    setCateBooks(res.data);
-  };
-
-  useEffect(() => {
-    getCategoryBookList();
-  }, []);
+  const handleIsFetchChange = useCallback(() => {
+    updateSearch((prevState) => ({
+      ...prevState,
+      isFetchData: !prevState.isFetch,
+    }));
+  }, [updateSearch]);
 
   return (
     <>
@@ -101,14 +154,16 @@ const Book = () => {
         }}
       >
         <Container maxWidth="xl">
-          <Stack spacing={3}>
+          <Stack spacing={4}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
-              <Typography variant="h4">Quản lý sách</Typography>
-              <div>
+              <Stack spacing={1}>
+                <Typography variant="h4">Books</Typography>
+              </Stack>
+              <Stack alignItems="center" direction="row" spacing={3}>
                 <Button
                   onClick={() => setOpenAddForm(true)}
                   startIcon={
-                    <SvgIcon fontSize="small">
+                    <SvgIcon>
                       <PlusIcon />
                     </SvgIcon>
                   }
@@ -116,43 +171,35 @@ const Book = () => {
                 >
                   Add
                 </Button>
-              </div>
+              </Stack>
             </Stack>
-            <SearchBook
-              onSearch={setSearch}
-              cateBooks={cateBooks}
-              setCateSelected={setCateSelected}
-              handlePageReset={handlePageReset}
-            />
-            <ListBook
-              books={bookList.books}
-              total={bookList.total}
-              page={pageMui}
-              rowsPerPage={itemPerPage}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              onPageChange={handlePageChange}
-              setOpenEditForm={setOpenEditForm}
-              setReloadPage={setReloadPage}
-              setBook={setBook}
-            />
+            <Card>
+              {/* Search Book */}
+              <BookSearch
+                onFiltersChange={handleFiltersChange}
+                cateBooks={cateBooks}
+              />
+              {/* Book List */}
+              <ListBook
+                books={books}
+                count={booksCount}
+                page={search.pageMui}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleRowsPerPageChange}
+                rowsPerPage={search.rowsPerPage}
+              />
+            </Card>
           </Stack>
         </Container>
       </Box>
       <AddBook
         openAddForm={openAddForm}
         setOpenAddForm={setOpenAddForm}
-        setReloadPage={setReloadPage}
-        cateBooks={cateBooks}
-      />
-      <EditBook
-        openEditForm={openEditForm}
-        setOpenEditForm={setOpenEditForm}
-        setReloadPage={setReloadPage}
-        book={book}
+        setReloadPage={handleIsFetchChange}
         cateBooks={cateBooks}
       />
     </>
   );
 };
 
-export default Book;
+export default Book2;

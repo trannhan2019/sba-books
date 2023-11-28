@@ -85,10 +85,8 @@ Route::prefix('book')->group(function () {
     Route::get('/', [BookController::class, 'index']);
     // Route::get('/', [CategoryBookController::class, 'index']);
     // // Route::get('/count', [DepartmentController::class, 'getCount']);
-     Route::put('/{id}', [BookController::class, 'update']);
-    // Route::delete('/', [CategoryBookController::class, 'destroyAll']);
-    // Route::delete('/{id}', [CategoryBookController::class, 'destroy']);
+    Route::put('/{id}', [BookController::class, 'update']);
+    Route::delete('/', [BookController::class, 'destroyAll']);
+    Route::delete('/{id}', [BookController::class, 'destroy']);
     // Route::get('/all', [CategoryBookController::class, 'getAll']);
 });
-
-
