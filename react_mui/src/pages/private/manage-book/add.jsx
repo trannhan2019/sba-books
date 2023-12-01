@@ -43,7 +43,7 @@ const AddBook = ({ openAddForm, setOpenAddForm, setReloadPage, cateBooks }) => {
       description: "",
       quantity: 0,
       author: "",
-      photo: "",
+      // photo: "",
       code: "",
       storage_location: "",
       more_info: "",

@@ -2,6 +2,7 @@ import { Box, Typography, Unstable_Grid2 as Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 import Logo from "@/components/common/Logo";
 import WelcomeImg from "@/assets/auth-illustration.svg";
+import BgImg from "@/assets/slider-bg-2.jpg";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
@@ -22,7 +23,13 @@ const AuthLayout = (props) => {
         height: "100vh",
       }}
     >
-      <Grid container sx={{ flex: "1 1 auto" }}>
+      <Grid
+        container
+        sx={{
+          flex: "1 1 auto",
+          flexFlow: { md: "row-reverse" },
+        }}
+      >
         <Grid
           xs={12}
           lg={6}
@@ -70,30 +77,11 @@ const AuthLayout = (props) => {
             "& img": {
               maxWidth: "100%",
             },
+            backgroundImage: `url(${BgImg})`,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
           }}
-        >
-          <Box sx={{ p: 3 }}>
-            <Typography
-              align="center"
-              color="inherit"
-              sx={{
-                fontSize: "24px",
-                lineHeight: "32px",
-                mb: 1,
-              }}
-              variant="h1"
-            >
-              Welcome to{" "}
-              <Box component="a" sx={{ color: "#15B79E" }} target="_blank">
-                Devias Kit
-              </Box>
-            </Typography>
-            <Typography align="center" sx={{ mb: 3 }} variant="subtitle1">
-              A professional kit that comes with ready-to-use MUI components.
-            </Typography>
-            <img alt="" src={WelcomeImg} />
-          </Box>
-        </Grid>
+        ></Grid>
       </Grid>
     </Box>
   );

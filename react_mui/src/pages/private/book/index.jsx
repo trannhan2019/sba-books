@@ -3,29 +3,29 @@ import { useDispatch } from "react-redux";
 import {
   Box,
   Button,
+  ButtonGroup,
   Container,
+  IconButton,
   Stack,
   SvgIcon,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
-import AddBook from "./add";
+import GridViewIcon from "@mui/icons-material/GridView";
+import ViewListOutlinedIcon from "@mui/icons-material/ViewListOutlined";
 import { apiGetAllCategoryBook } from "@/apis/category_book";
 import { setCateBooks } from "@/store/category_book/catebookSlice";
 import { setLoading } from "@/store/app/appSlice";
 import { apiGetListBook } from "@/apis/book";
 import { setBooks, setTotalBook } from "@/store/book/bookSlice";
 import useDebounce from "@/hooks/useDebounce";
-// import ListBook from "./list";
-// import SearchBook from "./search";
-// import EditBook from "./edit";
+import ListBook from "./list";
+import SearchBook from "./search";
+import GridBook from "./grid";
 
 const Book = () => {
   const dispatch = useDispatch();
-  //Add ///////////////
-  const [openAddForm, setOpenAddForm] = useState(false);
-  //Edit ///////////////
-  const [openEditForm, setOpenEditForm] = useState(false);
 
   //search
   const [search, setSearch] = useState("");
@@ -39,6 +39,7 @@ const Book = () => {
   const [cateBooks, setCateBooks] = useState([]);
   const [cateSelected, setCateSelected] = useState([]);
   const [book, setBook] = useState(null);
+  const [isGrid, setIsGrid] = useState(true);
 
   //paginate
   const [pageMui, setPageMui] = useState(0);
@@ -104,53 +105,46 @@ const Book = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Typography variant="h4">Quản lý sách</Typography>
-              <div>
-                <Button
-                  onClick={() => setOpenAddForm(true)}
-                  startIcon={
-                    <SvgIcon fontSize="small">
-                      <PlusIcon />
-                    </SvgIcon>
-                  }
-                  variant="contained"
-                >
-                  Add
-                </Button>
-              </div>
+              {/* group button change list grid */}
+              <ButtonGroup>
+                <Tooltip title="hiển thị dạng lưới">
+                  <IconButton onClick={() => setIsGrid(true)} disabled={isGrid}>
+                    <GridViewIcon fontSize="large" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="hiển thị dạng danh sách">
+                  <IconButton
+                    onClick={() => setIsGrid(false)}
+                    disabled={!isGrid}
+                  >
+                    <ViewListOutlinedIcon fontSize="large" />
+                  </IconButton>
+                </Tooltip>
+              </ButtonGroup>
             </Stack>
-            {/* <SearchBook
+            <SearchBook
               onSearch={setSearch}
               cateBooks={cateBooks}
               setCateSelected={setCateSelected}
               handlePageReset={handlePageReset}
-            /> */}
-            {/* <ListBook
-              books={bookList.books}
-              total={bookList.total}
-              page={pageMui}
-              rowsPerPage={itemPerPage}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              onPageChange={handlePageChange}
-              setOpenEditForm={setOpenEditForm}
-              setReloadPage={setReloadPage}
-              setBook={setBook}
-            /> */}
+            />
+            {isGrid ? (
+              <GridBook />
+            ) : (
+              <ListBook
+                books={bookList.books}
+                total={bookList.total}
+                page={pageMui}
+                rowsPerPage={itemPerPage}
+                onRowsPerPageChange={handleRowsPerPageChange}
+                onPageChange={handlePageChange}
+                setReloadPage={setReloadPage}
+                setBook={setBook}
+              />
+            )}
           </Stack>
         </Container>
       </Box>
-      {/* <AddBook
-        openAddForm={openAddForm}
-        setOpenAddForm={setOpenAddForm}
-        setReloadPage={setReloadPage}
-        cateBooks={cateBooks}
-      /> */}
-      {/* <EditBook
-        openEditForm={openEditForm}
-        setOpenEditForm={setOpenEditForm}
-        setReloadPage={setReloadPage}
-        book={book}
-        cateBooks={cateBooks}
-      /> */}
     </>
   );
 };

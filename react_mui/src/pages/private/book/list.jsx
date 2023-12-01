@@ -1,17 +1,7 @@
 import {
   Box,
-  Button,
-  Card,
-  Checkbox,
   Chip,
-  IconButton,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  MenuList,
   Stack,
-  SvgIcon,
   Table,
   TableBody,
   TableCell,
@@ -20,150 +10,36 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
-import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import HideImageIcon from "@mui/icons-material/HideImage";
 import { Scrollbar } from "@/components/common/Scrollbar";
 import TableLoader from "@/components/common/TableLoader";
-import { useSelector } from "react-redux";
 import { getUrlImage } from "@/utils/get-url-image";
-
-const useSelectionModel = (books) => {
-  const bookIds = useMemo(() => {
-    return books.map((book) => book.id);
-  }, [books]);
-  const [selected, setSelected] = useState([]);
-
-  useEffect(() => {
-    setSelected([]);
-  }, [bookIds]);
-
-  const selectOne = useCallback((bookId) => {
-    setSelected((prevState) => [...prevState, bookId]);
-  }, []);
-
-  const deselectOne = useCallback((bookId) => {
-    setSelected((prevState) => {
-      return prevState.filter((id) => id !== bookId);
-    });
-  }, []);
-
-  const selectAll = useCallback(() => {
-    setSelected([...bookIds]);
-  }, [bookIds]);
-
-  const deselectAll = useCallback(() => {
-    setSelected([]);
-  }, []);
-
-  return {
-    deselectAll,
-    deselectOne,
-    selectAll,
-    selectOne,
-    selected,
-  };
-};
+import { useSelector } from "react-redux";
 
 const ListBook = (props) => {
   const {
     books,
-    count,
-    page,
+    total,
     onPageChange,
     onRowsPerPageChange,
-    rowsPerPage,
-    ...other
+    page = 0,
+    rowsPerPage = 0,
+    setBook,
   } = props;
 
   const { isLoading } = useSelector((state) => state.app);
 
-  //open action menu
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  //selected
-  const { deselectAll, selectAll, deselectOne, selectOne, selected } =
-    useSelectionModel(books);
-
-  const handleToggleAll = useCallback(
-    (event) => {
-      const { checked } = event.target;
-
-      if (checked) {
-        selectAll();
-      } else {
-        deselectAll();
-      }
-    },
-    [selectAll, deselectAll]
-  );
-
-  const selectedAll = selected.length === books.length;
-  const selectedSome = selected.length > 0 && selected.length < books.length;
-  const enableBulkActions = selected.length > 0;
-
   return (
     <Box sx={{ position: "relative" }}>
-      {enableBulkActions > 0 && (
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{
-            alignItems: "center",
-            backgroundColor: (theme) =>
-              theme.palette.mode === "dark" ? "neutral.800" : "neutral.50",
-            display: enableBulkActions ? "flex" : "none",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            px: 2,
-            py: 0.5,
-            zIndex: 10,
-          }}
-        >
-          <Checkbox
-            checked={selectedAll}
-            indeterminate={selectedSome}
-            onChange={handleToggleAll}
-          />
-          <Button
-            // onClick={() => handleDeleteAllDepartment()}
-            size="small"
-            startIcon={<DeleteOutlinedIcon />}
-            variant="contained"
-            color="error"
-          >
-            Delete
-          </Button>
-        </Stack>
-      )}
       <Scrollbar>
         <Table sx={{ minWidth: 1200 }}>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  checked={selectedAll}
-                  indeterminate={selectedSome}
-                  onChange={handleToggleAll}
-                />
-              </TableCell>
               <TableCell>Tiều đề</TableCell>
               <TableCell>Thuộc thể loại</TableCell>
               <TableCell>Tác giả</TableCell>
               <TableCell>Tình trạng / Số lượng</TableCell>
               <TableCell>Mã sách</TableCell>
-              <TableCell>Thao tác</TableCell>
             </TableRow>
           </TableHead>
           {isLoading ? (
@@ -180,26 +56,10 @@ const ListBook = (props) => {
                 </TableRow>
               ) : (
                 books?.map((book) => {
-                  const isSelected = selected.includes(book.id);
+                  // const isSelected = bookSelected.selected.includes(book.id);
 
                   return (
-                    <TableRow hover key={book.id} selected={isSelected}>
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isSelected}
-                          onChange={(event) => {
-                            const { checked } = event.target;
-
-                            if (checked) {
-                              selectOne(book.id);
-                            } else {
-                              deselectOne(book.id);
-                            }
-                          }}
-                          value={isSelected}
-                        />
-                      </TableCell>
-
+                    <TableRow hover key={book.id}>
                       <TableCell width="25%">
                         <Box
                           sx={{
@@ -291,41 +151,8 @@ const ListBook = (props) => {
                         )}
                       </TableCell>
 
-                      <TableCell>
+                      <TableCell width="10%">
                         <Typography variant="subtitle2">{book.code}</Typography>
-                      </TableCell>
-
-                      <TableCell>
-                        <IconButton onClick={handleClick}>
-                          <MoreHorizOutlinedIcon />
-                        </IconButton>
-                        <Menu
-                          id="basic-menu"
-                          anchorEl={anchorEl}
-                          open={open}
-                          onClose={handleClose}
-                          MenuListProps={{
-                            "aria-labelledby": "basic-button",
-                          }}
-                        >
-                          <MenuList>
-                            <MenuItem onClick={handleClose}>
-                              <ListItemIcon>
-                                <EditNoteOutlinedIcon fontSize="small" />
-                              </ListItemIcon>
-                              <ListItemText>Edit</ListItemText>
-                            </MenuItem>
-                            <MenuItem onClick={handleClose}>
-                              <ListItemIcon>
-                                <DeleteOutlinedIcon
-                                  fontSize="small"
-                                  color="error"
-                                />
-                              </ListItemIcon>
-                              <ListItemText>Delete</ListItemText>
-                            </MenuItem>
-                          </MenuList>
-                        </Menu>
                       </TableCell>
                     </TableRow>
                   );
@@ -337,7 +164,7 @@ const ListBook = (props) => {
       </Scrollbar>
       <TablePagination
         component="div"
-        count={count}
+        count={total}
         page={page}
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}
