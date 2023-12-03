@@ -15,6 +15,7 @@ import { Scrollbar } from "@/components/common/Scrollbar";
 import TableLoader from "@/components/common/TableLoader";
 import { getUrlImage } from "@/utils/get-url-image";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const ListBook = (props) => {
   const {
@@ -24,7 +25,6 @@ const ListBook = (props) => {
     onRowsPerPageChange,
     page = 0,
     rowsPerPage = 0,
-    setBook,
   } = props;
 
   const { isLoading } = useSelector((state) => state.app);
@@ -108,6 +108,8 @@ const ListBook = (props) => {
                             }}
                           >
                             <Typography
+                              component={Link}
+                              to={`/book/${book.id}`}
                               variant="subtitle2"
                               sx={{
                                 cursor: "pointer",
@@ -169,7 +171,7 @@ const ListBook = (props) => {
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[8, 16, 24]}
         showFirstButton
         showLastButton
       />

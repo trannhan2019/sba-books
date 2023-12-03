@@ -45,7 +45,7 @@ const SearchUser = ({ onSearch, handlePageReset }) => {
           displayEmpty
           onChange={(event) => handleChangeSelect(event)}
         >
-          <MenuItem>--Tất cả --</MenuItem>
+          <MenuItem value={0}>--Tất cả --</MenuItem>
           {departments?.length > 0 &&
             departments.map((item) => (
               <MenuItem key={item.id} value={item.id}>

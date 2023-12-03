@@ -33,7 +33,7 @@ class BookController extends Controller
 
     public function index(Request $request)
     {
-        $itemPerPage = $request->query('itemPerPage', 5);
+        $itemPerPage = $request->query('itemPerPage', 8);
         //fill by company name or alias
         $cateSelected = $request->query('cateSelected');
         $search = $request->query('search');

@@ -5,5 +5,3 @@ const url =
 export const getUrlImage = (photo = "") => {
   return `${url}/${photo}`;
 };
-
-import.meta.env.VITE_TEST_VAR;

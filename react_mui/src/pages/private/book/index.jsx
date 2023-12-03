@@ -2,12 +2,10 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
   Box,
-  Button,
   ButtonGroup,
   Container,
   IconButton,
   Stack,
-  SvgIcon,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -15,10 +13,8 @@ import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import GridViewIcon from "@mui/icons-material/GridView";
 import ViewListOutlinedIcon from "@mui/icons-material/ViewListOutlined";
 import { apiGetAllCategoryBook } from "@/apis/category_book";
-import { setCateBooks } from "@/store/category_book/catebookSlice";
 import { setLoading } from "@/store/app/appSlice";
 import { apiGetListBook } from "@/apis/book";
-import { setBooks, setTotalBook } from "@/store/book/bookSlice";
 import useDebounce from "@/hooks/useDebounce";
 import ListBook from "./list";
 import SearchBook from "./search";
@@ -38,7 +34,6 @@ const Book = () => {
   const [bookList, setBookList] = useState({ books: [], total: 0 });
   const [cateBooks, setCateBooks] = useState([]);
   const [cateSelected, setCateSelected] = useState([]);
-  const [book, setBook] = useState(null);
   const [isGrid, setIsGrid] = useState(true);
 
   //paginate
@@ -48,13 +43,17 @@ const Book = () => {
     setPageMui(value);
     setPage(value + 1);
   };
+  const handlePageChangeGrid = (event, value) => {
+    setPageMui(value - 1);
+    setPage(value);
+  };
   //fix bug search hoac chon catebook khi page lon hon 1 se khong co ket qua
   const handlePageReset = () => {
     setPageMui(0);
     setPage(1);
   };
 
-  const [itemPerPage, setItemPerPage] = useState(5);
+  const [itemPerPage, setItemPerPage] = useState(8);
   const handleRowsPerPageChange = (event) => {
     setItemPerPage(event.target.value);
   };
@@ -108,17 +107,24 @@ const Book = () => {
               {/* group button change list grid */}
               <ButtonGroup>
                 <Tooltip title="hiển thị dạng lưới">
-                  <IconButton onClick={() => setIsGrid(true)} disabled={isGrid}>
-                    <GridViewIcon fontSize="large" />
-                  </IconButton>
+                  <span>
+                    <IconButton
+                      onClick={() => setIsGrid(true)}
+                      disabled={isGrid}
+                    >
+                      <GridViewIcon />
+                    </IconButton>
+                  </span>
                 </Tooltip>
                 <Tooltip title="hiển thị dạng danh sách">
-                  <IconButton
-                    onClick={() => setIsGrid(false)}
-                    disabled={!isGrid}
-                  >
-                    <ViewListOutlinedIcon fontSize="large" />
-                  </IconButton>
+                  <span>
+                    <IconButton
+                      onClick={() => setIsGrid(false)}
+                      disabled={!isGrid}
+                    >
+                      <ViewListOutlinedIcon />
+                    </IconButton>
+                  </span>
                 </Tooltip>
               </ButtonGroup>
             </Stack>
@@ -129,7 +135,12 @@ const Book = () => {
               handlePageReset={handlePageReset}
             />
             {isGrid ? (
-              <GridBook />
+              <GridBook
+                books={bookList.books}
+                total={Math.ceil(bookList.total / itemPerPage)}
+                page={page}
+                onPageChange={handlePageChangeGrid}
+              />
             ) : (
               <ListBook
                 books={bookList.books}
@@ -139,7 +150,6 @@ const Book = () => {
                 onRowsPerPageChange={handleRowsPerPageChange}
                 onPageChange={handlePageChange}
                 setReloadPage={setReloadPage}
-                setBook={setBook}
               />
             )}
           </Stack>

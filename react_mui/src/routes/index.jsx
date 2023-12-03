@@ -10,6 +10,7 @@ import ManageUser from "@/pages/private/manage-user";
 import ManageCategoryBook from "@/pages/private/manage-category-book";
 import ManageBook from "@/pages/private/manage-book";
 import Book from "@/pages/private/book";
+import BookDetail from "@/pages/private/book/detail";
 
 const AppRoutes = () => {
   return (
@@ -19,6 +20,7 @@ const AppRoutes = () => {
 
         <Route path="/" element={<PrivateLayout />}>
           <Route index element={<Book />} />
+          <Route path="/book/:id" element={<BookDetail />} />
           <Route
             path="manage-company"
             element={

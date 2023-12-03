@@ -1,12 +1,8 @@
-chuc nang
-	sach
-		list & grid(card)
-		chi tiet
+Chuc nang
 	lich su muon tra ca nhan
 		chi tiet click muon tra
 		tra sach co notify xac nhan update so luong
 		quan ly chung
 	quan ly
 		thong ke sach muon nhieu, nguoi muon nhieu
-giao dien
-	copy trang login
+
