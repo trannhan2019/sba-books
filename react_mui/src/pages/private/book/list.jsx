@@ -10,7 +10,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import HideImageIcon from "@mui/icons-material/HideImage";
+import BookImageDefault from "@/assets/default-image-book.jpg";
 import { Scrollbar } from "@/components/common/Scrollbar";
 import TableLoader from "@/components/common/TableLoader";
 import { getUrlImage } from "@/utils/get-url-image";
@@ -60,11 +60,12 @@ const ListBook = (props) => {
 
                   return (
                     <TableRow hover key={book.id}>
-                      <TableCell width="25%">
+                      <TableCell width="23%">
                         <Box
                           sx={{
                             alignItems: "center",
                             display: "flex",
+                            gap: 2,
                           }}
                         >
                           {book.photo ? (
@@ -97,14 +98,18 @@ const ListBook = (props) => {
                                 width: 80,
                               }}
                             >
-                              <HideImageIcon />
+                              <img
+                                src={BookImageDefault}
+                                width="100%"
+                                alt="image default"
+                              />
                             </Box>
                           )}
                           <div
                             style={{
                               overflow: "hidden",
                               textOverflow: "ellipsis",
-                              width: "12rem",
+                              width: "20rem",
                             }}
                           >
                             <Typography
@@ -112,8 +117,7 @@ const ListBook = (props) => {
                               to={`/book/${book.id}`}
                               variant="subtitle2"
                               sx={{
-                                cursor: "pointer",
-                                ml: 1,
+                                textDecoration: "none",
                               }}
                             >
                               {book.title}

@@ -4,5 +4,5 @@ Chuc nang
 		tra sach co notify xac nhan update so luong
 		quan ly chung
 	quan ly
-		thong ke sach muon nhieu, nguoi muon nhieu
+		thong ke sach muon nhieu, nguoi muon nhieu (them field so lan muon tra trong book va so lan muon o user)
 

@@ -9,13 +9,12 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import GridViewIcon from "@mui/icons-material/GridView";
 import ViewListOutlinedIcon from "@mui/icons-material/ViewListOutlined";
 import { apiGetAllCategoryBook } from "@/apis/category_book";
 import { setLoading } from "@/store/app/appSlice";
 import { apiGetListBook } from "@/apis/book";
-import useDebounce from "@/hooks/useDebounce";
+// import useDebounce from "@/hooks/useDebounce";
 import ListBook from "./list";
 import SearchBook from "./search";
 import GridBook from "./grid";
@@ -25,7 +24,7 @@ const Book = () => {
 
   //search
   const [search, setSearch] = useState("");
-  const searchDebounce = useDebounce(search, 800);
+  // const searchDebounce = useDebounce(search, 800);
 
   //set refresh department tai vi tri sau khi them va sua
   const [reloadPage, setReloadPage] = useState(false);
@@ -79,7 +78,7 @@ const Book = () => {
 
   useEffect(() => {
     fetchBooks(page, itemPerPage, search, cateSelected);
-  }, [page, itemPerPage, searchDebounce, reloadPage, cateSelected]);
+  }, [page, itemPerPage, search, reloadPage, cateSelected]);
 
   // get danh muc sach truyền form add và edit
   const getCategoryBookList = async () => {

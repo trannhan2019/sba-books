@@ -43,7 +43,12 @@ export const BookCard = (props) => {
 
         <Box mt={1}>
           <Typography color="text.secondary" variant="body1">
-            Thuộc thể loại: <Chip label={book.cate_book.name} size="small" />
+            Thuộc thể loại:{" "}
+            <Chip
+              label={book.cate_book.name}
+              size="small"
+              sx={{ float: "right" }}
+            />
           </Typography>
         </Box>
 
@@ -51,9 +56,19 @@ export const BookCard = (props) => {
           <Typography color="text.secondary" variant="body1">
             Tình trạng:{" "}
             {book.quantity <= 0 ? (
-              <Chip label="Đã mượn hết" color="error" size="small" />
+              <Chip
+                label="Đã mượn hết"
+                color="error"
+                size="small"
+                sx={{ float: "right" }}
+              />
             ) : (
-              <Chip label="Còn trên kệ" color="success" size="small" />
+              <Chip
+                label="Còn trên kệ"
+                color="success"
+                size="small"
+                sx={{ float: "right" }}
+              />
             )}
           </Typography>
         </Box>
