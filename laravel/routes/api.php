@@ -84,7 +84,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('book')->group(function () {
         Route::post('/', [BookController::class, 'store'])->middleware('can:isManager');
         Route::get('/', [BookController::class, 'index']);
-        // Route::get('/', [CategoryBookController::class, 'index']);
+        Route::get('/{id}', [BookController::class, 'getOne']);
         // // Route::get('/count', [DepartmentController::class, 'getCount']);
         Route::put('/{id}', [BookController::class, 'update'])->middleware('can:isManager');
         Route::delete('/', [BookController::class, 'destroyAll'])->middleware('can:isManager');

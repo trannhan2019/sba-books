@@ -42,7 +42,7 @@ export const BookCard = (props) => {
         </MuiLink>
 
         <Box mt={1}>
-          <Typography color="text.secondary" variant="body1">
+          <Typography color="text.secondary" variant="body1" component={Box}>
             Thuộc thể loại:{" "}
             <Chip
               label={book.cate_book.name}
@@ -53,7 +53,7 @@ export const BookCard = (props) => {
         </Box>
 
         <Box mt={1}>
-          <Typography color="text.secondary" variant="body1">
+          <Typography color="text.secondary" variant="body1" component={Box}>
             Tình trạng:{" "}
             {book.quantity <= 0 ? (
               <Chip

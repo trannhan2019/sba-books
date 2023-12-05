@@ -48,6 +48,11 @@ class BookController extends Controller
         return response()->json($books->with('cateBook')->orderBy('created_at', 'desc')->paginate($itemPerPage));
     }
 
+    public function getOne($id)
+    {
+        return response()->json(Book::where('id', $id)->with('cateBook')->first());
+    }
+
     public function update(StoreBookRequest $request, $id)
     {
         $book = Book::findOrFail($id);
@@ -90,14 +95,14 @@ class BookController extends Controller
 
         $bookList = Book::whereIn('id', $ids)->get();
 
-         foreach ($bookList as $book) {
-             if (!empty($book->photo)) {
-                 Storage::delete($book->photo);
-             }
-         }
+        foreach ($bookList as $book) {
+            if (!empty($book->photo)) {
+                Storage::delete($book->photo);
+            }
+        }
 
-         Book::destroy($ids);
-         return response()->json('Books deleted', 201);
-//        return response()->json($bookList, 201);
+        Book::destroy($ids);
+        return response()->json('Books deleted', 201);
+        //        return response()->json($bookList, 201);
     }
 }

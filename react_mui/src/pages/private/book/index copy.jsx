@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import {
   Box,
   ButtonGroup,
@@ -11,20 +12,26 @@ import {
 import GridViewIcon from "@mui/icons-material/GridView";
 import ViewListOutlinedIcon from "@mui/icons-material/ViewListOutlined";
 import { apiGetAllCategoryBook } from "@/apis/category_book";
+import { setLoading } from "@/store/app/appSlice";
 import { apiGetListBook } from "@/apis/book";
 // import useDebounce from "@/hooks/useDebounce";
 import ListBook from "./list";
 import SearchBook from "./search";
 import GridBook from "./grid";
-import { useQuery } from "@tanstack/react-query";
 
 const Book = () => {
+  const dispatch = useDispatch();
+
   //search
   const [search, setSearch] = useState("");
   // const searchDebounce = useDebounce(search, 800);
 
+  //set refresh department tai vi tri sau khi them va sua
+  const [reloadPage, setReloadPage] = useState(false);
+
   //cac state
-  // const [cateBooks, setCateBooks] = useState([]);
+  const [bookList, setBookList] = useState({ books: [], total: 0 });
+  const [cateBooks, setCateBooks] = useState([]);
   const [cateSelected, setCateSelected] = useState([]);
   const [isGrid, setIsGrid] = useState(true);
 
@@ -50,38 +57,38 @@ const Book = () => {
     setItemPerPage(event.target.value);
   };
 
-  const { data: booksData, isFetching } = useQuery({
-    queryKey: ["books", page, itemPerPage, search, cateSelected],
-    queryFn: async () => {
+  //featch data
+  const fetchBooks = async (page, itemPerPage, search, cateSelected) => {
+    try {
+      dispatch(setLoading(true));
       const response = await apiGetListBook({
         page,
         itemPerPage,
         search,
         cateSelected,
       });
-      return { books: response.data.data, total: response.data.total };
-    },
-    placeholderData: { books: [], total: 0 },
-  });
+      console.log(response);
+      setBookList({ books: response.data.data, total: response.data.total });
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setLoading(false));
+      console.log("get all department", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBooks(page, itemPerPage, search, cateSelected);
+  }, [page, itemPerPage, search, reloadPage, cateSelected]);
 
   // get danh muc sach truyền form add và edit
-  // const getCategoryBookList = async () => {
-  //   const res = await apiGetAllCategoryBook();
-  //   setCateBooks(res.data);
-  // };
+  const getCategoryBookList = async () => {
+    const res = await apiGetAllCategoryBook();
+    setCateBooks(res.data);
+  };
 
-  // useEffect(() => {
-  //   getCategoryBookList();
-  // }, []);
-
-  const { data: cateBooks } = useQuery({
-    queryKey: ["cate-book"],
-    queryFn: async () => {
-      const res = await apiGetAllCategoryBook();
-      return res.data;
-    },
-    placeholderData: [],
-  });
+  useEffect(() => {
+    getCategoryBookList();
+  }, []);
 
   return (
     <>
@@ -128,22 +135,20 @@ const Book = () => {
             />
             {isGrid ? (
               <GridBook
-                books={booksData.books}
-                total={Math.ceil(booksData.total / itemPerPage)}
+                books={bookList.books}
+                total={Math.ceil(bookList.total / itemPerPage)}
                 page={page}
                 onPageChange={handlePageChangeGrid}
-                isLoading={isFetching}
               />
             ) : (
-              // <></>
               <ListBook
-                books={booksData.books}
-                total={booksData.total}
+                books={bookList.books}
+                total={bookList.total}
                 page={pageMui}
                 rowsPerPage={itemPerPage}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 onPageChange={handlePageChange}
-                isLoading={isFetching}
+                setReloadPage={setReloadPage}
               />
             )}
           </Stack>

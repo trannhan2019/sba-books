@@ -1,8 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
-import { store, persistor } from "./store/redux";
+import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./store/redux";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import App from "./App.jsx";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -11,13 +14,17 @@ import "@fontsource/roboto/700.css";
 import "simplebar-react/dist/simplebar.min.css";
 
 import "./index.css";
-import { Provider } from "react-redux";
+
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <App />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </PersistGate>
   </Provider>
   // </React.StrictMode>

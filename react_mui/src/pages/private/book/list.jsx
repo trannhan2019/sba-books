@@ -14,7 +14,6 @@ import BookImageDefault from "@/assets/default-image-book.jpg";
 import { Scrollbar } from "@/components/common/Scrollbar";
 import TableLoader from "@/components/common/TableLoader";
 import { getUrlImage } from "@/utils/get-url-image";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const ListBook = (props) => {
@@ -25,9 +24,8 @@ const ListBook = (props) => {
     onRowsPerPageChange,
     page = 0,
     rowsPerPage = 0,
+    isLoading,
   } = props;
-
-  const { isLoading } = useSelector((state) => state.app);
 
   return (
     <Box sx={{ position: "relative" }}>

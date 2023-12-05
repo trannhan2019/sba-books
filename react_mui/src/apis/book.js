@@ -21,6 +21,12 @@ export const apiGetListBook = (params) =>
     params,
   });
 
+export const apiGetBook = (id) =>
+  axiosClient({
+    url: `/book/${id}`,
+    method: "get",
+  });
+
 export const apiUpdateBook = (data, id) =>
   axiosClient({
     url: `/book/${id}`,
