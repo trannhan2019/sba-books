@@ -21,11 +21,12 @@ return new class extends Migration
             $table->integer('location')->default(0);
             $table->rememberToken();
             $table->string('photo')->nullable();
-            $table->timestamps();
             $table->unsignedBigInteger('department_id');
             $table->foreign('department_id')->references('id')->on('departments');
             //viet tat khoa ngoai
             $table->foreignId('role_id')->constrained('roles');
+            $table->integer('count_transaction')->default(0);
+            $table->timestamps();
         });
     }
 

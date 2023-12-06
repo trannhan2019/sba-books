@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('storage_location');
             $table->string('more_info')->nullable();
             $table->foreignId('category_book_id')->constrained('category_books');
+            $table->integer('count_transaction')->default(0);
             $table->timestamps();
         });
     }

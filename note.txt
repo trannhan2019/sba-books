@@ -7,3 +7,4 @@ Chuc nang
 	tao table
 		thong ke sach muon nhieu, nguoi muon nhieu (them field so lan muon tra trong book va so lan muon o user)
 
+lam chuc nang logout
