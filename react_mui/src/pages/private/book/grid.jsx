@@ -1,4 +1,4 @@
-import CardLoader from "@/components/common/CardLoader";
+import ListCardLoader from "@/components/common/ListCardLoader";
 import { Scrollbar } from "@/components/common/Scrollbar";
 import { Box, Grid, Pagination, Typography } from "@mui/material";
 // import { useSelector } from "react-redux";
@@ -10,7 +10,7 @@ const GridBook = ({ books, total, page, onPageChange, isLoading }) => {
   return (
     <Scrollbar style={{ marginTop: "50px" }}>
       {isLoading ? (
-        <CardLoader items={8} />
+        <ListCardLoader items={8} />
       ) : (
         <>
           {books?.length <= 0 ? (

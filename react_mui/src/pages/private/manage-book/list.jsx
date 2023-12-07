@@ -3,12 +3,6 @@ import {
   Button,
   Checkbox,
   Chip,
-  IconButton,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  MenuList,
   Stack,
   Table,
   TableBody,
@@ -20,18 +14,15 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
-import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
-import HideImageIcon from "@mui/icons-material/HideImage";
 import { Scrollbar } from "@/components/common/Scrollbar";
 import TableLoader from "@/components/common/TableLoader";
 import Swal from "sweetalert2";
 import { useSelection } from "@/hooks/useSelection";
 import { useSelector } from "react-redux";
-import { useState } from "react";
 import { getUrlImage } from "@/utils/get-url-image";
 import { apiDeleteBook, apiDeleteBookList } from "@/apis/book";
 import ActionMenu from "./action-menu";
+import BookImageDefault from "@/assets/default-image-book.jpg";
 
 const ListBook = (props) => {
   const {
@@ -239,7 +230,11 @@ const ListBook = (props) => {
                                 width: 80,
                               }}
                             >
-                              <HideImageIcon />
+                              <img
+                                src={BookImageDefault}
+                                width="100%"
+                                alt="image default"
+                              />
                             </Box>
                           )}
                           <div

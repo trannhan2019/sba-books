@@ -1,28 +1,52 @@
-import { Card, CardContent, CardMedia, Grid, Skeleton } from "@mui/material";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  Skeleton,
+  Stack,
+} from "@mui/material";
+import React from "react";
 
-const CardLoader = ({ items }) => {
+const CardLoader = () => {
   return (
-    <Grid container spacing={3}>
-      {[...Array(items)].map((item, idx) => (
-        <Grid item key={idx} xs={12} md={4} xl={3}>
-          <Card>
-            <CardMedia>
-              <Skeleton
-                variant="rectangular"
-                width={"100%"}
-                height="300px"
-                animation="wave"
-              />
-            </CardMedia>
+    <>
+      <Card>
+        <Grid container>
+          <Grid
+            item
+            xs={12}
+            md={5}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Skeleton
+              component="div"
+              variant="rectangular"
+              width={350}
+              height={350}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={7}>
             <CardContent>
-              <Skeleton variant="text" sx={{ fontSize: "2rem" }} />
-              <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
-              <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+              <Stack spacing={1}>
+                <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+                <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+                <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+                <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+                <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+                <Skeleton variant="rectangular" width={"100%"} height={70} />
+              </Stack>
             </CardContent>
-          </Card>
+            <CardActions sx={{ padding: 3 }}>
+              <Skeleton variant="rectangular" width={210} height={60} />
+            </CardActions>
+          </Grid>
         </Grid>
-      ))}
-    </Grid>
+      </Card>
+    </>
   );
 };
 

@@ -25,6 +25,7 @@
     "@tinymce/tinymce-react": "^4.3.0",
     "axios": "^1.5.1",
     "date-fns": "^2.30.0",
+    "html-to-react": "^1.7.0",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
