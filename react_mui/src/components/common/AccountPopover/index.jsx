@@ -1,5 +1,6 @@
 // import { useCallback } from "react";
-// import { useRouter } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Divider,
@@ -8,18 +9,25 @@ import {
   Popover,
   Typography,
 } from "@mui/material";
-// import { useAuth } from "src/hooks/use-auth";
+import { apiLogout } from "@/apis/auth";
+import { setIsLoggedIn, setUser } from "@/store/auth/authSlice";
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open } = props;
-  //   const router = useRouter();
-  //   const auth = useAuth();
 
-  //   const handleSignOut = useCallback(() => {
-  //     onClose?.();
-  //     auth.signOut();
-  //     router.push("/auth/login");
-  //   }, [onClose, auth, router]);
+  const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleSignOut = async () => {
+    onClose?.();
+    await apiLogout();
+    dispatch(setUser(null));
+    dispatch(setIsLoggedIn(false));
+    localStorage.removeItem("token");
+    navigate("/login");
+    // console.log("logout");
+  };
 
   return (
     <Popover
@@ -40,7 +48,7 @@ export const AccountPopover = (props) => {
       >
         <Typography variant="overline">Account</Typography>
         <Typography color="text.secondary" variant="body2">
-          Anika Visser
+          {user?.name}
         </Typography>
       </Box>
       <Divider />
@@ -55,7 +63,7 @@ export const AccountPopover = (props) => {
         }}
       >
         {/* <MenuItem onClick={handleSignOut}>Sign out</MenuItem> */}
-        <MenuItem>Sign out</MenuItem>
+        <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
       </MenuList>
     </Popover>
   );

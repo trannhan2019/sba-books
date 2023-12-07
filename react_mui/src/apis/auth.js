@@ -6,3 +6,9 @@ export const apiLogin = (data) =>
     method: "post",
     data,
   });
+
+export const apiLogout = () =>
+  axiosClient({
+    url: "/auth/logout",
+    method: "post",
+  });

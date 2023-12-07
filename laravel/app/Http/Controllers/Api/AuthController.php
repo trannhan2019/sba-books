@@ -34,4 +34,11 @@ class AuthController extends Controller
             'user' => $user
         ], 200);
     }
+
+    public function logout()
+    {
+        $user = Auth::user();
+        $user->tokens()->delete();
+        return response()->json('User is loggout');
+    }
 }

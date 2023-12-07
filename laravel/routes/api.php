@@ -31,6 +31,7 @@ Route::middleware(['auth:sanctum', 'can:isManager'])->get('/user-current', funct
 
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
