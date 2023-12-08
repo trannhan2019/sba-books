@@ -3,9 +3,10 @@ import { Scrollbar } from "@/components/common/Scrollbar";
 import { Box, Grid, Pagination, Typography } from "@mui/material";
 // import { useSelector } from "react-redux";
 import { BookCard } from "./book-card";
+import { useSelector } from "react-redux";
 
-const GridBook = ({ books, total, page, onPageChange, isLoading }) => {
-  // const { isLoading } = useSelector((state) => state.app);
+const GridBook = ({ books, total, page, onPageChange }) => {
+  const { isLoading } = useSelector((state) => state.app);
 
   return (
     <Scrollbar style={{ marginTop: "50px" }}>

@@ -80,8 +80,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{id}', [CategoryBookController::class, 'update']);
         Route::delete('/', [CategoryBookController::class, 'destroyAll']);
         Route::delete('/{id}', [CategoryBookController::class, 'destroy']);
-        Route::get('/all', [CategoryBookController::class, 'getAll']);
     });
+    Route::get('/category-book/all', [CategoryBookController::class, 'getAll']);
 
     Route::prefix('book')->group(function () {
         Route::post('/', [BookController::class, 'store'])->middleware('can:isManager');
@@ -94,10 +94,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('book-history')->group(function () {
         Route::post('/', [BookHistoryController::class, 'store']);
-//        Route::get('/', [BookController::class, 'index']);
-//        Route::get('/{id}', [BookController::class, 'getOne']);
-//        Route::put('/{id}', [BookController::class, 'update'])->middleware('can:isManager');
-//        Route::delete('/', [BookController::class, 'destroyAll'])->middleware('can:isManager');
-//        Route::delete('/{id}', [BookController::class, 'destroy'])->middleware('can:isManager');
+        Route::get('/user', [BookHistoryController::class, 'getByUser']);
+        Route::post('/user/{id}', [BookHistoryController::class, 'update']);
+        //        Route::put('/{id}', [BookController::class, 'update'])->middleware('can:isManager');
+        //        Route::delete('/', [BookController::class, 'destroyAll'])->middleware('can:isManager');
+        //        Route::delete('/{id}', [BookController::class, 'destroy'])->middleware('can:isManager');
     });
 });

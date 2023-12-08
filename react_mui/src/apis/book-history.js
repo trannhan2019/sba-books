@@ -6,3 +6,15 @@ export const apiStoreBookHistory = (data) =>
     method: "post",
     data,
   });
+
+export const apiUpdateBookHistory = (id) =>
+  axiosClient({
+    url: `/book-history/user/${id}`,
+    method: "post",
+  });
+
+export const apiGetBookHistoryByUser = () =>
+  axiosClient({
+    url: `/book-history/user`,
+    method: "get",
+  });

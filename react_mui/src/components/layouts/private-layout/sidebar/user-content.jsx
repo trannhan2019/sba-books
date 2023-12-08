@@ -1,8 +1,6 @@
 import { useLocation } from "react-router-dom";
-import RectangleGroupIcon from "@heroicons/react/24/solid/RectangleGroupIcon";
-import BuildingOffice2Icon from "@heroicons/react/24/solid/BuildingOffice2Icon";
 import { Box, Stack, SvgIcon, Typography } from "@mui/material";
-import CategoryIcon from "@mui/icons-material/Category";
+import HistoryIcon from "@mui/icons-material/History";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import { SidebarItem } from "./sidebar-item";
 
@@ -10,35 +8,27 @@ export const users = [
   {
     title: "Sách",
     path: "/",
-    icon: (
-      <SvgIcon fontSize="small">
-        <BuildingOffice2Icon />
-      </SvgIcon>
-    ),
+    icon: <AutoStoriesIcon fontSize="small" />,
   },
   {
     title: "Lịch sử mượn trả",
-    path: "/",
-    icon: (
-      <SvgIcon fontSize="small">
-        <RectangleGroupIcon />
-      </SvgIcon>
-    ),
+    path: "/book-history",
+    icon: <HistoryIcon fontSize="small" />,
   },
 ];
 
-export const manages = [
-  {
-    title: "Comment",
-    path: "/manage-category-book",
-    icon: <CategoryIcon fontSize="small" />,
-  },
-  {
-    title: "Quản lý sách",
-    path: "/manage-book",
-    icon: <AutoStoriesIcon fontSize="small" />,
-  },
-];
+// export const manages = [
+//   {
+//     title: "Comment",
+//     path: "/manage-category-book",
+//     icon: <CategoryIcon fontSize="small" />,
+//   },
+//   {
+//     title: "Quản lý sách",
+//     path: "/manage-book",
+//     icon: <AutoStoriesIcon fontSize="small" />,
+//   },
+// ];
 
 export function UserContent() {
   const location = useLocation();
@@ -83,7 +73,7 @@ export function UserContent() {
         </Stack>
       </Box>
       {/* QUAN LY */}
-      <Box
+      {/* <Box
         component="nav"
         sx={{
           flexGrow: 1,
@@ -119,7 +109,7 @@ export function UserContent() {
             );
           })}
         </Stack>
-      </Box>
+      </Box> */}
     </>
   );
 }

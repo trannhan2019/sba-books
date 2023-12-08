@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
 import { apiGetBook } from "@/apis/book";
 import BookImageDefault from "@/assets/default-image-book.jpg";
 import { getUrlImage } from "@/utils/get-url-image";
@@ -22,21 +22,44 @@ import { Parser } from "html-to-react";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { apiStoreBookHistory } from "@/apis/book-history";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "@/store/app/appSlice";
 
 const BookDetail = () => {
   let { id } = useParams();
+  const { isLoading } = useSelector((state) => state.app);
   const { user } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
 
-  const { data: book, isFetching } = useQuery({
-    queryKey: ["book", id],
-    queryFn: async () => {
-      const res = await apiGetBook(id);
-      return res.data;
-    },
-    placeholderData: [],
-  });
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [book, setBook] = useState(null);
+
+  // const { data: book, isFetching } = useQuery({
+  //   queryKey: ["book", id],
+  //   queryFn: async () => {
+  //     const res = await apiGetBook(id);
+  //     return res.data;
+  //   },
+  //   placeholderData: [],
+  // });
+  const fetchData = async (id) => {
+    try {
+      dispatch(setLoading(true));
+      const response = await apiGetBook(id);
+      console.log(response);
+      setBook(response.data);
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setLoading(false));
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(id);
+  }, []);
 
   // console.log(data);
   let bookPhoto = book?.photo ? getUrlImage(book.photo) : BookImageDefault;
@@ -52,7 +75,7 @@ const BookDetail = () => {
         try {
           await apiStoreBookHistory({ exchange_user_id: user.id, book_id: id });
           Swal.fire("Saved!", "", "success");
-          navigate("/"); //them route lich su muon sach ca nhan
+          navigate("/book-history");
         } catch (error) {
           console.log("delete", error);
           toast.error("Lỗi không mượn được sách");
@@ -80,7 +103,7 @@ const BookDetail = () => {
               </Button>
             </Link>
           </Stack>
-          {isFetching ? (
+          {isLoading ? (
             <CardLoader />
           ) : (
             <Card>

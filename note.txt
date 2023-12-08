@@ -7,12 +7,17 @@ Chuc nang
 	tao table
 		thong ke sach muon nhieu, nguoi muon nhieu (them field so lan muon tra trong book va so lan muon o user)
 
-chay lai migrate refresh do sua doi truong, 
-test dat sach
+
 them route muon sach ca nhan
 them hinh anh test
-view list lich su muon sach cua ca nhan
+view list lich su muon sach cua ca nhan - them chuc nang tra sach
 view list lich su muon sach quan ly - them chuc nang xoa lich su
 
 thong ke 5 sach duoc muon nhieu
 thong ke 5 nguoi muon nhieu sach
+
+notification: show 5 noti chua xem, show all
+
+infor user
+
+edit logo moi sba

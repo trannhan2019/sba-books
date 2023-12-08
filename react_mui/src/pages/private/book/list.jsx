@@ -15,6 +15,7 @@ import { Scrollbar } from "@/components/common/Scrollbar";
 import TableLoader from "@/components/common/TableLoader";
 import { getUrlImage } from "@/utils/get-url-image";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const ListBook = (props) => {
   const {
@@ -24,13 +25,13 @@ const ListBook = (props) => {
     onRowsPerPageChange,
     page = 0,
     rowsPerPage = 0,
-    isLoading,
   } = props;
+  const { isLoading } = useSelector((state) => state.app);
 
   return (
     <Box sx={{ position: "relative" }}>
       <Scrollbar>
-        <Table sx={{ minWidth: 1200 }}>
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell>Tiều đề</TableCell>

@@ -1,29 +1,22 @@
 import { useLocation } from "react-router-dom";
-import RectangleGroupIcon from "@heroicons/react/24/solid/RectangleGroupIcon";
-import BuildingOffice2Icon from "@heroicons/react/24/solid/BuildingOffice2Icon";
 import { Box, Stack, SvgIcon, Typography } from "@mui/material";
 import CategoryIcon from "@mui/icons-material/Category";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import { SidebarItem } from "./sidebar-item";
+import ManageSearchIcon from "@mui/icons-material/ManageSearch";
+import HistoryIcon from "@mui/icons-material/History";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 
 export const users = [
   {
     title: "Sách",
     path: "/",
-    icon: (
-      <SvgIcon fontSize="small">
-        <BuildingOffice2Icon />
-      </SvgIcon>
-    ),
+    icon: <AutoStoriesIcon fontSize="small" />,
   },
   {
     title: "Lịch sử mượn trả",
-    path: "/history-book",
-    icon: (
-      <SvgIcon fontSize="small">
-        <RectangleGroupIcon />
-      </SvgIcon>
-    ),
+    path: "/book-history",
+    icon: <HistoryIcon fontSize="small" />,
   },
 ];
 
@@ -36,9 +29,14 @@ export const manages = [
   {
     title: "Quản lý sách",
     path: "/manage-book",
-    icon: <AutoStoriesIcon fontSize="small" />,
+    icon: <ManageSearchIcon fontSize="small" />,
   },
   //quan ly muon tra
+  {
+    title: "Quản lý mượn trả sách",
+    path: "/manage-book-history",
+    icon: <MenuBookOutlinedIcon fontSize="small" />,
+  },
   //thong ke sach muon nhieu, nguoi muon nhieu
   //quan ly notification
 ];

@@ -7,25 +7,19 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import CategoryIcon from "@mui/icons-material/Category";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import { SidebarItem } from "./sidebar-item";
+import HistoryIcon from "@mui/icons-material/History";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 
 export const users = [
   {
     title: "Sách",
     path: "/",
-    icon: (
-      <SvgIcon fontSize="small">
-        <BuildingOffice2Icon />
-      </SvgIcon>
-    ),
+    icon: <AutoStoriesIcon fontSize="small" />,
   },
   {
     title: "Lịch sử mượn trả",
-    path: "/history-book",
-    icon: (
-      <SvgIcon fontSize="small">
-        <RectangleGroupIcon />
-      </SvgIcon>
-    ),
+    path: "/book-history",
+    icon: <HistoryIcon fontSize="small" />,
   },
 ];
 
@@ -73,6 +67,11 @@ export const manages = [
     icon: <AutoStoriesIcon fontSize="small" />,
   },
   //quan ly muon tra
+  {
+    title: "Quản lý mượn trả sách",
+    path: "/manage-book-history",
+    icon: <MenuBookOutlinedIcon fontSize="small" />,
+  },
   //thong ke sach muon nhieu, nguoi muon nhieu
 ];
 

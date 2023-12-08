@@ -11,6 +11,8 @@ import ManageCategoryBook from "@/pages/private/manage-category-book";
 import ManageBook from "@/pages/private/manage-book";
 import Book from "@/pages/private/book";
 import BookDetail from "@/pages/private/book/detail";
+import ManageBookHistory from "@/pages/private/manage-book-history";
+import BookHistory from "@/pages/private/book-history";
 
 const AppRoutes = () => {
   return (
@@ -21,6 +23,7 @@ const AppRoutes = () => {
         <Route path="/" element={<PrivateLayout />}>
           <Route index element={<Book />} />
           <Route path="/book/:id" element={<BookDetail />} />
+          <Route path="/book-history" element={<BookHistory />} />
           <Route
             path="manage-company"
             element={
@@ -66,6 +69,14 @@ const AppRoutes = () => {
             element={
               <ManagerGuard>
                 <ManageBook />
+              </ManagerGuard>
+            }
+          />
+          <Route
+            path="manage-book-history"
+            element={
+              <ManagerGuard>
+                <ManageBookHistory />
               </ManagerGuard>
             }
           />

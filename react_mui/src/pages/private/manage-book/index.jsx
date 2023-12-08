@@ -11,10 +11,10 @@ import {
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import AddBook from "./add";
 import { apiGetAllCategoryBook } from "@/apis/category_book";
-import { setCateBooks } from "@/store/category_book/catebookSlice";
+// import { setCateBooks } from "@/store/category_book/catebookSlice";
 import { setLoading } from "@/store/app/appSlice";
 import { apiGetListBook } from "@/apis/book";
-import { setBooks, setTotalBook } from "@/store/book/bookSlice";
+// import { setBooks, setTotalBook } from "@/store/book/bookSlice";
 import useDebounce from "@/hooks/useDebounce";
 import ListBook from "./list";
 import SearchBook from "./search";
