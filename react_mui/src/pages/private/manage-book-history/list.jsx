@@ -20,7 +20,7 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { apiUpdateBookHistory } from "@/apis/book-history";
 
-const BookHistoryList = (props) => {
+const ManageBookHistoryList = (props) => {
   const {
     bookHistoryList,
     total,
@@ -148,4 +148,4 @@ const BookHistoryList = (props) => {
   );
 };
 
-export default BookHistoryList;
+export default ManageBookHistoryList;

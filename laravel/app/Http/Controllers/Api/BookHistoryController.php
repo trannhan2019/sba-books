@@ -37,19 +37,17 @@ class BookHistoryController extends Controller
     public function getByUser(Request $request)
     {
         $user_id = Auth::user()->id;
-        $itemPerPage = $request->query('item_per_page', 5);
+        $itemPerPage = $request->query('itemPerPage', 5);
         //fill by company book name
         $search = $request->query('search');
 
         $book_history = BookHistory::query();
-
         $book_history->where('exchange_user_id', $user_id)->with('book');
         if (!empty($search)) {
-            $book_history = $book_history->where('book.title', 'like', '%' . $search . '%');
+            $book_history->whereRelation('book','title','like','%'.$search.'%');
         }
 
         return response()->json($book_history->orderBy('created_at', 'DESC')->paginate($itemPerPage));
-        // return response()->json(CategoryBook::all());
     }
 
     public function update($id)
@@ -61,5 +59,20 @@ class BookHistoryController extends Controller
         $book = Book::findOrFail($book_history->book_id);
         $book->quantity = $book->quantity + 1;
         $book->save();
+    }
+
+    public function getList(Request $request)
+    {
+        $itemPerPage = $request->query('itemPerPage', 5);
+        //fill by company book name
+        $search = $request->query('search');
+
+        $book_history = BookHistory::query();
+        $book_history->with(['book','user']);
+//        if (!empty($search)) {
+//            $book_history->whereRelation('book','title','like','%'.$search.'%');
+//        }
+
+        return response()->json($book_history->orderBy('created_at', 'DESC')->paginate($itemPerPage));
     }
 }

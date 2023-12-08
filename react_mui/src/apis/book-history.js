@@ -13,8 +13,16 @@ export const apiUpdateBookHistory = (id) =>
     method: "post",
   });
 
-export const apiGetBookHistoryByUser = () =>
+export const apiGetBookHistoryByUser = (params) =>
   axiosClient({
     url: `/book-history/user`,
     method: "get",
+    params,
+  });
+
+export const apiGetBookHistory = (params) =>
+  axiosClient({
+    url: `/book-history`,
+    method: "get",
+    params,
   });

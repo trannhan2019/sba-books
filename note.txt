@@ -8,7 +8,8 @@ Chuc nang
 		thong ke sach muon nhieu, nguoi muon nhieu (them field so lan muon tra trong book va so lan muon o user)
 
 
-them route muon sach ca nhan
+them route muon sach manage
+them tai khoan "quan ly sach" set role manager de log rieng va nhan noti search theo username
 them hinh anh test
 view list lich su muon sach cua ca nhan - them chuc nang tra sach
 view list lich su muon sach quan ly - them chuc nang xoa lich su
