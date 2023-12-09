@@ -96,9 +96,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [BookHistoryController::class, 'store']);
         Route::get('/', [BookHistoryController::class, 'getList'])->middleware('can:isManager');
         Route::get('/user', [BookHistoryController::class, 'getByUser']);
-        Route::post('/user/{id}', [BookHistoryController::class, 'update']);
+        Route::put('/user/{id}', [BookHistoryController::class, 'update']);
         //        Route::put('/{id}', [BookController::class, 'update'])->middleware('can:isManager');
         //        Route::delete('/', [BookController::class, 'destroyAll'])->middleware('can:isManager');
-        //        Route::delete('/{id}', [BookController::class, 'destroy'])->middleware('can:isManager');
+        Route::delete('/{id}', [BookHistoryController::class, 'destroy'])->middleware('can:isManager');
     });
 });

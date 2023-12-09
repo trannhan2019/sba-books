@@ -26,7 +26,7 @@ class StoreBookRequest extends FormRequest
             'category_book_id' => 'required',
             'code' => 'required',
             'storage_location' => 'required',
-            'photo' => 'sometimes|mimes:jpeg,jpg,png,gif|max:100000',
+            'photo.*' => 'nullable|image|max:100000',
             // 'photo' => 'nullable|mimes:jpeg,jpg,png,gif|max:100000'
         ];
     }

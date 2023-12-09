@@ -200,43 +200,27 @@ const ListBook = (props) => {
                             display: "flex",
                           }}
                         >
-                          {book.photo ? (
-                            <Box
-                              sx={{
-                                alignItems: "center",
-                                backgroundColor: "neutral.50",
-                                backgroundImage: `url(${getUrlImage(
-                                  book.photo
-                                )})`,
-                                backgroundPosition: "center",
-                                backgroundSize: "cover",
-                                borderRadius: 1,
-                                display: "flex",
-                                height: 80,
-                                justifyContent: "center",
-                                overflow: "hidden",
-                                width: 80,
-                              }}
-                            />
-                          ) : (
-                            <Box
-                              sx={{
-                                alignItems: "center",
-                                backgroundColor: "neutral.50",
-                                borderRadius: 1,
-                                display: "flex",
-                                height: 80,
-                                justifyContent: "center",
-                                width: 80,
-                              }}
-                            >
-                              <img
-                                src={BookImageDefault}
-                                width="100%"
-                                alt="image default"
-                              />
-                            </Box>
-                          )}
+                          <Box
+                            sx={{
+                              alignItems: "center",
+                              backgroundColor: "neutral.50",
+                              backgroundImage: `url(${
+                                book?.photo_url &&
+                                book?.photo_url !== "0" &&
+                                book?.photo_url !== "null"
+                                  ? book.photo_url
+                                  : getUrlImage(book?.photo)
+                              })`,
+                              backgroundPosition: "center",
+                              backgroundSize: "cover",
+                              borderRadius: 1,
+                              display: "flex",
+                              height: 80,
+                              justifyContent: "center",
+                              overflow: "hidden",
+                              width: 80,
+                            }}
+                          />
                           <div
                             style={{
                               overflow: "hidden",

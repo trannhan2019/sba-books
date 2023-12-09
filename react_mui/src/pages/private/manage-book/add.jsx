@@ -16,10 +16,10 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Switch,
   Stack,
   Typography,
   IconButton,
+  FormLabel,
 } from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 // import ImageInput from "@/components/common/ImageInput";
@@ -43,7 +43,7 @@ const AddBook = ({ openAddForm, setOpenAddForm, setReloadPage, cateBooks }) => {
       description: "",
       quantity: 0,
       author: "",
-      // photo: "",
+      photo_url: "",
       code: "",
       storage_location: "",
       more_info: "",
@@ -153,8 +153,36 @@ const AddBook = ({ openAddForm, setOpenAddForm, setReloadPage, cateBooks }) => {
               label="Thông tin giới thiệu về sách"
             />
 
-            {/* <ImageInput form={hookForm} name="photo" mode="update" /> */}
-            <ImageInput2 name="photo" form={hookForm} />
+            <Stack mt={3}>
+              <Typography variant="subtitle1">
+                Chèn link hoặc upload hình ảnh
+              </Typography>
+              <Controller
+                name="photo_url"
+                control={control}
+                render={({
+                  field: { onChange, onBlur, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    margin="normal"
+                    label="Dán link hình ảnh"
+                    placeholder="https://image.example.com"
+                    type="text"
+                    fullWidth
+                    variant="outlined"
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    value={value}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+              />
+
+              <ImageInput2 name="photo" form={hookForm} />
+            </Stack>
+
             <Controller
               name="author"
               control={control}
@@ -258,7 +286,6 @@ const AddBook = ({ openAddForm, setOpenAddForm, setReloadPage, cateBooks }) => {
                 fieldState: { error },
               }) => (
                 <TextField
-                  required
                   multiline
                   rows={2}
                   margin="normal"

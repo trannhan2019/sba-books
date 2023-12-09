@@ -10,7 +10,7 @@ export const apiStoreBookHistory = (data) =>
 export const apiUpdateBookHistory = (id) =>
   axiosClient({
     url: `/book-history/user/${id}`,
-    method: "post",
+    method: "put",
   });
 
 export const apiGetBookHistoryByUser = (params) =>
@@ -25,4 +25,10 @@ export const apiGetBookHistory = (params) =>
     url: `/book-history`,
     method: "get",
     params,
+  });
+
+export const apiDeleteBookHistory = (id) =>
+  axiosClient({
+    url: `/book-history/${id}`,
+    method: "delete",
   });

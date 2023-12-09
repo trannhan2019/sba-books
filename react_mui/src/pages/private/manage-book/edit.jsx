@@ -16,7 +16,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Switch,
   Stack,
   Typography,
   IconButton,
@@ -44,7 +43,7 @@ const EditBook = ({
   book,
 }) => {
   const hookForm = useForm({
-    // resolver: yupResolver(scheme),
+    resolver: yupResolver(scheme),
   });
 
   const { control, handleSubmit, reset, setValue } = hookForm;
@@ -60,7 +59,7 @@ const EditBook = ({
           formData.append(key, values[key]);
         }
       }
-      console.log(formData.get("title"));
+      // console.log(formData.get("title"));
       await apiUpdateBook(formData, book.id);
       setOpenEditForm(false);
       setReloadPage((preState) => !preState);
@@ -80,6 +79,7 @@ const EditBook = ({
     setValue("code", book?.code);
     setValue("storage_location", book?.storage_location);
     setValue("more_info", book?.more_info);
+    setValue("photo_url", book?.photo_url);
   }, [openEditForm]);
 
   return (
@@ -159,7 +159,35 @@ const EditBook = ({
             />
 
             {/* <ImageInput form={hookForm} name="photo" mode="update" /> */}
-            <ImageInput2 name="photo" form={hookForm} photo={book?.photo} />
+            <Stack mt={3}>
+              <Typography variant="subtitle1">
+                Chèn link hoặc upload hình ảnh
+              </Typography>
+              <Controller
+                name="photo_url"
+                control={control}
+                render={({
+                  field: { onChange, onBlur, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    margin="normal"
+                    label="Dán link hình ảnh"
+                    placeholder="https://image.example.com"
+                    type="text"
+                    fullWidth
+                    variant="outlined"
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    value={value}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+              />
+
+              <ImageInput2 name="photo" form={hookForm} photo={book?.photo} />
+            </Stack>
             <Controller
               name="author"
               control={control}

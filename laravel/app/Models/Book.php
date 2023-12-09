@@ -12,7 +12,7 @@ class Book extends Model
     protected $fillable = [
         'title','description','quantity','author','code',
         'storage_location','more_info','category_book_id',
-        'photo','count_transaction'
+        'photo','count_transaction','photo_url'
     ];
 
     public function cateBook(){

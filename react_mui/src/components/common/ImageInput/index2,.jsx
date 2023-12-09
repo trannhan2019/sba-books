@@ -103,9 +103,9 @@ export default function ImageInput2(props) {
   }, []);
   return (
     <Box mt={1}>
-      <Typography fontWeight="bold" variant="body1">
+      {/* <Typography fontWeight="bold" variant="body1">
         Chọn ảnh{" "}
-      </Typography>
+      </Typography> */}
       <Box
         sx={{
           alignItems: "center",

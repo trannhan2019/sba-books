@@ -19,7 +19,14 @@ export const BookCard = (props) => {
       <CardMedia
         component={Link}
         to={`/book/${book.id}`}
-        image={book.photo ? getUrlImage(book.photo) : BookImageDefault}
+        image={
+          book?.photo_url &&
+          book?.photo_url !== "0" &&
+          book?.photo_url !== "null"
+            ? book.photo_url
+            : getUrlImage(book?.photo)
+        }
+        // image={book.photo ? getUrlImage(book.photo) : BookImageDefault}
         sx={{ height: 300 }}
       />
       <CardContent>

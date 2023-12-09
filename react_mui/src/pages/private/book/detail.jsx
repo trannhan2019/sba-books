@@ -48,7 +48,6 @@ const BookDetail = () => {
     try {
       dispatch(setLoading(true));
       const response = await apiGetBook(id);
-      console.log(response);
       setBook(response.data);
       dispatch(setLoading(false));
     } catch (error) {
@@ -60,9 +59,6 @@ const BookDetail = () => {
   useEffect(() => {
     fetchData(id);
   }, []);
-
-  // console.log(data);
-  let bookPhoto = book?.photo ? getUrlImage(book.photo) : BookImageDefault;
 
   const handleSubscribe = () => {
     Swal.fire({
@@ -82,7 +78,6 @@ const BookDetail = () => {
         }
       }
     });
-    // console.log("click");
   };
 
   return (
@@ -110,9 +105,44 @@ const BookDetail = () => {
               <Grid container>
                 <Grid item xs={12} md={5}>
                   <CardMedia
-                    image={bookPhoto}
-                    sx={{ height: 500, backgroundSize: "85% 85%" }}
+                    image={
+                      book?.photo_url &&
+                      book?.photo_url !== "0" &&
+                      book?.photo_url !== "null"
+                        ? book?.photo_url
+                        : getUrlImage(book?.photo)
+                    }
+                    component="img"
+                    sx={{
+                      height: 500,
+                      // backgroundSize: "85% 85%",
+                    }}
                   />
+                  {/* <Box
+                    sx={{
+                      height: 500,
+                      backgroundSize: "85% 85%",
+                      backgroundImage: `url(${bookPhoto})`,
+                    }}
+                  /> */}
+                  {/* {book?.photo_url ? (
+                    <CardMedia
+                      image={book?.photo_url}
+                      component="img"
+                      sx={{
+                        height: 500,
+                        // backgroundSize: "85% 85%",
+                      }}
+                    />
+                  ) : (
+                    <CardMedia
+                      image={getUrlImage(book?.photo)}
+                      component="img"
+                      sx={{
+                        height: 500,
+                      }}
+                    />
+                  )} */}
                 </Grid>
 
                 <Grid item xs={12} md={7}>

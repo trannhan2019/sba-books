@@ -6,6 +6,7 @@ import { apiGetBookHistory } from "@/apis/book-history";
 
 // import BookHistorySearch from "./search";
 import ManageBookHistoryList from "./list";
+import ManageBookHistorySearch from "./search";
 
 const ManageBookHistory = () => {
   const dispatch = useDispatch();
@@ -66,10 +67,10 @@ const ManageBookHistory = () => {
           <Stack spacing={3}>
             <Typography variant="h4">Quản lý lịch sử mượn trả sách</Typography>
 
-            {/* <BookHistorySearch
+            <ManageBookHistorySearch
               onSearch={setSearch}
               handlePageReset={handlePageReset}
-            /> */}
+            />
 
             <ManageBookHistoryList
               bookHistoryList={bookHistoryData.bookHistoryList}

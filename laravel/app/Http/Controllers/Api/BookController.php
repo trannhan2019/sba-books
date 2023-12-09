@@ -23,6 +23,7 @@ class BookController extends Controller
         $book->more_info = $request->more_info;
         $book->category_book_id = $request->category_book_id;
         //image
+        $book->photo_url = $request->photo_url;
         if (!empty($request->photo)) {
             $path = Storage::put('books', $request->photo);
             $book->photo = $path;
@@ -66,6 +67,7 @@ class BookController extends Controller
         $book->more_info = $request->more_info;
         $book->category_book_id = $request->category_book_id;
         //image
+        $book->photo_url = $request->photo_url;
         if (!empty($request->photo)) {
             if (!empty($book->photo)) {
                 Storage::delete($book->photo);
