@@ -11,6 +11,9 @@ import {
 } from "@mui/material";
 import { apiLogout } from "@/apis/auth";
 import { setIsLoggedIn, setUser } from "@/store/auth/authSlice";
+import Pusher from "pusher-js";
+import { useEffect } from "react";
+import { apiTest } from "@/apis/book-history";
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open } = props;
@@ -27,6 +30,28 @@ export const AccountPopover = (props) => {
     localStorage.removeItem("token");
     navigate("/login");
     // console.log("logout");
+  };
+
+  const handleDeleteCache = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
+
+  // Enable pusher logging - don't include this in production
+  // Pusher.logToConsole = true;
+  const pusher = new Pusher("68da525ff3d86eea888f", {
+    cluster: "ap1",
+  });
+
+  useEffect(() => {
+    var channel = pusher.subscribe("sba-book-manage");
+    channel.bind("my-event", function (data) {
+      console.log(data);
+    });
+  }, []);
+
+  const handleTest = async () => {
+    await apiTest();
   };
 
   return (
@@ -62,8 +87,9 @@ export const AccountPopover = (props) => {
           },
         }}
       >
-        {/* <MenuItem onClick={handleSignOut}>Sign out</MenuItem> */}
+        <MenuItem onClick={handleDeleteCache}>Xoá dữ liệu tạm</MenuItem>
         <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
+        <MenuItem onClick={handleTest}>Test Notify</MenuItem>
       </MenuList>
     </Popover>
   );

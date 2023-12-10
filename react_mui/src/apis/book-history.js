@@ -32,3 +32,9 @@ export const apiDeleteBookHistory = (id) =>
     url: `/book-history/${id}`,
     method: "delete",
   });
+
+export const apiTest = () =>
+  axiosClient({
+    url: `/book-history/test`,
+    method: "post",
+  });

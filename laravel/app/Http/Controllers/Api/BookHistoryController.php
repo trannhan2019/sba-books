@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\BookHistory;
 use App\Models\User;
+use App\Notifications\TestPusherNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -93,5 +94,12 @@ class BookHistoryController extends Controller
 
         $book_history->delete();
         return response()->json('Book History deleted', 201);
+    }
+
+    public function test(Request $request){
+        $user = Auth::user();
+        $msg = 'Tesfsadfsadf';
+        $user->notify(new TestPusherNotification($user->id,$msg));
+        return 'done';
     }
 }

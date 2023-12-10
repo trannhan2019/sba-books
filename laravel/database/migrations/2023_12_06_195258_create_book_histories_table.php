@@ -19,6 +19,7 @@ return new class extends Migration
             $table->dateTime('exchanged_at')->nullable();
             $table->dateTime('verified_at')->nullable();
             $table->dateTime('returned_at')->nullable();
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }

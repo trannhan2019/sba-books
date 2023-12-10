@@ -14,6 +14,15 @@ thong ke 5 sach duoc muon nhieu
 thong ke 5 nguoi muon nhieu sach
 
 notification: show 5 noti chua xem, show all, co toast khi push
+pusher: trannhan.dev@gmail.com
+sba-book-manage
+BROADCAST_DRIVER=pusher
+PUSHER_APP_ID=1722298
+PUSHER_APP_KEY=68da525ff3d86eea888f
+PUSHER_APP_SECRET=f7de1cd883369c32faf8
+PUSHER_APP_CLUSTER=ap1
+
+
 
 infor user
 
@@ -22,3 +31,5 @@ edit logo moi sba
 them sach: photo co the link hoac file: them truong photo_url
 
 xoa Caches: truong hop thay doi update db, se xoa het local storage, o menu account
+
+
