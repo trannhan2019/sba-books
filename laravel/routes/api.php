@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CategoryBookController;
 use App\Http\Controllers\Api\BookController;
 use App\Http\Controllers\Api\BookHistoryController;
+use App\Http\Controllers\Api\BookNotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -101,5 +102,9 @@ Route::middleware('auth:sanctum')->group(function () {
         //        Route::delete('/', [BookController::class, 'destroyAll'])->middleware('can:isManager');
         Route::delete('/{id}', [BookHistoryController::class, 'destroy'])->middleware('can:isManager');
         Route::post('/test',[BookHistoryController::class,'test']);
+    });
+
+    Route::prefix('book-notification')->group(function (){
+        Route::get('/',[BookNotificationController::class,'getBookNotification']);
     });
 });

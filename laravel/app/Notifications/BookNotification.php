@@ -3,21 +3,26 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class TestPusherNotification extends Notification implements ShouldBroadcast
+class BookNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 
-    protected $user_id;
-    protected $msg;
-    public function __construct($user_id,$msg)
+    protected $receiver;
+    protected $sender;
+    protected $book;
+    protected $history;
+
+    public function __construct($receiver,$sender,$book,$history)
     {
-        $this->user_id = $user_id;
-        $this->msg = $msg;
+        $this->receiver = $receiver;
+        $this->sender = $sender;
+        $this->book = $book;
+        $this->history = $history;
     }
 
     /**
@@ -31,17 +36,6 @@ class TestPusherNotification extends Notification implements ShouldBroadcast
     }
 
     /**
-     * Get the mail representation of the notification.
-     */
-//    public function toMail(object $notifiable): MailMessage
-//    {
-//        return (new MailMessage)
-//                    ->line('The introduction to the notification.')
-//                    ->action('Notification Action', url('/'))
-//                    ->line('Thank you for using our application!');
-//    }
-
-    /**
      * Get the array representation of the notification.
      *
      * @return array<string, mixed>
@@ -49,8 +43,10 @@ class TestPusherNotification extends Notification implements ShouldBroadcast
     public function toArray(object $notifiable): array
     {
         return [
-            'user_id'=>$this->user_id,
-            'msg'=>$this->msg
+           "receiver" => $this->receiver,
+            "sender" => $this->sender,
+            "book" => $this->book,
+            "history" => $this->history
         ];
     }
 
@@ -61,6 +57,6 @@ class TestPusherNotification extends Notification implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'test-event';
+        return 'book-notification-event';
     }
 }

@@ -1,47 +1,20 @@
-import { useCallback, useMemo, useRef, useState } from "react";
-import Bell01Icon from "@untitled-ui/icons-react/build/esm/Bell01";
-import { Badge, IconButton, SvgIcon, Tooltip } from "@mui/material";
+import { useCallback, useRef, useState, useEffect } from "react";
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
+import { Badge, IconButton, Tooltip } from "@mui/material";
 import { NotificationsPopover } from "./notifications-popover";
-
-const useNotifications = () => {
-  const [notifications, setNotifications] = useState(initialNotifications);
-  const unread = useMemo(() => {
-    return notifications.reduce(
-      (acc, notification) => acc + (notification.read ? 0 : 1),
-      0
-    );
-  }, [notifications]);
-
-  const handleRemoveOne = useCallback((notificationId) => {
-    setNotifications((prevState) => {
-      return prevState.filter(
-        (notification) => notification.id !== notificationId
-      );
-    });
-  }, []);
-
-  const handleMarkAllAsRead = useCallback(() => {
-    setNotifications((prevState) => {
-      return prevState.map((notification) => ({
-        ...notification,
-        read: true,
-      }));
-    });
-  }, []);
-
-  return {
-    handleMarkAllAsRead,
-    handleRemoveOne,
-    notifications,
-    unread,
-  };
-};
+import Pusher from "pusher-js";
+import { apiGetBookNotification } from "@/apis/notify";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 export const NotificationsButton = () => {
+  const { user } = useSelector((state) => state.auth);
+  const [notifications, setNotifications] = useState([]);
+  // const [message, setMessage] = useState('');
+  // let allMessages = [];
+
   const anchorRef = useRef(null);
   const [openPopover, setOpenPopover] = useState(false);
-  const { handleRemoveOne, handleMarkAllAsRead, notifications, unread } =
-    useNotifications();
 
   const handlePopoverOpen = useCallback(() => {
     setOpenPopover(true);
@@ -51,14 +24,42 @@ export const NotificationsButton = () => {
     setOpenPopover(false);
   }, []);
 
+  //call api get notification and get pusher
+  const fetchData = async () => {
+    const response = await apiGetBookNotification();
+    console.log(response);
+    if (user.username === "sba_manager") {
+      setNotifications(response.data);
+    }
+  };
+
+  useEffect(() => {
+    const pusher = new Pusher(import.meta.env.VITE_PUSHER_ID, {
+      cluster: "ap1",
+    });
+    const channel = pusher.subscribe("sba-book-manage");
+    channel.bind("book-notification-event", async function (data) {
+      // setNotifications((oldState) => [...oldState, data]);
+      // allMessages.push(data);
+      //     setMessages(allMessages);
+      await fetchData();
+      if (user.username === "sba_manager") {
+        toast.info(`${data.sender.name} vừa mượn/trả sách`);
+      }
+      console.log(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <>
       <Tooltip title="Notifications">
         <IconButton ref={anchorRef} onClick={handlePopoverOpen}>
-          <Badge color="error" badgeContent={unread}>
-            <SvgIcon>
-              <Bell01Icon />
-            </SvgIcon>
+          <Badge color="error" badgeContent={4}>
+            <NotificationsOutlinedIcon />
           </Badge>
         </IconButton>
       </Tooltip>
@@ -66,8 +67,6 @@ export const NotificationsButton = () => {
         anchorEl={anchorRef.current}
         notifications={notifications}
         onClose={handlePopoverClose}
-        onMarkAllAsRead={handleMarkAllAsRead}
-        onRemoveOne={handleRemoveOne}
         open={openPopover}
       />
     </>

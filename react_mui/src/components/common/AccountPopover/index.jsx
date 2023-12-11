@@ -42,16 +42,13 @@ export const AccountPopover = (props) => {
 
   // Enable pusher logging - don't include this in production
   // Pusher.logToConsole = true;
-  const pusher = new Pusher(
-    `${import.meta.env.VITE_PUSHER_ID}|68da525ff3d86eea888f`,
-    {
-      cluster: "ap1",
-    }
-  );
+  const pusher = new Pusher(import.meta.env.VITE_PUSHER_ID, {
+    cluster: "ap1",
+  });
 
   useEffect(() => {
     var channel = pusher.subscribe("sba-book-manage");
-    channel.bind("my-event", function (data) {
+    channel.bind("test-event", function (data) {
       console.log(data);
     });
   }, []);

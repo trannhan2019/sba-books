@@ -14,6 +14,7 @@ import { alpha } from "@mui/material/styles";
 import { usePopover } from "@/hooks/use-popover";
 import { AccountPopover } from "@/components/common/AccountPopover";
 import UserAvata from "@/assets/avatars/avatar-anika-visser.png";
+import { NotificationsButton } from "@/components/common/NotificationPopover/button";
 
 const SIDE_NAV_WIDTH = 270;
 const TOP_NAV_HEIGHT = 64;
@@ -64,15 +65,7 @@ const Header = (props) => {
 
           <Stack alignItems="center" direction="row" spacing={2}>
             {/* NOTIFICATIONS */}
-            <Tooltip title="Notifications">
-              <IconButton>
-                <Badge badgeContent={4} color="success" variant="dot">
-                  <SvgIcon fontSize="small">
-                    <BellIcon />
-                  </SvgIcon>
-                </Badge>
-              </IconButton>
-            </Tooltip>
+            <NotificationsButton />
 
             {/* ACCOUNT */}
             <Avatar

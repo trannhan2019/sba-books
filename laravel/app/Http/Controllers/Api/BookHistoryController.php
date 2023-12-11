@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\BookHistory;
 use App\Models\User;
+use App\Notifications\BookNotification;
 use App\Notifications\TestPusherNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -33,6 +34,12 @@ class BookHistoryController extends Controller
         $book->count_transaction = $book->count_transaction + 1;
         $book->quantity = $book->quantity - 1;
         $book->save();
+
+        $receiver = User::where('username','sba_manager')->first();
+
+        $user->notify(new BookNotification($receiver,$user,$book,$book_history));
+
+        return response()->json('done');
     }
 
     public function getByUser(Request $request)

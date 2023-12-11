@@ -1,166 +1,56 @@
 // import { format } from "date-fns";
-import User01Icon from "@untitled-ui/icons-react/build/esm/User01";
-import Mail04Icon from "@untitled-ui/icons-react/build/esm/Mail04";
-import MessageChatSquareIcon from "@untitled-ui/icons-react/build/esm/MessageChatSquare";
-import XIcon from "@untitled-ui/icons-react/build/esm/X";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import {
-  Avatar,
   Box,
-  IconButton,
+  Divider,
   Link,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemText,
   Popover,
   Stack,
-  SvgIcon,
-  Tooltip,
   Typography,
 } from "@mui/material";
-import { Scrollbar } from "../../../components/scrollbar";
+import { Scrollbar } from "@/components/common/Scrollbar";
 
 const renderContent = (notification) => {
-  switch (notification.type) {
-    case "job_add": {
-      const createdAt = format(notification.createdAt, "MMM dd, h:mm a");
+  // const createdAt = format(notification.createdAt, "MMM dd, h:mm a");
 
-      return (
-        <>
-          <ListItemAvatar sx={{ mt: 0.5 }}>
-            <Avatar src={notification.avatar}>
-              <SvgIcon>
-                <User01Icon />
-              </SvgIcon>
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            primary={
-              <Box
-                sx={{
-                  alignItems: "center",
-                  display: "flex",
-                  flexWrap: "wrap",
-                }}
-              >
-                <Typography sx={{ mr: 0.5 }} variant="subtitle2">
-                  {notification.author}
-                </Typography>
-                <Typography sx={{ mr: 0.5 }} variant="body2">
-                  added a new job
-                </Typography>
-                <Link href="#" underline="always" variant="body2">
-                  {notification.job}
-                </Link>
-              </Box>
-            }
-            secondary={
-              <Typography color="text.secondary" variant="caption">
-                {createdAt}
-              </Typography>
-            }
-            sx={{ my: 0 }}
-          />
-        </>
-      );
-    }
-    case "new_feature": {
-      const createdAt = format(notification.createdAt, "MMM dd, h:mm a");
-
-      return (
-        <>
-          <ListItemAvatar sx={{ mt: 0.5 }}>
-            <Avatar>
-              <SvgIcon>
-                <MessageChatSquareIcon />
-              </SvgIcon>
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            primary={
-              <Box
-                sx={{
-                  alignItems: "center",
-                  display: "flex",
-                  flexWrap: "wrap",
-                }}
-              >
-                <Typography variant="subtitle2" sx={{ mr: 0.5 }}>
-                  New feature!
-                </Typography>
-                <Typography variant="body2">
-                  {notification.description}
-                </Typography>
-              </Box>
-            }
-            secondary={
-              <Typography color="text.secondary" variant="caption">
-                {createdAt}
-              </Typography>
-            }
-            sx={{ my: 0 }}
-          />
-        </>
-      );
-    }
-    case "company_created": {
-      const createdAt = format(notification.createdAt, "MMM dd, h:mm a");
-
-      return (
-        <>
-          <ListItemAvatar sx={{ mt: 0.5 }}>
-            <Avatar src={notification.avatar}>
-              <SvgIcon>
-                <User01Icon />
-              </SvgIcon>
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            primary={
-              <Box
-                sx={{
-                  alignItems: "center",
-                  display: "flex",
-                  flexWrap: "wrap",
-                  m: 0,
-                }}
-              >
-                <Typography sx={{ mr: 0.5 }} variant="subtitle2">
-                  {notification.author}
-                </Typography>
-                <Typography sx={{ mr: 0.5 }} variant="body2">
-                  created
-                </Typography>
-                <Link href="#" underline="always" variant="body2">
-                  {notification.company}
-                </Link>
-              </Box>
-            }
-            secondary={
-              <Typography color="text.secondary" variant="caption">
-                {createdAt}
-              </Typography>
-            }
-            sx={{ my: 0 }}
-          />
-        </>
-      );
-    }
-    default:
-      return null;
-  }
+  return (
+    <>
+      <ListItemText
+        primary={
+          <Box
+            sx={{
+              alignItems: "center",
+              display: "flex",
+              flexWrap: "wrap",
+            }}
+          >
+            <Typography sx={{ mr: 0.5 }} variant="subtitle2">
+              {notification?.data.sender.name}
+            </Typography>
+            <Typography sx={{ mr: 0.5 }} variant="body2">
+              added a new job
+            </Typography>
+            <Link href="#" underline="always" variant="body2">
+              {notification?.data.book.title}
+            </Link>
+          </Box>
+        }
+        secondary={
+          <Typography color="text.secondary" variant="caption">
+            Thoi gian
+          </Typography>
+        }
+        sx={{ my: 0 }}
+      />
+    </>
+  );
 };
 
 export const NotificationsPopover = (props) => {
-  const {
-    anchorEl,
-    notifications,
-    onClose,
-    onMarkAllAsRead,
-    onRemoveOne,
-    open = false,
-    ...other
-  } = props;
+  const { anchorEl, notifications, onClose, open = false, ...other } = props;
 
   const isEmpty = notifications.length === 0;
 
@@ -190,14 +80,9 @@ export const NotificationsPopover = (props) => {
         <Typography color="inherit" variant="h6">
           Notifications
         </Typography>
-        <Tooltip title="Mark all as read">
-          <IconButton onClick={onMarkAllAsRead} size="small" color="inherit">
-            <SvgIcon>
-              <Mail04Icon />
-            </SvgIcon>
-          </IconButton>
-        </Tooltip>
+        <EmailOutlinedIcon />
       </Stack>
+      <Divider />
       {isEmpty ? (
         <Box sx={{ p: 2 }}>
           <Typography variant="subtitle2">
@@ -220,19 +105,6 @@ export const NotificationsPopover = (props) => {
                     top: "24%",
                   },
                 }}
-                secondaryAction={
-                  <Tooltip title="Remove">
-                    <IconButton
-                      edge="end"
-                      onClick={() => onRemoveOne?.(notification.id)}
-                      size="small"
-                    >
-                      <SvgIcon>
-                        <XIcon />
-                      </SvgIcon>
-                    </IconButton>
-                  </Tooltip>
-                }
               >
                 {renderContent(notification)}
               </ListItem>
