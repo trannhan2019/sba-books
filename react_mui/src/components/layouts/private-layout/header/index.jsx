@@ -63,6 +63,7 @@ const Header = (props) => {
           </Stack>
 
           <Stack alignItems="center" direction="row" spacing={2}>
+            {/* NOTIFICATIONS */}
             <Tooltip title="Notifications">
               <IconButton>
                 <Badge badgeContent={4} color="success" variant="dot">
@@ -72,6 +73,8 @@ const Header = (props) => {
                 </Badge>
               </IconButton>
             </Tooltip>
+
+            {/* ACCOUNT */}
             <Avatar
               onClick={accountPopover.handleOpen}
               ref={accountPopover.anchorRef}

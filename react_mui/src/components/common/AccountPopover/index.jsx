@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Divider,
+  ListItemIcon,
+  ListItemText,
   MenuItem,
   MenuList,
   Popover,
@@ -14,6 +16,7 @@ import { setIsLoggedIn, setUser } from "@/store/auth/authSlice";
 import Pusher from "pusher-js";
 import { useEffect } from "react";
 import { apiTest } from "@/apis/book-history";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open } = props;
@@ -39,9 +42,12 @@ export const AccountPopover = (props) => {
 
   // Enable pusher logging - don't include this in production
   // Pusher.logToConsole = true;
-  const pusher = new Pusher("68da525ff3d86eea888f", {
-    cluster: "ap1",
-  });
+  const pusher = new Pusher(
+    `${import.meta.env.VITE_PUSHER_ID}|68da525ff3d86eea888f`,
+    {
+      cluster: "ap1",
+    }
+  );
 
   useEffect(() => {
     var channel = pusher.subscribe("sba-book-manage");
@@ -88,7 +94,12 @@ export const AccountPopover = (props) => {
         }}
       >
         <MenuItem onClick={handleDeleteCache}>Xoá dữ liệu tạm</MenuItem>
-        <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
+        <MenuItem onClick={handleSignOut}>
+          <ListItemIcon>
+            <PowerSettingsNewIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Sign out</ListItemText>
+        </MenuItem>
         <MenuItem onClick={handleTest}>Test Notify</MenuItem>
       </MenuList>
     </Popover>
