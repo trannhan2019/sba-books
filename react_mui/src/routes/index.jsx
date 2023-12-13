@@ -13,6 +13,7 @@ import Book from "@/pages/private/book";
 import BookDetail from "@/pages/private/book/detail";
 import ManageBookHistory from "@/pages/private/manage-book-history";
 import BookHistory from "@/pages/private/book-history";
+import ManageBookNotification from "@/pages/private/manage-notification";
 
 const AppRoutes = () => {
   return (
@@ -79,6 +80,10 @@ const AppRoutes = () => {
                 <ManageBookHistory />
               </ManagerGuard>
             }
+          />
+          <Route
+            path="manage-book-notification"
+            element={<ManageBookNotification />}
           />
         </Route>
 

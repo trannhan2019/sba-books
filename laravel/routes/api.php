@@ -106,6 +106,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('book-notification')->group(function () {
         Route::get('/', [BookNotificationController::class, 'getBookNotification']);
+        Route::get('/paginate', [BookNotificationController::class, 'getBookNotificationPaginate']);
         Route::put('/{id}', [BookNotificationController::class, 'updateReadAt']);
     });
 });

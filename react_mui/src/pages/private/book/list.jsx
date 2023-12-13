@@ -10,7 +10,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import BookImageDefault from "@/assets/default-image-book.jpg";
 import { Scrollbar } from "@/components/common/Scrollbar";
 import TableLoader from "@/components/common/TableLoader";
 import { getUrlImage } from "@/utils/get-url-image";

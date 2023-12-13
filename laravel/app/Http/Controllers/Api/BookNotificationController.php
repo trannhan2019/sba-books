@@ -25,4 +25,13 @@ class BookNotificationController extends Controller
 
         return response()->json('done');
     }
+
+    public function getBookNotificationPaginate(Request $request){
+        $itemPerPage = $request->query('itemPerPage', 5);
+
+        $notifyList = DatabaseNotification::query();
+        $notifyList->where('type', 'App\Notifications\BookNotification')->orderBy('created_at', 'desc');
+
+        return response()->json($notifyList->paginate($itemPerPage));
+    }
 }

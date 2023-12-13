@@ -1,7 +1,6 @@
 import {
   Box,
   Chip,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -19,6 +18,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { apiDeleteBookHistory } from "@/apis/book-history";
+import { format } from "date-fns";
 
 const ManageBookHistoryList = (props) => {
   const {
@@ -105,13 +105,23 @@ const ManageBookHistoryList = (props) => {
 
                       <TableCell>
                         <Typography variant="subtitle2">
-                          {item.exchanged_at}
+                          {item.exchanged_at
+                            ? format(
+                                new Date(item.exchanged_at),
+                                "dd/MM/yyyy - HH:mm"
+                              )
+                            : ""}
                         </Typography>
                       </TableCell>
 
                       <TableCell>
                         <Typography variant="subtitle2">
-                          {item.returned_at}
+                          {item.returned_at
+                            ? format(
+                                new Date(item.returned_at),
+                                "dd/MM/yyyy - HH:mm"
+                              )
+                            : ""}
                         </Typography>
                       </TableCell>
 

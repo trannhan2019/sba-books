@@ -1,4 +1,5 @@
-// import { format } from "date-fns";
+import { format } from "date-fns";
+import vi from "date-fns/locale/vi";
 import { Link as ReactLink, useNavigate } from "react-router-dom";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import {
@@ -15,51 +16,6 @@ import {
 } from "@mui/material";
 import { Scrollbar } from "@/components/common/Scrollbar";
 import { apiUpdateBookNotification } from "@/apis/notify";
-
-// const renderContent = (notification, onClose) => {
-//   const navigate = useNavigate();
-//   // const createdAt = format(notification.createdAt, "MMM dd, h:mm a");
-//   //onclick set read true, onclose
-//   const handleClickItem = async (id) => {
-//     await apiUpdateBookNotification(id);
-//     onClose();
-//     navigate("/manage-book-history");
-//   };
-
-//   return (
-//     <>
-//       <ListItemText
-//         onClick={() => handleClickItem(notification.id)}
-//         sx={{ my: 0, cursor: "pointer" }}
-//       >
-//         <Box
-//           sx={{
-//             alignItems: "center",
-//             display: "flex",
-//             flexWrap: "wrap",
-//           }}
-//         >
-//           <Badge
-//             invisible={notification?.read_at}
-//             color="primary"
-//             variant="dot"
-//             sx={{ width: "100%" }}
-//           >
-//             <Typography sx={{ mr: 0.5 }} variant="subtitle2">
-//               <b>{notification?.data.sender.name}</b> đã{" "}
-//               {notification?.data.history.returned_at ? " trả " : " mượn "} sách{" "}
-//               <b>{notification?.data.book.title}</b> lúc{" "}
-//               <b>
-//                 {notification?.data.history.returned_at ??
-//                   notification?.data.history.exchanged_at}
-//               </b>
-//             </Typography>
-//           </Badge>
-//         </Box>
-//       </ListItemText>
-//     </>
-//   );
-// };
 
 export const NotificationsPopover = (props) => {
   const {
@@ -152,14 +108,32 @@ export const NotificationsPopover = (props) => {
                       sx={{ width: "100%" }}
                     >
                       <Typography sx={{ mr: 0.5 }} variant="subtitle2">
-                        <b>{notification?.data.sender.name}</b> đã{" "}
+                        <b>{notification?.data.sender.name}</b>
                         {notification?.data.history.returned_at
-                          ? " trả "
-                          : " mượn "}{" "}
-                        sách <b>{notification?.data.book.title}</b> lúc{" "}
+                          ? " đã trả sách "
+                          : " đã mượn sách "}
+                        <b>{notification?.data.book.title}</b>
+                        {" lúc "}
                         <b>
-                          {notification?.data.history.returned_at ??
-                            notification?.data.history.exchanged_at}
+                          {notification?.data.history.returned_at
+                            ? format(
+                                new Date(
+                                  notification?.data.history.returned_at
+                                ),
+                                "HH:mm - dd/MM/yyyy",
+                                {
+                                  locale: vi,
+                                }
+                              )
+                            : format(
+                                new Date(
+                                  notification?.data.history.exchanged_at
+                                ),
+                                "HH:mm - dd/MM/yyyy",
+                                {
+                                  locale: vi,
+                                }
+                              )}
                         </b>
                       </Typography>
                     </Badge>
@@ -173,8 +147,9 @@ export const NotificationsPopover = (props) => {
               <ListItemText>
                 <Link
                   component={ReactLink}
-                  to={"/"}
+                  to={"/manage-book-notification"}
                   sx={{ textDecoration: "none" }}
+                  onClick={onClose}
                 >
                   Xem tất cả thông báo
                 </Link>

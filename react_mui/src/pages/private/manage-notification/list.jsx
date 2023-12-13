@@ -1,8 +1,10 @@
 import {
+  Badge,
   Box,
   Button,
   Checkbox,
   Chip,
+  IconButton,
   Stack,
   Table,
   TableBody,
@@ -10,6 +12,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { toast } from "react-toastify";
@@ -19,40 +22,31 @@ import TableLoader from "@/components/common/TableLoader";
 import Swal from "sweetalert2";
 import { useSelection } from "@/hooks/useSelection";
 import { useSelector } from "react-redux";
-import { getUrlImage } from "@/utils/get-url-image";
 import { apiDeleteBook, apiDeleteBookList } from "@/apis/book";
-import ActionMenu from "./action-menu";
-import BookImageDefault from "@/assets/default-image-book.jpg";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
+import { format } from "date-fns";
+import vi from "date-fns/locale/vi";
 
-const ListBook = (props) => {
+const ListBookNotification = (props) => {
   const {
-    books,
+    notifies,
     total,
     onPageChange,
     onRowsPerPageChange,
     page = 0,
-    rowsPerPage = 0,
-    setOpenEditForm,
-    setBook,
-    setReloadPage,
+    rowsPerPage = 5,
   } = props;
 
   const { isLoading } = useSelector((state) => state.app);
 
   //seleted
-  const bookSelected = useSelection(books);
+  const notifySelected = useSelection(notifies);
   const selectedSome =
-    bookSelected.selected.length > 0 &&
-    bookSelected.selected.length < books.length;
+    notifySelected.selected.length > 0 &&
+    notifySelected.selected.length < notifies.length;
   const selectedAll =
-    books?.length > 0 && bookSelected.selected.length === books.length;
-  const enableBulkActions = bookSelected.selected.length > 0;
-
-  //show edit
-  const showEdit = (book) => {
-    setOpenEditForm(true);
-    setBook(book);
-  };
+    notifies?.length > 0 && notifySelected.selected.length === notifies.length;
+  const enableBulkActions = notifySelected.selected.length > 0;
 
   // handel Del single
   const handleDeleteBook = (id) => {
@@ -84,7 +78,7 @@ const ListBook = (props) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await apiDeleteBookList({ ids: bookSelected.selected });
+          await apiDeleteBookList({ ids: notifySelected.selected });
           setReloadPage((preState) => !preState);
           Swal.fire("Saved!", "", "success");
         } catch (error) {
@@ -120,9 +114,9 @@ const ListBook = (props) => {
             indeterminate={selectedSome}
             onChange={(event) => {
               if (event.target.checked) {
-                bookSelected.handleSelectAll?.();
+                notifySelected.handleSelectAll?.();
               } else {
-                bookSelected.handleDeselectAll?.();
+                notifySelected.handleDeselectAll?.();
               }
             }}
           />
@@ -138,7 +132,7 @@ const ListBook = (props) => {
         </Stack>
       )}
       <Scrollbar>
-        <Table sx={{ minWidth: 1200 }}>
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell padding="checkbox">
@@ -147,26 +141,23 @@ const ListBook = (props) => {
                   indeterminate={selectedSome}
                   onChange={(event) => {
                     if (event.target.checked) {
-                      bookSelected.handleSelectAll?.();
+                      notifySelected.handleSelectAll?.();
                     } else {
-                      bookSelected.handleDeselectAll?.();
+                      notifySelected.handleDeselectAll?.();
                     }
                   }}
                 />
               </TableCell>
-              <TableCell>Tiều đề</TableCell>
-              <TableCell>Thuộc thể loại</TableCell>
-              <TableCell>Tác giả</TableCell>
-              <TableCell>Tình trạng / Số lượng</TableCell>
-              <TableCell>Mã sách</TableCell>
+              <TableCell>Nội dung thông báo</TableCell>
+              <TableCell>Trạng thái</TableCell>
               <TableCell>Thao tác</TableCell>
             </TableRow>
           </TableHead>
           {isLoading ? (
-            <TableLoader rowsNum={8} colsNum={5} />
+            <TableLoader rowsNum={5} colsNum={3} />
           ) : (
             <TableBody>
-              {books?.length <= 0 ? (
+              {notifies?.length <= 0 ? (
                 <TableRow>
                   <TableCell colSpan={4}>
                     <Typography variant="body1">
@@ -175,113 +166,84 @@ const ListBook = (props) => {
                   </TableCell>
                 </TableRow>
               ) : (
-                books?.map((book) => {
-                  const isSelected = bookSelected.selected.includes(book.id);
+                notifies?.map((notify) => {
+                  const isSelected = notifySelected.selected.includes(
+                    notify.id
+                  );
 
                   return (
-                    <TableRow hover key={book.id} selected={isSelected}>
+                    <TableRow
+                      hover
+                      key={notify.id}
+                      selected={isSelected}
+                      // invisible={!!true}
+                    >
                       <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isSelected}
-                          onChange={(event) => {
-                            if (event.target.checked) {
-                              bookSelected.handleSelectOne?.(book);
-                            } else {
-                              bookSelected.handleDeselectOne?.(book);
-                            }
-                          }}
-                        />
-                      </TableCell>
-
-                      <TableCell width="25%">
-                        <Box
-                          sx={{
-                            alignItems: "center",
-                            display: "flex",
-                          }}
-                        >
-                          <Box
-                            sx={{
-                              alignItems: "center",
-                              backgroundColor: "neutral.50",
-                              backgroundImage: `url(${
-                                book?.photo_url &&
-                                book?.photo_url !== "0" &&
-                                book?.photo_url !== "null"
-                                  ? book.photo_url
-                                  : getUrlImage(book?.photo)
-                              })`,
-                              backgroundPosition: "center",
-                              backgroundSize: "cover",
-                              borderRadius: 1,
-                              display: "flex",
-                              height: 80,
-                              justifyContent: "center",
-                              overflow: "hidden",
-                              width: 80,
+                        <Badge variant="dot" color="primary">
+                          <Checkbox
+                            checked={isSelected}
+                            onChange={(event) => {
+                              if (event.target.checked) {
+                                notifySelected.handleSelectOne?.(notify);
+                              } else {
+                                notifySelected.handleDeselectOne?.(notify);
+                              }
                             }}
                           />
-                          <div
-                            style={{
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              width: "12rem",
-                            }}
-                          >
-                            <Typography
-                              variant="subtitle2"
-                              sx={{
-                                cursor: "pointer",
-                                ml: 1,
-                              }}
-                            >
-                              {book.title}
-                            </Typography>
-                          </div>
-                        </Box>
+                        </Badge>
                       </TableCell>
-
-                      <TableCell width="15%">
-                        <Typography variant="body2">
-                          {book.cate_book.name}
+                      <TableCell>
+                        <Typography variant="body2" sx={{ cursor: "pointer" }}>
+                          <b>{notify?.data.sender.name}</b>
+                          {notify?.data.history.returned_at
+                            ? " đã trả sách "
+                            : " đã mượn sách "}
+                          <b>{notify?.data.book.title}</b>
+                          {" lúc "}
+                          <b>
+                            {notify?.data.history.returned_at
+                              ? format(
+                                  new Date(notify?.data.history.returned_at),
+                                  "HH:mm - dd/MM/yyyy",
+                                  {
+                                    locale: vi,
+                                  }
+                                )
+                              : format(
+                                  new Date(notify?.data.history.exchanged_at),
+                                  "HH:mm - dd/MM/yyyy",
+                                  {
+                                    locale: vi,
+                                  }
+                                )}
+                          </b>
                         </Typography>
                       </TableCell>
 
-                      <TableCell width="15%">
-                        <Typography variant="body2">{book.author}</Typography>
-                      </TableCell>
-
                       <TableCell width="10%">
-                        {book.quantity > 0 ? (
-                          <Stack>
-                            <Chip
-                              label="Còn trên kệ"
-                              color="success"
-                              size="small"
-                            />
-                            <Typography variant="body2" textAlign="center">
-                              {book.quantity} cuốn
-                            </Typography>
-                          </Stack>
+                        {notify?.data.read_at ? (
+                          <Chip
+                            label="Đã xem thông báo"
+                            color="success"
+                            size="small"
+                          />
                         ) : (
                           <Chip
-                            label="Đã mượn hết"
+                            label="Chưa xem thông báo"
                             color="error"
                             size="small"
                           />
                         )}
                       </TableCell>
 
-                      <TableCell width="10%">
-                        <Typography variant="subtitle2">{book.code}</Typography>
-                      </TableCell>
-
                       <TableCell>
-                        <ActionMenu
-                          book={book}
-                          showEdit={showEdit}
-                          handleDeleteBook={handleDeleteBook}
-                        />
+                        <Tooltip title="Xoá sách">
+                          <IconButton
+                          // onClick={() => handleDeleteBook(item.id)}
+                          >
+                            <DeleteForeverOutlinedIcon color="error" />
+                          </IconButton>
+                        </Tooltip>
                       </TableCell>
                     </TableRow>
                   );
@@ -306,4 +268,4 @@ const ListBook = (props) => {
   );
 };
 
-export default ListBook;
+export default ListBookNotification;
