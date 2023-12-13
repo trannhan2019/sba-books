@@ -13,9 +13,6 @@ import {
 } from "@mui/material";
 import { apiLogout } from "@/apis/auth";
 import { setIsLoggedIn, setUser } from "@/store/auth/authSlice";
-import Pusher from "pusher-js";
-import { useEffect } from "react";
-import { apiTest } from "@/apis/book-history";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 
 export const AccountPopover = (props) => {
@@ -38,23 +35,6 @@ export const AccountPopover = (props) => {
   const handleDeleteCache = () => {
     localStorage.clear();
     navigate("/login");
-  };
-
-  // Enable pusher logging - don't include this in production
-  // Pusher.logToConsole = true;
-  const pusher = new Pusher(import.meta.env.VITE_PUSHER_ID, {
-    cluster: "ap1",
-  });
-
-  useEffect(() => {
-    var channel = pusher.subscribe("sba-book-manage");
-    channel.bind("test-event", function (data) {
-      console.log(data);
-    });
-  }, []);
-
-  const handleTest = async () => {
-    await apiTest();
   };
 
   return (
@@ -97,7 +77,6 @@ export const AccountPopover = (props) => {
           </ListItemIcon>
           <ListItemText>Sign out</ListItemText>
         </MenuItem>
-        <MenuItem onClick={handleTest}>Test Notify</MenuItem>
       </MenuList>
     </Popover>
   );

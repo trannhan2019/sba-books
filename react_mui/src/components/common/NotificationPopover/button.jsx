@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 export const NotificationsButton = () => {
   const { user } = useSelector((state) => state.auth);
   const [notifications, setNotifications] = useState([]);
+  const [notiUnreadCount, setNotiUnreadCount] = useState(0);
   // const [message, setMessage] = useState('');
   // let allMessages = [];
 
@@ -29,7 +30,8 @@ export const NotificationsButton = () => {
     const response = await apiGetBookNotification();
     console.log(response);
     if (user.username === "sba_manager") {
-      setNotifications(response.data);
+      setNotifications(response.data.notificationList);
+      setNotiUnreadCount(response.data.notificationUnreadCount);
     }
   };
 
@@ -43,6 +45,7 @@ export const NotificationsButton = () => {
       // allMessages.push(data);
       //     setMessages(allMessages);
       await fetchData();
+      //sau nay mo rong chuc nang thong bao all se su dung switch case tham khao notify devias
       if (user.username === "sba_manager") {
         toast.info(`${data.sender.name} vừa mượn/trả sách`);
       }
@@ -58,7 +61,7 @@ export const NotificationsButton = () => {
     <>
       <Tooltip title="Notifications">
         <IconButton ref={anchorRef} onClick={handlePopoverOpen}>
-          <Badge color="error" badgeContent={4}>
+          <Badge color="error" badgeContent={notiUnreadCount} max={99}>
             <NotificationsOutlinedIcon />
           </Badge>
         </IconButton>
@@ -68,6 +71,7 @@ export const NotificationsButton = () => {
         notifications={notifications}
         onClose={handlePopoverClose}
         open={openPopover}
+        fetchData={fetchData}
       />
     </>
   );

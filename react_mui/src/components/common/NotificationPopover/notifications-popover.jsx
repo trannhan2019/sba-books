@@ -1,59 +1,86 @@
 // import { format } from "date-fns";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import {
+  Badge,
   Box,
   Divider,
-  Link,
   List,
   ListItem,
   ListItemText,
   Popover,
   Stack,
   Typography,
+  Link,
 } from "@mui/material";
 import { Scrollbar } from "@/components/common/Scrollbar";
+import { apiUpdateBookNotification } from "@/apis/notify";
 
-const renderContent = (notification) => {
-  // const createdAt = format(notification.createdAt, "MMM dd, h:mm a");
+// const renderContent = (notification, onClose) => {
+//   const navigate = useNavigate();
+//   // const createdAt = format(notification.createdAt, "MMM dd, h:mm a");
+//   //onclick set read true, onclose
+//   const handleClickItem = async (id) => {
+//     await apiUpdateBookNotification(id);
+//     onClose();
+//     navigate("/manage-book-history");
+//   };
 
-  return (
-    <>
-      <ListItemText
-        primary={
-          <Box
-            sx={{
-              alignItems: "center",
-              display: "flex",
-              flexWrap: "wrap",
-            }}
-          >
-            <Typography sx={{ mr: 0.5 }} variant="subtitle2">
-              {notification?.data.sender.name}
-            </Typography>
-            <Typography sx={{ mr: 0.5 }} variant="body2">
-              added a new job
-            </Typography>
-            <Link href="#" underline="always" variant="body2">
-              {notification?.data.book.title}
-            </Link>
-          </Box>
-        }
-        secondary={
-          <Typography color="text.secondary" variant="caption">
-            Thoi gian
-          </Typography>
-        }
-        sx={{ my: 0 }}
-      />
-    </>
-  );
-};
+//   return (
+//     <>
+//       <ListItemText
+//         onClick={() => handleClickItem(notification.id)}
+//         sx={{ my: 0, cursor: "pointer" }}
+//       >
+//         <Box
+//           sx={{
+//             alignItems: "center",
+//             display: "flex",
+//             flexWrap: "wrap",
+//           }}
+//         >
+//           <Badge
+//             invisible={notification?.read_at}
+//             color="primary"
+//             variant="dot"
+//             sx={{ width: "100%" }}
+//           >
+//             <Typography sx={{ mr: 0.5 }} variant="subtitle2">
+//               <b>{notification?.data.sender.name}</b> đã{" "}
+//               {notification?.data.history.returned_at ? " trả " : " mượn "} sách{" "}
+//               <b>{notification?.data.book.title}</b> lúc{" "}
+//               <b>
+//                 {notification?.data.history.returned_at ??
+//                   notification?.data.history.exchanged_at}
+//               </b>
+//             </Typography>
+//           </Badge>
+//         </Box>
+//       </ListItemText>
+//     </>
+//   );
+// };
 
 export const NotificationsPopover = (props) => {
-  const { anchorEl, notifications, onClose, open = false, ...other } = props;
+  const {
+    anchorEl,
+    notifications,
+    onClose,
+    open = false,
+    fetchData,
+    ...other
+  } = props;
+  const navigate = useNavigate();
+
+  const handleClickItem = async (id) => {
+    await apiUpdateBookNotification(id);
+    await fetchData();
+    onClose();
+    navigate("/manage-book-history");
+  };
 
   const isEmpty = notifications.length === 0;
-
+  //co the switch case cho cac truong hop thong bao khac -> tham khao notification Devias
   return (
     <Popover
       anchorEl={anchorEl}
@@ -106,9 +133,53 @@ export const NotificationsPopover = (props) => {
                   },
                 }}
               >
-                {renderContent(notification)}
+                {/* {renderContent(notification, onClose)} */}
+                <ListItemText
+                  onClick={() => handleClickItem(notification.id)}
+                  sx={{ my: 0, cursor: "pointer" }}
+                >
+                  <Box
+                    sx={{
+                      alignItems: "center",
+                      display: "flex",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <Badge
+                      invisible={!!notification?.read_at}
+                      color="primary"
+                      variant="dot"
+                      sx={{ width: "100%" }}
+                    >
+                      <Typography sx={{ mr: 0.5 }} variant="subtitle2">
+                        <b>{notification?.data.sender.name}</b> đã{" "}
+                        {notification?.data.history.returned_at
+                          ? " trả "
+                          : " mượn "}{" "}
+                        sách <b>{notification?.data.book.title}</b> lúc{" "}
+                        <b>
+                          {notification?.data.history.returned_at ??
+                            notification?.data.history.exchanged_at}
+                        </b>
+                      </Typography>
+                    </Badge>
+                  </Box>
+                </ListItemText>
               </ListItem>
             ))}
+            <Divider />
+
+            <ListItem sx={{ textAlign: "center" }}>
+              <ListItemText>
+                <Link
+                  component={ReactLink}
+                  to={"/"}
+                  sx={{ textDecoration: "none" }}
+                >
+                  Xem tất cả thông báo
+                </Link>
+              </ListItemText>
+            </ListItem>
           </List>
         </Scrollbar>
       )}

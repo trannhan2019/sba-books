@@ -101,10 +101,11 @@ Route::middleware('auth:sanctum')->group(function () {
         //        Route::put('/{id}', [BookController::class, 'update'])->middleware('can:isManager');
         //        Route::delete('/', [BookController::class, 'destroyAll'])->middleware('can:isManager');
         Route::delete('/{id}', [BookHistoryController::class, 'destroy'])->middleware('can:isManager');
-        Route::post('/test',[BookHistoryController::class,'test']);
+        // Route::post('/test',[BookHistoryController::class,'test']);
     });
 
-    Route::prefix('book-notification')->group(function (){
-        Route::get('/',[BookNotificationController::class,'getBookNotification']);
+    Route::prefix('book-notification')->group(function () {
+        Route::get('/', [BookNotificationController::class, 'getBookNotification']);
+        Route::put('/{id}', [BookNotificationController::class, 'updateReadAt']);
     });
 });

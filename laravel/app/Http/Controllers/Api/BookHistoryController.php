@@ -35,9 +35,9 @@ class BookHistoryController extends Controller
         $book->quantity = $book->quantity - 1;
         $book->save();
 
-        $receiver = User::where('username','sba_manager')->first();
+        $receiver = User::where('username', 'sba_manager')->first();
 
-        $user->notify(new BookNotification($receiver,$user,$book,$book_history));
+        $user->notify(new BookNotification($receiver, $user, $book, $book_history));
 
         return response()->json('done');
     }
@@ -52,7 +52,7 @@ class BookHistoryController extends Controller
         $book_history = BookHistory::query();
         $book_history->where('exchange_user_id', $user_id)->with('book');
         if (!empty($search)) {
-            $book_history->whereRelation('book','title','like','%'.$search.'%');
+            $book_history->whereRelation('book', 'title', 'like', '%' . $search . '%');
         }
 
         return response()->json($book_history->orderBy('created_at', 'DESC')->paginate($itemPerPage));
@@ -67,6 +67,12 @@ class BookHistoryController extends Controller
         $book = Book::findOrFail($book_history->book_id);
         $book->quantity = $book->quantity + 1;
         $book->save();
+
+        $receiver = User::where('username', 'sba_manager')->first();
+        $user = User::findOrFail($book_history->exchange_user_id);
+        $user->notify(new BookNotification($receiver, $user, $book, $book_history));
+
+        return response()->json('done');
     }
 
     public function getList(Request $request)
@@ -76,10 +82,11 @@ class BookHistoryController extends Controller
         $search = $request->query('search');
 
         $book_history = BookHistory::query();
-        $book_history->with(['book','user']);
+        $book_history->with(['book', 'user']);
         if (!empty($search)) {
-            $book_history->whereRelation('user','name','like','%'.$search.'%');
+            $book_history->whereRelation('user', 'name', 'like', '%' . $search . '%');
         }
+
 
         return response()->json($book_history->orderBy('created_at', 'DESC')->paginate($itemPerPage));
     }
@@ -90,7 +97,7 @@ class BookHistoryController extends Controller
 
         $book = Book::findOrFail($book_history->book_id);
         $book->count_transaction = $book->count_transaction - 1;
-        if(empty($book_history->returned_at)){
+        if (empty($book_history->returned_at)) {
             $book->quantity = $book->quantity + 1;
         }
         $book->save();
@@ -103,10 +110,10 @@ class BookHistoryController extends Controller
         return response()->json('Book History deleted', 201);
     }
 
-    public function test(Request $request){
-        $user = Auth::user();
-        $msg = 'Tesfsadfsadf';
-        $user->notify(new TestPusherNotification($user->id,$msg));
-        return 'done';
-    }
+    // public function test(Request $request){
+    //     $user = Auth::user();
+    //     $msg = 'Tesfsadfsadf';
+    //     $user->notify(new TestPusherNotification($user->id,$msg));
+    //     return 'done';
+    // }
 }
