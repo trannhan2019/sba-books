@@ -3,6 +3,7 @@ import { Box, Stack, SvgIcon, Typography } from "@mui/material";
 import HistoryIcon from "@mui/icons-material/History";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import { SidebarItem } from "./sidebar-item";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
 export const users = [
   {
@@ -14,6 +15,11 @@ export const users = [
     title: "Lịch sử mượn trả",
     path: "/book-history",
     icon: <HistoryIcon fontSize="small" />,
+  },
+  {
+    title: "Thông tin tài khoản",
+    path: "/account",
+    icon: <PersonOutlineOutlinedIcon fontSize="small" />,
   },
 ];
 

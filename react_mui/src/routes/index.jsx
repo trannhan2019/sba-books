@@ -14,6 +14,7 @@ import BookDetail from "@/pages/private/book/detail";
 import ManageBookHistory from "@/pages/private/manage-book-history";
 import BookHistory from "@/pages/private/book-history";
 import ManageBookNotification from "@/pages/private/manage-notification";
+import Account from "@/pages/private/account";
 
 const AppRoutes = () => {
   return (
@@ -25,6 +26,7 @@ const AppRoutes = () => {
           <Route index element={<Book />} />
           <Route path="/book/:id" element={<BookDetail />} />
           <Route path="/book-history" element={<BookHistory />} />
+          <Route path="/account" element={<Account />} />
           <Route
             path="manage-company"
             element={

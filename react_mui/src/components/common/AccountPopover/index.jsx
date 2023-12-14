@@ -1,5 +1,5 @@
 // import { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
@@ -14,6 +14,7 @@ import {
 import { apiLogout } from "@/apis/auth";
 import { setIsLoggedIn, setUser } from "@/store/auth/authSlice";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open } = props;
@@ -32,10 +33,10 @@ export const AccountPopover = (props) => {
     // console.log("logout");
   };
 
-  const handleDeleteCache = () => {
-    localStorage.clear();
-    navigate("/login");
-  };
+  // const handleDeleteCache = () => {
+  //   localStorage.clear();
+  //   navigate("/login");
+  // };
 
   return (
     <Popover
@@ -70,7 +71,13 @@ export const AccountPopover = (props) => {
           },
         }}
       >
-        <MenuItem onClick={handleDeleteCache}>Xoá dữ liệu tạm</MenuItem>
+        <MenuItem component={Link} to="/account">
+          <ListItemIcon>
+            <PersonOutlineOutlinedIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Profile</ListItemText>
+        </MenuItem>
+        {/* <MenuItem onClick={handleDeleteCache}>Xoá dữ liệu tạm</MenuItem> */}
         <MenuItem onClick={handleSignOut}>
           <ListItemIcon>
             <PowerSettingsNewIcon fontSize="small" />

@@ -1,20 +1,19 @@
-import BellIcon from "@heroicons/react/24/solid/BellIcon";
 import Bars3Icon from "@heroicons/react/24/solid/Bars3Icon";
 import {
   Avatar,
-  Badge,
   Box,
   IconButton,
   Stack,
   SvgIcon,
-  Tooltip,
   useMediaQuery,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { usePopover } from "@/hooks/use-popover";
 import { AccountPopover } from "@/components/common/AccountPopover";
-import UserAvata from "@/assets/avatars/avatar-anika-visser.png";
+import UserDefaultAvatar from "@/assets/user-default-image.png";
 import { NotificationsButton } from "@/components/common/NotificationPopover/button";
+import { useSelector } from "react-redux";
+import { getUrlImage } from "@/utils/get-url-image";
 
 const SIDE_NAV_WIDTH = 270;
 const TOP_NAV_HEIGHT = 64;
@@ -23,6 +22,7 @@ const Header = (props) => {
   const { onNavOpen } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   const accountPopover = usePopover();
+  const { user } = useSelector((state) => state.auth);
 
   return (
     <>
@@ -63,7 +63,7 @@ const Header = (props) => {
             )}
           </Stack>
 
-          <Stack alignItems="center" direction="row" spacing={2}>
+          <Stack alignItems="center" direction="row" spacing={3}>
             {/* NOTIFICATIONS */}
             <NotificationsButton />
 
@@ -76,7 +76,7 @@ const Header = (props) => {
                 height: 40,
                 width: 40,
               }}
-              src={UserAvata}
+              src={user?.photo ? getUrlImage(user.photo) : UserDefaultAvatar}
             />
           </Stack>
         </Stack>

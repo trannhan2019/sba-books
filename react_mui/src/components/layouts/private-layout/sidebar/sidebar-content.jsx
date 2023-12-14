@@ -7,6 +7,7 @@ import { Scrollbar } from "@/components/common/Scrollbar";
 import { AdminContent } from "./admin-content";
 import { ManagerContent } from "./manager-content";
 import { UserContent } from "./user-content";
+import LogoSba from "@/assets/logo_sba.png";
 
 export function SidebarContent() {
   const { user, isLoggedIn } = useSelector((state) => state.auth);
@@ -29,7 +30,10 @@ export function SidebarContent() {
           height: "100%",
         }}
       >
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ padding: 1, display: "flex", justifyContent: "center" }}>
+          <img width="75%" src={LogoSba} />
+        </Box>
+        {/* <Box sx={{ p: 3 }}>
           <Box
             component={Link}
             href="/"
@@ -65,8 +69,8 @@ export function SidebarContent() {
               <ChevronUpDownIcon />
             </SvgIcon>
           </Box>
-        </Box>
-        <Divider sx={{ borderColor: "neutral.700" }} />
+        </Box> */}
+        <Divider sx={{ borderColor: "neutral.200" }} />
         {/* admin, manager,user */}
         {isLoggedIn && user?.role?.name === "administrator" && <AdminContent />}
         {isLoggedIn && user?.role?.name === "quản lý" && <ManagerContent />}

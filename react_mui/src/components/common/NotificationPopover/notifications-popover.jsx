@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import vi from "date-fns/locale/vi";
+// import vi from "date-fns/locale/vi";
 import { Link as ReactLink, useNavigate } from "react-router-dom";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import {
@@ -104,8 +104,12 @@ export const NotificationsPopover = (props) => {
                     <Badge
                       invisible={!!notification?.read_at}
                       color="primary"
-                      variant="dot"
+                      badgeContent="new"
                       sx={{ width: "100%" }}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "left",
+                      }}
                     >
                       <Typography sx={{ mr: 0.5 }} variant="subtitle2">
                         <b>{notification?.data.sender.name}</b>
@@ -120,19 +124,13 @@ export const NotificationsPopover = (props) => {
                                 new Date(
                                   notification?.data.history.returned_at
                                 ),
-                                "HH:mm - dd/MM/yyyy",
-                                {
-                                  locale: vi,
-                                }
+                                "HH:mm - dd/MM/yyyy"
                               )
                             : format(
                                 new Date(
                                   notification?.data.history.exchanged_at
                                 ),
-                                "HH:mm - dd/MM/yyyy",
-                                {
-                                  locale: vi,
-                                }
+                                "HH:mm - dd/MM/yyyy"
                               )}
                         </b>
                       </Typography>

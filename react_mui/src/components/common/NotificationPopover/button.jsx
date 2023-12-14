@@ -4,15 +4,21 @@ import { Badge, IconButton, Tooltip } from "@mui/material";
 import { NotificationsPopover } from "./notifications-popover";
 import Pusher from "pusher-js";
 import { apiGetBookNotification } from "@/apis/notify";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import {
+  setNotifications,
+  setNotiUnreadCount,
+} from "@/store/notify/notifySlice";
 
 export const NotificationsButton = () => {
   const { user } = useSelector((state) => state.auth);
-  const [notifications, setNotifications] = useState([]);
-  const [notiUnreadCount, setNotiUnreadCount] = useState(0);
+  const { notifications, notiUnreadCount } = useSelector(
+    (state) => state.notify
+  );
   // const [message, setMessage] = useState('');
   // let allMessages = [];
+  const dispatch = useDispatch();
 
   const anchorRef = useRef(null);
   const [openPopover, setOpenPopover] = useState(false);
@@ -30,8 +36,8 @@ export const NotificationsButton = () => {
     const response = await apiGetBookNotification();
     console.log(response);
     if (user.username === "sba_manager") {
-      setNotifications(response.data.notificationList);
-      setNotiUnreadCount(response.data.notificationUnreadCount);
+      dispatch(setNotifications(response.data.notificationList));
+      dispatch(setNotiUnreadCount(response.data.notificationUnreadCount));
     }
   };
 

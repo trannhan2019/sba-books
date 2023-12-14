@@ -1,5 +1,6 @@
 import { Drawer, useMediaQuery } from "@mui/material";
 import { SidebarContent } from "./sidebar-content";
+import { neutral } from "@/theme/colors";
 
 const Sidebar = (props) => {
   const { open, onClose } = props;
@@ -12,8 +13,8 @@ const Sidebar = (props) => {
         open
         PaperProps={{
           sx: {
-            backgroundColor: "neutral.800",
-            color: "common.white",
+            backgroundColor: "neutral.50", //neutral.800
+            // color: "common.white",
             width: 270,
           },
         }}
@@ -31,9 +32,9 @@ const Sidebar = (props) => {
       open={open}
       PaperProps={{
         sx: {
-          backgroundColor: "neutral.800",
-          color: "common.white",
-          width: 280,
+          backgroundColor: "neutral.50", //neutral.800
+          // color: "common.white", //"common.white"
+          width: 270,
         },
       }}
       sx={{ zIndex: (theme) => theme.zIndex.appBar + 100 }}

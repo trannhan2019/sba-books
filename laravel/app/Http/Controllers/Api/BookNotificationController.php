@@ -26,12 +26,27 @@ class BookNotificationController extends Controller
         return response()->json('done');
     }
 
-    public function getBookNotificationPaginate(Request $request){
+    public function getBookNotificationPaginate(Request $request)
+    {
         $itemPerPage = $request->query('itemPerPage', 5);
 
         $notifyList = DatabaseNotification::query();
         $notifyList->where('type', 'App\Notifications\BookNotification')->orderBy('created_at', 'desc');
 
         return response()->json($notifyList->paginate($itemPerPage));
+    }
+
+    public function destroy($id)
+    {
+        DatabaseNotification::findOrFail($id)->delete();
+        return response()->json('deleted', 201);
+    }
+
+    public function destroyAll(Request $request)
+    {
+        // return response()->json($request);
+        $ids = $request->ids;
+        DatabaseNotification::destroy($ids);
+        return response()->json('deleted', 201);
     }
 }

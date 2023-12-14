@@ -64,6 +64,7 @@ const ManageBookNotification = () => {
             </Stack>
             <ListBookNotification
               notifies={notifyList.notifies}
+              fetchData={fetchData}
               total={notifyList.total}
               page={pageMui}
               rowsPerPage={itemPerPage}

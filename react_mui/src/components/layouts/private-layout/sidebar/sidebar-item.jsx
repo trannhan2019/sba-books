@@ -19,10 +19,10 @@ export const SidebarItem = (props) => {
             textAlign: "left",
             width: "100%",
             ...(active && {
-              backgroundColor: "rgba(255, 255, 255, 0.04)",
+              backgroundColor: "rgba(0, 0, 255, 0.1)", //0.04
             }),
             "&:hover": {
-              backgroundColor: "rgba(255, 255, 255, 0.04)",
+              backgroundColor: "rgba(0, 0, 255, 0.1)", //0.04
             },
           }}
         >
@@ -31,7 +31,7 @@ export const SidebarItem = (props) => {
               component="span"
               sx={{
                 alignItems: "center",
-                color: "neutral.400",
+                color: "neutral.900", //400
                 display: "inline-flex",
                 justifyContent: "center",
                 mr: 2,
@@ -46,7 +46,7 @@ export const SidebarItem = (props) => {
           <Box
             component="span"
             sx={{
-              color: "neutral.400",
+              color: "neutral.900", //400
               flexGrow: 1,
               fontFamily: (theme) => theme.typography.fontFamily,
               fontSize: 14,
@@ -54,10 +54,10 @@ export const SidebarItem = (props) => {
               lineHeight: "24px",
               whiteSpace: "nowrap",
               ...(active && {
-                color: "common.white",
+                color: "primary.main",
               }),
               ...(disabled && {
-                color: "neutral.500",
+                color: "neutral.300",
               }),
             }}
           >

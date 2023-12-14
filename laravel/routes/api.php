@@ -108,5 +108,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [BookNotificationController::class, 'getBookNotification']);
         Route::get('/paginate', [BookNotificationController::class, 'getBookNotificationPaginate']);
         Route::put('/{id}', [BookNotificationController::class, 'updateReadAt']);
+        Route::delete('/', [BookNotificationController::class, 'destroyAll']);
+        Route::delete('/{id}', [BookNotificationController::class, 'destroy']);
     });
 });

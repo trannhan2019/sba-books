@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Checkbox,
-  Chip,
   IconButton,
   Stack,
   Table,
@@ -21,11 +20,20 @@ import { Scrollbar } from "@/components/common/Scrollbar";
 import TableLoader from "@/components/common/TableLoader";
 import Swal from "sweetalert2";
 import { useSelection } from "@/hooks/useSelection";
-import { useSelector } from "react-redux";
-import { apiDeleteBook, apiDeleteBookList } from "@/apis/book";
+import { useDispatch, useSelector } from "react-redux";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import { format } from "date-fns";
-import vi from "date-fns/locale/vi";
+import { useNavigate } from "react-router-dom";
+import {
+  apiDeleteAllBookNotification,
+  apiDeleteBookNotification,
+  apiGetBookNotification,
+  apiUpdateBookNotification,
+} from "@/apis/notify";
+import {
+  setNotifications,
+  setNotiUnreadCount,
+} from "@/store/notify/notifySlice";
 
 const ListBookNotification = (props) => {
   const {
@@ -35,8 +43,12 @@ const ListBookNotification = (props) => {
     onRowsPerPageChange,
     page = 0,
     rowsPerPage = 5,
+    fetchData,
   } = props;
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
   const { isLoading } = useSelector((state) => state.app);
 
   //seleted
@@ -48,19 +60,35 @@ const ListBookNotification = (props) => {
     notifies?.length > 0 && notifySelected.selected.length === notifies.length;
   const enableBulkActions = notifySelected.selected.length > 0;
 
+  //view notification
+  const fetchNotifyStore = async () => {
+    const response = await apiGetBookNotification();
+    if (user.username === "sba_manager") {
+      dispatch(setNotifications(response.data.notificationList));
+      dispatch(setNotiUnreadCount(response.data.notificationUnreadCount));
+    }
+  };
+
+  const handleViewNotify = async (id) => {
+    await apiUpdateBookNotification(id);
+    await fetchNotifyStore();
+    navigate("/manage-book-history");
+  };
+
   // handel Del single
-  const handleDeleteBook = (id) => {
+  const handleDeleteBookNotification = (id) => {
     // console.log(id);
     Swal.fire({
       icon: "info",
-      title: "Bạn có muốn xóa dữ liệu ?",
+      title: "Có muốn xóa dữ liệu ?",
       showCancelButton: true,
       confirmButtonText: "Xác nhận",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await apiDeleteBook(id);
-          setReloadPage((preState) => !preState);
+          await apiDeleteBookNotification(id);
+          await fetchData();
+          await fetchNotifyStore();
           Swal.fire("Saved!", "", "success");
         } catch (error) {
           console.log("delete", error);
@@ -69,17 +97,18 @@ const ListBookNotification = (props) => {
       }
     });
   };
-  const handleDeleteBookList = () => {
+  const handleDeleteAllBookNotification = () => {
     Swal.fire({
       icon: "info",
-      title: "Bạn có muốn xóa dữ liệu ?",
+      title: "Có muốn xóa dữ liệu ?",
       showCancelButton: true,
       confirmButtonText: "Xác nhận",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await apiDeleteBookList({ ids: notifySelected.selected });
-          setReloadPage((preState) => !preState);
+          await apiDeleteAllBookNotification({ ids: notifySelected.selected });
+          await fetchData();
+          await fetchNotifyStore();
           Swal.fire("Saved!", "", "success");
         } catch (error) {
           console.log("delete", error);
@@ -121,7 +150,7 @@ const ListBookNotification = (props) => {
             }}
           />
           <Button
-            onClick={() => handleDeleteBookList()}
+            onClick={() => handleDeleteAllBookNotification()}
             size="small"
             startIcon={<DeleteOutlinedIcon />}
             variant="contained"
@@ -149,7 +178,7 @@ const ListBookNotification = (props) => {
                 />
               </TableCell>
               <TableCell>Nội dung thông báo</TableCell>
-              <TableCell>Trạng thái</TableCell>
+              {/* <TableCell>Trạng thái</TableCell> */}
               <TableCell>Thao tác</TableCell>
             </TableRow>
           </TableHead>
@@ -179,7 +208,11 @@ const ListBookNotification = (props) => {
                       // invisible={!!true}
                     >
                       <TableCell padding="checkbox">
-                        <Badge variant="dot" color="primary">
+                        <Badge
+                          badgeContent="new"
+                          color="primary"
+                          invisible={!!notify?.read_at}
+                        >
                           <Checkbox
                             checked={isSelected}
                             onChange={(event) => {
@@ -192,7 +225,7 @@ const ListBookNotification = (props) => {
                           />
                         </Badge>
                       </TableCell>
-                      <TableCell>
+                      <TableCell onClick={() => handleViewNotify(notify.id)}>
                         <Typography variant="body2" sx={{ cursor: "pointer" }}>
                           <b>{notify?.data.sender.name}</b>
                           {notify?.data.history.returned_at
@@ -204,23 +237,17 @@ const ListBookNotification = (props) => {
                             {notify?.data.history.returned_at
                               ? format(
                                   new Date(notify?.data.history.returned_at),
-                                  "HH:mm - dd/MM/yyyy",
-                                  {
-                                    locale: vi,
-                                  }
+                                  "dd/MM/yyyy - HH:mm"
                                 )
                               : format(
                                   new Date(notify?.data.history.exchanged_at),
-                                  "HH:mm - dd/MM/yyyy",
-                                  {
-                                    locale: vi,
-                                  }
+                                  "dd/MM/yyyy - HH:mm"
                                 )}
                           </b>
                         </Typography>
                       </TableCell>
 
-                      <TableCell width="10%">
+                      {/* <TableCell width="10%">
                         {notify?.data.read_at ? (
                           <Chip
                             label="Đã xem thông báo"
@@ -234,12 +261,14 @@ const ListBookNotification = (props) => {
                             size="small"
                           />
                         )}
-                      </TableCell>
+                      </TableCell> */}
 
                       <TableCell>
-                        <Tooltip title="Xoá sách">
+                        <Tooltip title="Xoá thông báo">
                           <IconButton
-                          // onClick={() => handleDeleteBook(item.id)}
+                            onClick={() =>
+                              handleDeleteBookNotification(notify?.id)
+                            }
                           >
                             <DeleteForeverOutlinedIcon color="error" />
                           </IconButton>
