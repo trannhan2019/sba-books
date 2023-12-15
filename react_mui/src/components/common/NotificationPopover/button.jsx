@@ -46,17 +46,20 @@ export const NotificationsButton = () => {
       cluster: "ap1",
     });
     const channel = pusher.subscribe("sba-book-manage");
-    channel.bind("book-notification-event", async function (data) {
-      // setNotifications((oldState) => [...oldState, data]);
-      // allMessages.push(data);
-      //     setMessages(allMessages);
-      await fetchData();
-      //sau nay mo rong chuc nang thong bao all se su dung switch case tham khao notify devias
-      if (user.username === "sba_manager") {
+
+    if (user.username === "sba_manager") {
+      channel.bind("book-notification-event", async function (data) {
+        // setNotifications((oldState) => [...oldState, data]);
+        // allMessages.push(data);
+        //     setMessages(allMessages);
+        await fetchData();
+        //sau nay mo rong chuc nang thong bao all se su dung switch case tham khao notify devias
+
         toast.info(`${data.sender.name} vừa mượn/trả sách`);
-      }
-      console.log(data);
-    });
+
+        console.log(data);
+      });
+    }
   }, []);
 
   useEffect(() => {

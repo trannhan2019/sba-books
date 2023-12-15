@@ -25,6 +25,13 @@ export const departmentSlice = createSlice({
     setCountDepartment: (state, action) => {
       state.count = action.payload;
     },
+    clearDepartmentStore: (state, action) => {
+      state.departments = [];
+      state.department = null;
+      state.departmentId = 0;
+      state.total = 0;
+      state.count = 0;
+    },
   },
 });
 
@@ -34,6 +41,7 @@ export const {
   setTotalDepartment,
   setCountDepartment,
   setDepartmentId,
+  clearDepartmentStore,
 } = departmentSlice.actions;
 
 export default departmentSlice.reducer;

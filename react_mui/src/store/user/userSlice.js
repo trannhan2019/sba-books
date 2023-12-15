@@ -21,10 +21,21 @@ export const userSlice = createSlice({
     setCountUser: (state, action) => {
       state.count = action.payload;
     },
+    clearUserStore: (state, action) => {
+      state.userList = [];
+      state.userCurrent = null;
+      state.total = 0;
+      state.count = 0;
+    },
   },
 });
 
-export const { setUserList, setUserCurrent, setTotalUser, setCountUser } =
-  userSlice.actions;
+export const {
+  setUserList,
+  setUserCurrent,
+  setTotalUser,
+  setCountUser,
+  clearUserStore,
+} = userSlice.actions;
 
 export default userSlice.reducer;

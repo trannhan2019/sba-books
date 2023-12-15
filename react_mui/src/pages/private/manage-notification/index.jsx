@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Container, Stack, Typography } from "@mui/material";
 import { setLoading } from "@/store/app/appSlice";
 import { apiGetBookNotificationPaginate } from "@/apis/notify";
@@ -7,6 +7,8 @@ import ListBookNotification from "./list";
 
 const ManageBookNotification = () => {
   const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.auth);
 
   //cac state
   const [notifyList, setNotifyList] = useState({ notifies: [], total: 0 });
@@ -26,21 +28,23 @@ const ManageBookNotification = () => {
 
   //featch data
   const fetchData = async (page, itemPerPage) => {
-    try {
-      dispatch(setLoading(true));
-      const response = await apiGetBookNotificationPaginate({
-        page,
-        itemPerPage,
-      });
-      console.log(response);
-      setNotifyList({
-        notifies: response.data.data,
-        total: response.data.total,
-      });
-      dispatch(setLoading(false));
-    } catch (error) {
-      dispatch(setLoading(false));
-      console.log("get all", error);
+    if (user.username === "sba_manager") {
+      try {
+        dispatch(setLoading(true));
+        const response = await apiGetBookNotificationPaginate({
+          page,
+          itemPerPage,
+        });
+        console.log(response);
+        setNotifyList({
+          notifies: response.data.data,
+          total: response.data.total,
+        });
+        dispatch(setLoading(false));
+      } catch (error) {
+        dispatch(setLoading(false));
+        console.log("get all", error);
+      }
     }
   };
 

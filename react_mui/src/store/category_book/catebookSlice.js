@@ -17,10 +17,15 @@ export const cateBookSlice = createSlice({
     setTotalCate: (state, action) => {
       state.totalCate = action.payload;
     },
+    clearCateBookStore: (state, action) => {
+      state.cateBooks = [];
+      state.cateBook = null;
+      state.totalCate = 0;
+    },
   },
 });
 
-export const { setCateBooks, setCateBook, setTotalCate } =
+export const { setCateBooks, setCateBook, setTotalCate, clearCateBookStore } =
   cateBookSlice.actions;
 
 export default cateBookSlice.reducer;

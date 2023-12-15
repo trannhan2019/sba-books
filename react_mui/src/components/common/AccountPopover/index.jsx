@@ -12,9 +12,18 @@ import {
   Typography,
 } from "@mui/material";
 import { apiLogout } from "@/apis/auth";
-import { setIsLoggedIn, setUser } from "@/store/auth/authSlice";
+import { clearAuthStore, setIsLoggedIn, setUser } from "@/store/auth/authSlice";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import AutorenewOutlinedIcon from "@mui/icons-material/AutorenewOutlined";
+import { clearAppStore } from "@/store/app/appSlice";
+import { clearBookStore } from "@/store/book/bookSlice";
+import { clearCateBookStore } from "@/store/category_book/catebookSlice";
+import { clearCompanyStore } from "@/store/company/companySlice";
+import { clearDepartmentStore } from "@/store/department/departmentSlice";
+import { clearNotifyStore } from "@/store/notify/notifySlice";
+import { clearRoleStore } from "@/store/role/roleSlice";
+import { clearUserStore } from "@/store/user/userSlice";
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open } = props;
@@ -26,17 +35,40 @@ export const AccountPopover = (props) => {
   const handleSignOut = async () => {
     onClose?.();
     await apiLogout();
-    dispatch(setUser(null));
-    dispatch(setIsLoggedIn(false));
-    localStorage.removeItem("token");
+
+    dispatch(clearAppStore());
+    dispatch(clearAuthStore());
+    dispatch(clearBookStore());
+    dispatch(clearCateBookStore());
+    dispatch(clearCompanyStore());
+    dispatch(clearDepartmentStore());
+    dispatch(clearNotifyStore());
+    dispatch(clearRoleStore());
+    dispatch(clearUserStore());
+
+    localStorage.clear();
     navigate("/login");
     // console.log("logout");
   };
 
-  // const handleDeleteCache = () => {
-  //   localStorage.clear();
-  //   navigate("/login");
-  // };
+  const handleDeleteCache = () => {
+    dispatch(clearAppStore());
+    dispatch(clearAuthStore());
+    dispatch(clearBookStore());
+    dispatch(clearCateBookStore());
+    dispatch(clearCompanyStore());
+    dispatch(clearDepartmentStore());
+    dispatch(clearNotifyStore());
+    dispatch(clearRoleStore());
+    dispatch(clearUserStore());
+    localStorage.clear();
+    navigate("/login");
+  };
+
+  const showAccountInfo = () => {
+    onClose?.();
+    navigate("/account");
+  };
 
   return (
     <Popover
@@ -71,13 +103,21 @@ export const AccountPopover = (props) => {
           },
         }}
       >
-        <MenuItem component={Link} to="/account">
+        <MenuItem onClick={showAccountInfo}>
           <ListItemIcon>
             <PersonOutlineOutlinedIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText>Profile</ListItemText>
+          <ListItemText>Tài khoản</ListItemText>
         </MenuItem>
+
         {/* <MenuItem onClick={handleDeleteCache}>Xoá dữ liệu tạm</MenuItem> */}
+        <MenuItem onClick={handleDeleteCache}>
+          <ListItemIcon>
+            <AutorenewOutlinedIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Xoá dữ liệu tạm</ListItemText>
+        </MenuItem>
+
         <MenuItem onClick={handleSignOut}>
           <ListItemIcon>
             <PowerSettingsNewIcon fontSize="small" />

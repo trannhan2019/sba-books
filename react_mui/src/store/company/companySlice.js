@@ -17,10 +17,15 @@ export const companySlice = createSlice({
     setTotalCompany: (state, action) => {
       state.total = action.payload;
     },
+    clearCompanyStore: (state, action) => {
+      state.companies = [];
+      state.company = null;
+      state.total = 0;
+    },
   },
 });
 
-export const { setCompanies, setCompany, setTotalCompany } =
+export const { setCompanies, setCompany, setTotalCompany, clearCompanyStore } =
   companySlice.actions;
 
 export default companySlice.reducer;

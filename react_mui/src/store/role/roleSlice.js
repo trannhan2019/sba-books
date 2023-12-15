@@ -21,10 +21,16 @@ export const roleSlice = createSlice({
     setCountRole: (state, action) => {
       state.count = action.payload;
     },
+    clearRoleStore: (state, action) => {
+      state.roles = [];
+      state.role = null;
+      state.total = 0;
+      state.count = 0;
+    },
   },
 });
 
-export const { setRoles, setRole, setTotalRole, setCountRole } =
+export const { setRoles, setRole, setTotalRole, setCountRole, clearRoleStore } =
   roleSlice.actions;
 
 export default roleSlice.reducer;

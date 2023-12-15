@@ -15,9 +15,15 @@ export const notifySlice = createSlice({
     setNotiUnreadCount: (state, action) => {
       state.notiUnreadCount = action.payload;
     },
+
+    clearNotifyStore: (state, action) => {
+      state.notifications = [];
+      state.notiUnreadCount = 0;
+    },
   },
 });
 
-export const { setNotifications, setNotiUnreadCount } = notifySlice.actions;
+export const { setNotifications, setNotiUnreadCount, clearNotifyStore } =
+  notifySlice.actions;
 
 export default notifySlice.reducer;

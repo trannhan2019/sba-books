@@ -25,10 +25,17 @@ export const bookSlice = createSlice({
     setCountBook: (state, action) => {
       state.count = action.payload;
     },
+    clearBookStore: (state, action) => {
+      state.books = [];
+      state.book = null;
+      state.cate_book_id = 0;
+      state.total = 0;
+      state.count = 0;
+    },
   },
 });
 
-export const { setBook, setBooks, setCountBook, setTotalBook } =
+export const { setBook, setBooks, setCountBook, setTotalBook, clearBookStore } =
   bookSlice.actions;
 
 export default bookSlice.reducer;

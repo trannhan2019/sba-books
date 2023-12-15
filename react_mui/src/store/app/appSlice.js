@@ -10,9 +10,12 @@ export const appSlice = createSlice({
     setLoading: (state, action) => {
       state.isLoading = action.payload;
     },
+    clearAppStore: (state, action) => {
+      state.isLoading = false;
+    },
   },
 });
 
-export const { setLoading } = appSlice.actions;
+export const { setLoading, clearAppStore } = appSlice.actions;
 
 export default appSlice.reducer;
