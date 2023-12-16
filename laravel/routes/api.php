@@ -73,6 +73,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [UserController::class, 'destroy']);
         // Route::get('/all', [DepartmentController::class, 'getAll']);
     });
+    Route::prefix('user')->group(function (){
+        Route::put('/update-password/{id}',[UserController::class,'updatePassword']);
+        Route::put('/update-photo/{id}',[UserController::class,'updatePhoto']);
+        Route::put('/user-current/{id}',[UserController::class,'getUserCurrent']);
+    });
 
     Route::group(['prefix' => 'category-book', 'middleware' => ['can:isManager']], function () {
         Route::post('/', [CategoryBookController::class, 'store']);

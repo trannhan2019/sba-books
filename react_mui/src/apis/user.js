@@ -40,20 +40,28 @@ export const apiUpdateUser = (data, id) =>
     data,
   });
 
-// export const apiGetDepartment = (id) =>
-//   axiosClient({
-//     url: `/department/${id}`,
-//     method: "get",
-//   });
-
-// export const apiGetCountDepartment = () =>
-//   axiosClient({
-//     url: "/department/count",
-//     method: "get",
-//   });
-
-export const apiGetCurrentUser = () =>
+export const apiGetCurrentUser = (id) =>
   axiosClient({
-    url: "/user-current",
+    url: `user/user-current/${id}`,
     method: "get",
+  });
+
+export const apiUpdatePasswordUser = (id, data) =>
+  axiosClient({
+    url: `/user/update-password/${id}`,
+    method: "put",
+    data,
+  });
+
+export const apiUpdatePhotoUser = (id, data) =>
+  axiosClient({
+    url: `/user/update-photo/${id}`,
+    method: "post",
+    data,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    params: {
+      _method: "PUT",
+    },
   });

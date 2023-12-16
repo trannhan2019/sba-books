@@ -1,15 +1,22 @@
-import { useCallback, useState } from "react";
 import {
+  Avatar,
   Box,
+  Button,
+  Card,
+  CardContent,
+  TextField,
+  Stack,
+  SvgIcon,
+  Typography,
+  Unstable_Grid2 as Grid,
+  FormControlLabel,
+  Switch,
   Container,
   Divider,
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { AccountInfo } from "./account-info";
+import AccountPhoto from "./account-photo";
 
 const Account = () => {
   const { user } = useSelector((state) => state.auth);
@@ -28,7 +35,16 @@ const Account = () => {
             <Typography variant="h4">Account</Typography>
             <Divider />
           </Stack>
-          <AccountInfo />
+          <Stack spacing={4}>
+            <Card>
+              <CardContent>
+                <Grid container spacing={3}>
+                  <AccountPhoto />
+                  <AccountInfo />
+                </Grid>
+              </CardContent>
+            </Card>
+          </Stack>
         </Container>
       </Box>
     </>

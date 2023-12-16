@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+use Illuminate\Support\Facades\Storage;
 use function Laravel\Prompts\search;
 
 class UserController extends Controller
@@ -44,10 +45,11 @@ class UserController extends Controller
         return response()->json($users->with(['role', 'department'])->orderBy('location')->paginate($itemPerPage));
     }
 
-    // public function getCount()
-    // {
-    //     return Department::count();
-    // }
+     public function getUserCurrent(Request $request,$id)
+     {
+         $user = User::findOrFail($id);
+         return response()->json($user, 200);
+     }
 
     public function update(UpdateUserRequest $request, $id)
     {
@@ -81,8 +83,26 @@ class UserController extends Controller
         return response()->json('User list deleted', 201);
     }
 
-    // public function getAll()
-    // {
-    //     return response()->json(Department::orderBy('location')->select('id', 'name', 'alias')->get());
-    // }
+    public function updatePassword(Request $request,$id){
+        $validated = $request->validate([
+            'password' => 'required|min:6',
+        ]);
+        $user = User::findOrFail($id);
+        $user->password = Hash::make($request->password);
+        $user->save();
+        return response()->json('done', 201);
+    }
+
+    public function updatePhoto(Request $request,$id){
+        //validate
+        $user = User::findOrFail($id);
+        if (!empty($user->photo)) {
+            Storage::delete($user->photo);
+        }
+        $path = Storage::put('accounts', $request->photo);
+        $user->photo = $path;
+        $user->save();
+
+        return response()->json('done', 201);
+    }
 }
