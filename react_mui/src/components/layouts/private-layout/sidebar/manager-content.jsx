@@ -7,6 +7,7 @@ import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 import HistoryIcon from "@mui/icons-material/History";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 
 export const users = [
   {
@@ -27,6 +28,12 @@ export const users = [
 ];
 
 export const manages = [
+  //thong ke sach muon nhieu, nguoi muon nhieu
+  {
+    title: "Tổng quan",
+    path: "/manage-overview",
+    icon: <BarChartOutlinedIcon fontSize="small" />,
+  },
   {
     title: "Danh mục sách",
     path: "/manage-category-book",
@@ -43,8 +50,6 @@ export const manages = [
     path: "/manage-book-history",
     icon: <MenuBookOutlinedIcon fontSize="small" />,
   },
-  //thong ke sach muon nhieu, nguoi muon nhieu
-  //quan ly notification
 ];
 
 export function ManagerContent() {

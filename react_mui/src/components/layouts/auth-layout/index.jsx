@@ -1,8 +1,7 @@
-import { Box, Typography, Unstable_Grid2 as Grid } from "@mui/material";
+import { Box, Unstable_Grid2 as Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 import Logo from "@/components/common/Logo";
-import WelcomeImg from "@/assets/auth-illustration.svg";
-import BgImg from "@/assets/slider-bg-2.jpg";
+import BgImg from "@/assets/auth-bg.jpg";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 

@@ -34,7 +34,7 @@ export const NotificationsButton = () => {
   //call api get notification and get pusher
   const fetchData = async () => {
     const response = await apiGetBookNotification();
-    console.log(response);
+    // console.log(response);
     if (user.username === "sba_manager") {
       dispatch(setNotifications(response.data.notificationList));
       dispatch(setNotiUnreadCount(response.data.notificationUnreadCount));

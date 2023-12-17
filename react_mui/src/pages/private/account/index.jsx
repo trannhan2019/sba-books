@@ -1,25 +1,19 @@
 import {
-  Avatar,
   Box,
-  Button,
   Card,
   CardContent,
-  TextField,
   Stack,
-  SvgIcon,
   Typography,
   Unstable_Grid2 as Grid,
-  FormControlLabel,
-  Switch,
   Container,
   Divider,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { AccountInfo } from "./account-info";
 import AccountPhoto from "./account-photo";
 
 const Account = () => {
-  const { user } = useSelector((state) => state.auth);
+  // const { user } = useSelector((state) => state.auth);
 
   return (
     <>

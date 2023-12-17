@@ -47,7 +47,7 @@ class UserController extends Controller
 
      public function getUserCurrent(Request $request,$id)
      {
-         $user = User::findOrFail($id);
+         $user = User::with(['role', 'department'])->findOrFail($id);
          return response()->json($user, 200);
      }
 

@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\BookHistoryController;
 use App\Http\Controllers\Api\BookNotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\OverViewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,7 +77,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('user')->group(function (){
         Route::put('/update-password/{id}',[UserController::class,'updatePassword']);
         Route::put('/update-photo/{id}',[UserController::class,'updatePhoto']);
-        Route::put('/user-current/{id}',[UserController::class,'getUserCurrent']);
+        Route::get('/user-current/{id}',[UserController::class,'getUserCurrent']);
     });
 
     Route::group(['prefix' => 'category-book', 'middleware' => ['can:isManager']], function () {
@@ -115,5 +116,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{id}', [BookNotificationController::class, 'updateReadAt']);
         Route::delete('/', [BookNotificationController::class, 'destroyAll']);
         Route::delete('/{id}', [BookNotificationController::class, 'destroy']);
+    });
+
+    Route::prefix('over-view')->group(function () {
+        Route::get('/', [OverViewController::class, 'getOverviewData']);
     });
 });

@@ -48,12 +48,12 @@ const AccountPhoto = () => {
   });
 
   console.log(photo);
-  useEffect(async () => {
-    const res = await apiGetCurrentUser(user.id);
-    dispatch(setUser(res.data.data));
-  }, []);
+  // useEffect(async () => {
+  //   const res = await apiGetCurrentUser(user.id);
+  //   dispatch(setUser(res.data.data));
+  // }, []);
 
-  useEffect(async () => {
+  useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
     return () => URL.revokeObjectURL(photo);
   }, []);
@@ -66,7 +66,7 @@ const AccountPhoto = () => {
       // console.log(formData.get("title"));
       await apiUpdatePhotoUser(user.id, formData);
       const res = await apiGetCurrentUser(user.id);
-      dispatch(setUser(res.data.data));
+      dispatch(setUser(res.data));
       toast.success("Thay đổi ảnh thành công");
     } catch (error) {
       console.log(error);

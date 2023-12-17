@@ -78,7 +78,6 @@ export const manages = [
     path: "/manage-book-history",
     icon: <MenuBookOutlinedIcon fontSize="small" />,
   },
-  //thong ke sach muon nhieu, nguoi muon nhieu
 ];
 
 export function AdminContent() {

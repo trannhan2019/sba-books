@@ -42,7 +42,7 @@ export const apiUpdateUser = (data, id) =>
 
 export const apiGetCurrentUser = (id) =>
   axiosClient({
-    url: `user/user-current/${id}`,
+    url: `/user/user-current/${id}`,
     method: "get",
   });
 

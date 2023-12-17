@@ -15,6 +15,8 @@ import ManageBookHistory from "@/pages/private/manage-book-history";
 import BookHistory from "@/pages/private/book-history";
 import ManageBookNotification from "@/pages/private/manage-notification";
 import Account from "@/pages/private/account";
+import NotFound from "@/pages/error/not-found";
+import ManageOverview from "@/pages/private/manage-overview";
 
 const AppRoutes = () => {
   return (
@@ -84,12 +86,20 @@ const AppRoutes = () => {
             }
           />
           <Route
+            path="manage-overview"
+            element={
+              <ManagerGuard>
+                <ManageOverview />
+              </ManagerGuard>
+            }
+          />
+          <Route
             path="manage-book-notification"
             element={<ManageBookNotification />}
           />
         </Route>
 
-        {/* <Route path="*" element={<PageNotFound />} /> */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
