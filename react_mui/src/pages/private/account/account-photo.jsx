@@ -141,7 +141,12 @@ const AccountPhoto = () => {
           </Box>
         </Box>
         <Stack>
-          <Button color="inherit" size="small" onClick={handleSubmit(onSubmit)}>
+          <Button
+            color="inherit"
+            size="small"
+            onClick={handleSubmit(onSubmit)}
+            disabled={!photo}
+          >
             Change
           </Button>
           <FormHelperText sx={{ color: "red" }}>
