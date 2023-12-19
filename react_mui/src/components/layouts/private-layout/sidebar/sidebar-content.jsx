@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import ChevronUpDownIcon from "@heroicons/react/24/solid/ChevronUpDownIcon";
 import { Box, Divider, SvgIcon, Typography } from "@mui/material";
-import Logo from "@/components/common/Logo";
 import { Scrollbar } from "@/components/common/Scrollbar";
 import { AdminContent } from "./admin-content";
 import { ManagerContent } from "./manager-content";
@@ -31,7 +29,9 @@ export function SidebarContent() {
         }}
       >
         <Box sx={{ padding: 1, display: "flex", justifyContent: "center" }}>
-          <img width="75%" src={LogoSba} />
+          <Link to={"/"}>
+            <img width="75%" src={LogoSba} />
+          </Link>
         </Box>
         {/* <Box sx={{ p: 3 }}>
           <Box
