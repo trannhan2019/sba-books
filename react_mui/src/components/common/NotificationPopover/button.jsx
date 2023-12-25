@@ -60,6 +60,8 @@ export const NotificationsButton = () => {
         console.log(data);
       });
     }
+
+    return () => pusher.unsubscribe("sba-book-manage");
   }, []);
 
   useEffect(() => {
