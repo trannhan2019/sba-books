@@ -33,10 +33,13 @@ const ListUser = (props) => {
     rowsPerPage = 0,
     setOpenEditForm,
     setReloadPage,
+    isLoading,
+    userList,
+    total,
   } = props;
 
-  const { isLoading } = useSelector((state) => state.app);
-  const { total, userList } = useSelector((state) => state.user);
+  // const { isLoading } = useSelector((state) => state.app);
+  // const { total, userList } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   //seleted
   const userSelected = useSelection(userList);

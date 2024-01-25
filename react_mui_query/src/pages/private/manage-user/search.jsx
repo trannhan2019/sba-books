@@ -1,10 +1,6 @@
-import {
-  setDepartment,
-  setDepartmentId,
-} from "@/store/department/departmentSlice";
+import { setDepartmentId } from "@/store/department/departmentSlice";
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
 import {
-  Card,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -14,16 +10,23 @@ import {
   Stack,
   SvgIcon,
 } from "@mui/material";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const SearchUser = ({ onSearch, handlePageReset }) => {
-  const dispatch = useDispatch();
-  const { departments, departmentId } = useSelector(
-    (state) => state.department
-  );
+const SearchUser = ({
+  onSearch,
+  handlePageReset,
+  departments,
+  departmentId,
+  setDepartmentId,
+}) => {
+  // const dispatch = useDispatch();
+  // const {  departmentId } = useSelector(
+  //   (state) => state.department
+  // );
 
   const handleChangeSelect = (event) => {
-    dispatch(setDepartmentId(event.target.value));
+    setDepartmentId(event.target.value);
     handlePageReset();
   };
 
