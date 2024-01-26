@@ -4,6 +4,8 @@ import { Box, Container, Stack, Typography } from "@mui/material";
 import { setLoading } from "@/store/app/appSlice";
 import { apiGetBookNotificationPaginate } from "@/apis/notify";
 import ListBookNotification from "./list";
+import { usePaginateMui } from "@/hooks/usePaginateMui";
+// import { useQuery } from "@tanstack/react-query";
 
 const ManageBookNotification = () => {
   const dispatch = useDispatch();
@@ -14,17 +16,20 @@ const ManageBookNotification = () => {
   const [notifyList, setNotifyList] = useState({ notifies: [], total: 0 });
 
   //paginate
-  const [pageMui, setPageMui] = useState(0);
-  const [page, setPage] = useState(1);
-  const handlePageChange = (event, value) => {
-    setPageMui(value);
-    setPage(value + 1);
-  };
+  const {
+    page,
+    pageMui,
+    handlePageChange,
+    itemPerPage,
+    handleRowsPerPageChange,
+  } = usePaginateMui();
 
-  const [itemPerPage, setItemPerPage] = useState(5);
-  const handleRowsPerPageChange = (event) => {
-    setItemPerPage(event.target.value);
-  };
+  // const {data:notifiesData} = useQuery({
+  //     queryKey:['notify-list',page,itemPerPage],
+  //     queryFn:()=>{
+  //         return apiGetBookNotificationPaginate({page,itemPerPage})
+  //     }
+  // })
 
   //featch data
   const fetchData = async (page, itemPerPage) => {
@@ -35,7 +40,7 @@ const ManageBookNotification = () => {
           page,
           itemPerPage,
         });
-        console.log(response);
+        // console.log(response);
         setNotifyList({
           notifies: response.data.data,
           total: response.data.total,
@@ -67,9 +72,9 @@ const ManageBookNotification = () => {
               <Typography variant="h4">Quản lý thông báo</Typography>
             </Stack>
             <ListBookNotification
-              notifies={notifyList.notifies}
+              notifies={notifyList.notifies || []}
               fetchData={fetchData}
-              total={notifyList.total}
+              total={notifyList.total || 0}
               page={pageMui}
               rowsPerPage={itemPerPage}
               onRowsPerPageChange={handleRowsPerPageChange}

@@ -35,9 +35,10 @@ const ListBook = (props) => {
     setOpenEditForm,
     setBook,
     setReloadPage,
+    isLoading,
   } = props;
 
-  const { isLoading } = useSelector((state) => state.app);
+  // const { isLoading } = useSelector((state) => state.app);
 
   //seleted
   const bookSelected = useSelection(books);
@@ -66,7 +67,7 @@ const ListBook = (props) => {
       if (result.isConfirmed) {
         try {
           await apiDeleteBook(id);
-          setReloadPage((preState) => !preState);
+          setReloadPage((preState) => preState + 1);
           Swal.fire("Saved!", "", "success");
         } catch (error) {
           console.log("delete", error);
@@ -85,7 +86,7 @@ const ListBook = (props) => {
       if (result.isConfirmed) {
         try {
           await apiDeleteBookList({ ids: bookSelected.selected });
-          setReloadPage((preState) => !preState);
+          setReloadPage((preState) => preState + 1);
           Swal.fire("Saved!", "", "success");
         } catch (error) {
           console.log("delete", error);

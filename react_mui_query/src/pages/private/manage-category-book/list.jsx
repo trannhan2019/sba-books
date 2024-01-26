@@ -1,9 +1,7 @@
 import {
   Box,
   Button,
-  Card,
   Checkbox,
-  Chip,
   IconButton,
   Stack,
   Table,

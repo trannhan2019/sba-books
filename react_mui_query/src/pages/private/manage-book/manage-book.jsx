@@ -19,9 +19,11 @@ import useDebounce from "@/hooks/useDebounce";
 import ListBook from "./list";
 import SearchBook from "./search";
 import EditBook from "./edit";
+import { usePaginateMui } from "@/hooks/usePaginateMui";
+import { useQuery } from "@tanstack/react-query";
 
 const ManageBook = () => {
-  const dispatch = useDispatch();
+  //   const dispatch = useDispatch();
   //Add ///////////////
   const [openAddForm, setOpenAddForm] = useState(false);
   //Edit ///////////////
@@ -32,64 +34,57 @@ const ManageBook = () => {
   const searchDebounce = useDebounce(search, 800);
 
   //set refresh department tai vi tri sau khi them va sua
-  const [reloadPage, setReloadPage] = useState(false);
+  const [reloadPage, setReloadPage] = useState(0);
 
   //cac state
-  const [bookList, setBookList] = useState({ books: [], total: 0 });
   const [cateBooks, setCateBooks] = useState([]);
   const [cateSelected, setCateSelected] = useState([]);
   const [book, setBook] = useState(null);
 
   //paginate
-  const [pageMui, setPageMui] = useState(0);
-  const [page, setPage] = useState(1);
-  const handlePageChange = (event, value) => {
-    setPageMui(value);
-    setPage(value + 1);
-  };
-  //fix bug search hoac chon catebook khi page lon hon 1 se khong co ket qua
-  const handlePageReset = () => {
-    setPageMui(0);
-    setPage(1);
-  };
+  const {
+    page,
+    pageMui,
+    handlePageChange,
+    handlePageReset,
+    itemPerPage,
+    handleRowsPerPageChange,
+  } = usePaginateMui();
 
-  const [itemPerPage, setItemPerPage] = useState(5);
-  const handleRowsPerPageChange = (event) => {
-    setItemPerPage(event.target.value);
-  };
-
-  //featch data
-  const fetchBooks = async (page, itemPerPage, search, cateSelected) => {
-    try {
-      dispatch(setLoading(true));
-      const response = await apiGetListBook({
+  const { isLoading, data: booksData } = useQuery({
+    queryKey: [
+      "book-list",
+      page,
+      itemPerPage,
+      search,
+      cateSelected,
+      reloadPage,
+    ],
+    queryFn: () => {
+      return apiGetListBook({
         page,
         itemPerPage,
         search,
         cateSelected,
       });
-      console.log(response);
-      setBookList({ books: response.data.data, total: response.data.total });
-      dispatch(setLoading(false));
-    } catch (error) {
-      dispatch(setLoading(false));
-      console.log("get all department", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchBooks(page, itemPerPage, search, cateSelected);
-  }, [page, itemPerPage, searchDebounce, reloadPage, cateSelected]);
+    },
+  });
 
   // get danh muc sach truyền form add và edit
-  const getCategoryBookList = async () => {
-    const res = await apiGetAllCategoryBook();
-    setCateBooks(res.data);
-  };
+  //   const getCategoryBookList = async () => {
+  //     const res = await apiGetAllCategoryBook();
+  //     setCateBooks(res.data);
+  //   };
 
-  useEffect(() => {
-    getCategoryBookList();
-  }, []);
+  //   useEffect(() => {
+  //     getCategoryBookList();
+  //   }, []);
+  const { data: cateBooksData } = useQuery({
+    queryKey: ["cate-book-all"],
+    queryFn: () => {
+      return apiGetAllCategoryBook();
+    },
+  });
 
   return (
     <>
@@ -120,13 +115,13 @@ const ManageBook = () => {
             </Stack>
             <SearchBook
               onSearch={setSearch}
-              cateBooks={cateBooks}
+              cateBooks={cateBooksData?.data || []}
               setCateSelected={setCateSelected}
               handlePageReset={handlePageReset}
             />
             <ListBook
-              books={bookList.books}
-              total={bookList.total}
+              books={booksData?.data.data || []}
+              total={booksData?.data.total || 0}
               page={pageMui}
               rowsPerPage={itemPerPage}
               onRowsPerPageChange={handleRowsPerPageChange}
@@ -134,6 +129,7 @@ const ManageBook = () => {
               setOpenEditForm={setOpenEditForm}
               setReloadPage={setReloadPage}
               setBook={setBook}
+              isLoading={isLoading}
             />
           </Stack>
         </Container>
@@ -142,14 +138,14 @@ const ManageBook = () => {
         openAddForm={openAddForm}
         setOpenAddForm={setOpenAddForm}
         setReloadPage={setReloadPage}
-        cateBooks={cateBooks}
+        cateBooks={cateBooksData?.data || []}
       />
       <EditBook
         openEditForm={openEditForm}
         setOpenEditForm={setOpenEditForm}
         setReloadPage={setReloadPage}
         book={book}
-        cateBooks={cateBooks}
+        cateBooks={cateBooksData?.data || []}
       />
     </>
   );

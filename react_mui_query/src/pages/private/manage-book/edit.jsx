@@ -62,7 +62,7 @@ const EditBook = ({
       // console.log(formData.get("title"));
       await apiUpdateBook(formData, book.id);
       setOpenEditForm(false);
-      setReloadPage((preState) => !preState);
+      setReloadPage((preState) => preState + 1);
       toast.success("Sửa thông tin thành công");
     } catch (error) {
       console.log(error);

@@ -9,30 +9,18 @@ import CateBookIconly from "@/assets/iconly/iconly-glass-chart.svg";
 import BookIconly from "@/assets/iconly/iconly-glass-paper.svg";
 import BookHistoryIconly from "@/assets/iconly/activity.svg";
 import { OverviewCard } from "./overview-card";
-import { useEffect, useState } from "react";
 import { apiGetOverView } from "@/apis/overview";
 import { OverviewTopBook } from "./overview-top-book";
 import { OverviewTopUser } from "./overview-top-user";
+import { useQuery } from "@tanstack/react-query";
 
 const ManageOverview = () => {
-  const [cateBookCount, setCateBookCount] = useState(0);
-  const [bookCount, setBookCount] = useState(0);
-  const [bookHistoryCount, setBookHistoryCount] = useState(0);
-  const [books, setBooks] = useState([]);
-  const [users, setUsers] = useState([]);
-
-  const fetchData = async () => {
-    const res = await apiGetOverView();
-    console.log(res.data);
-    setCateBookCount(res.data.cateBookCount);
-    setBookCount(res.data.bookCount);
-    setBookHistoryCount(res.data.bookHistoryCount);
-    setBooks(res.data.bookTopTransaction);
-    setUsers(res.data.userTopTransaction);
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const { data: overviewData } = useQuery({
+    queryKey: ["overview-list"],
+    queryFn: () => {
+      return apiGetOverView();
+    },
+  });
 
   return (
     <>
@@ -61,7 +49,7 @@ const ManageOverview = () => {
             </Grid>
             <Grid xs={12} md={4}>
               <OverviewCard
-                amount={cateBookCount}
+                amount={overviewData?.data.cateBookCount || 0}
                 image={CateBookIconly}
                 heading="Số lượng danh mục sách"
                 link="manage-category-book"
@@ -69,7 +57,7 @@ const ManageOverview = () => {
             </Grid>
             <Grid xs={12} md={4}>
               <OverviewCard
-                amount={bookCount}
+                amount={overviewData?.data.bookCount || 0}
                 image={BookIconly}
                 heading="Số lượng sách"
                 link="manage-book"
@@ -77,7 +65,7 @@ const ManageOverview = () => {
             </Grid>
             <Grid xs={12} md={4}>
               <OverviewCard
-                amount={bookHistoryCount}
+                amount={overviewData?.data.bookHistoryCount || 0}
                 image={BookHistoryIconly}
                 heading="Số lần mượn trả sách"
                 link="manage-book-history"
@@ -85,10 +73,14 @@ const ManageOverview = () => {
             </Grid>
 
             <Grid xs={6}>
-              <OverviewTopBook books={books} />
+              <OverviewTopBook
+                books={overviewData?.data.bookTopTransaction || []}
+              />
             </Grid>
             <Grid xs={6}>
-              <OverviewTopUser users={users} />
+              <OverviewTopUser
+                users={overviewData?.data.userTopTransaction || []}
+              />
             </Grid>
           </Grid>
         </Container>

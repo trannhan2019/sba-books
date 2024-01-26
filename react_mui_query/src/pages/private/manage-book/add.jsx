@@ -56,7 +56,7 @@ const AddBook = ({ openAddForm, setOpenAddForm, setReloadPage, cateBooks }) => {
   const { control, handleSubmit, reset } = hookForm;
 
   const onSubmit = async (values) => {
-    console.log(values);
+    // console.log(values);
     try {
       const formData = new FormData();
       for (const key in values) {
@@ -69,7 +69,7 @@ const AddBook = ({ openAddForm, setOpenAddForm, setReloadPage, cateBooks }) => {
       await apiStoreBook(formData);
       reset();
       setOpenAddForm(false);
-      setReloadPage((preState) => !preState);
+      setReloadPage((preState) => preState + 1);
       toast.success("Tạo mới thành công");
     } catch (error) {
       console.log("add book", error);

@@ -30,9 +30,10 @@ const BookHistoryList = (props) => {
     page = 0,
     rowsPerPage = 0,
     setReloadPage,
+    isLoading,
   } = props;
 
-  const { isLoading } = useSelector((state) => state.app);
+  // const { isLoading } = useSelector((state) => state.app);
 
   const handleUpdate = (id) => {
     Swal.fire({
@@ -44,7 +45,7 @@ const BookHistoryList = (props) => {
       if (result.isConfirmed) {
         try {
           await apiUpdateBookHistory(id);
-          setReloadPage((preState) => !preState);
+          setReloadPage((preState) => preState + 1);
           Swal.fire("Saved!", "", "success");
         } catch (error) {
           console.log("delete user", error);

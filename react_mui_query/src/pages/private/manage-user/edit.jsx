@@ -57,11 +57,11 @@ const EditUser = ({
       await apiUpdateUser(values, user.id);
       reset();
       setOpenEditForm(false);
-      setReloadPage((preState) => !preState);
+      setReloadPage((preState) => preState + 1);
       setChangePassword(false);
       toast.success("Sửa thông tin thành công");
     } catch (error) {
-      console.log("edit department", error);
+      // console.log("edit department", error);
       setChangePassword(false);
       toast.error("Lỗi không sửa được thông tin");
     }

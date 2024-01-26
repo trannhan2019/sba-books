@@ -14,7 +14,7 @@ import {
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { Scrollbar } from "@/components/common/Scrollbar";
 import TableLoader from "@/components/common/TableLoader";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { apiDeleteBookHistory } from "@/apis/book-history";
@@ -29,9 +29,10 @@ const ManageBookHistoryList = (props) => {
     page = 0,
     rowsPerPage = 0,
     setReloadPage,
+    isLoading,
   } = props;
 
-  const { isLoading } = useSelector((state) => state.app);
+  // const { isLoading } = useSelector((state) => state.app);
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -43,7 +44,7 @@ const ManageBookHistoryList = (props) => {
       if (result.isConfirmed) {
         try {
           await apiDeleteBookHistory(id);
-          setReloadPage((preState) => !preState);
+          setReloadPage((preState) => preState + 1);
           Swal.fire("Saved!", "", "success");
         } catch (error) {
           console.log("delete", error);

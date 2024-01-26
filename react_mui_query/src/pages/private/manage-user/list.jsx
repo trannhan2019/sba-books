@@ -22,8 +22,6 @@ import TableLoader from "@/components/common/TableLoader";
 import Swal from "sweetalert2";
 import { useSelection } from "@/hooks/useSelection";
 import { apiDeleteUser, apiDeleteUsers } from "@/apis/user";
-import { useDispatch, useSelector } from "react-redux";
-import { setUserCurrent } from "@/store/user/userSlice";
 
 const ListUser = (props) => {
   const {
@@ -36,11 +34,9 @@ const ListUser = (props) => {
     isLoading,
     userList,
     total,
+    setUser,
   } = props;
 
-  // const { isLoading } = useSelector((state) => state.app);
-  // const { total, userList } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
   //seleted
   const userSelected = useSelection(userList);
   const selectedSome =
@@ -51,7 +47,7 @@ const ListUser = (props) => {
 
   //show edit
   const showEdit = async (user) => {
-    dispatch(setUserCurrent(user));
+    setUser(user);
     setOpenEditForm(true);
   };
   // handel Del single

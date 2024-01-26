@@ -24,7 +24,6 @@ import {
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { apiStoreUser } from "@/apis/user";
-import { useSelector } from "react-redux";
 
 const scheme = Yup.object({
   name: Yup.string().required("Tên người dùng không để trống"),
@@ -36,10 +35,14 @@ const scheme = Yup.object({
   role: Yup.string().required("Chọn quuyền"),
 }).required();
 
-const AddUser = ({ openAddForm, setOpenAddForm, setReloadPage }) => {
+const AddUser = ({
+  openAddForm,
+  setOpenAddForm,
+  setReloadPage,
+  departments,
+  roles,
+}) => {
   const [showPassword, setShowPassword] = useState(false);
-  const { departments } = useSelector((state) => state.department);
-  const { roles } = useSelector((state) => state.role);
 
   const { control, handleSubmit, reset, setError } = useForm({
     defaultValues: {
@@ -60,7 +63,7 @@ const AddUser = ({ openAddForm, setOpenAddForm, setReloadPage }) => {
       await apiStoreUser(values);
       reset();
       setOpenAddForm(false);
-      setReloadPage((preState) => !preState);
+      setReloadPage((preState) => preState + 1);
       toast.success("Tạo mới thành công");
     } catch (error) {
       if (error.status === 422 && error.data.errors.username) {

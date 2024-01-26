@@ -1,6 +1,6 @@
-import { setDepartmentId } from "@/store/department/departmentSlice";
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
 import {
+  Button,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -11,7 +11,6 @@ import {
   SvgIcon,
 } from "@mui/material";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 const SearchUser = ({
   onSearch,
@@ -20,18 +19,16 @@ const SearchUser = ({
   departmentId,
   setDepartmentId,
 }) => {
-  // const dispatch = useDispatch();
-  // const {  departmentId } = useSelector(
-  //   (state) => state.department
-  // );
+  const [valueSearch, setValueSearch] = useState("");
 
-  const handleChangeSelect = (event) => {
-    setDepartmentId(event.target.value);
+  const submitChangeSearch = (event) => {
+    event.preventDefault();
+    onSearch(valueSearch);
     handlePageReset();
   };
 
-  const handleChangeSearch = (event) => {
-    onSearch(event.target.value);
+  const handleChangeSelect = (event) => {
+    setDepartmentId(event.target.value);
     handlePageReset();
   };
 
@@ -58,21 +55,28 @@ const SearchUser = ({
         </Select>
       </FormControl>
 
-      <OutlinedInput
-        onChange={(event) => handleChangeSearch(event)}
-        defaultValue=""
-        fullWidth
-        size="small"
-        placeholder="Tìm kiếm theo tên người dùng ..."
-        startAdornment={
-          <InputAdornment position="start">
-            <SvgIcon color="action" fontSize="small">
-              <MagnifyingGlassIcon />
-            </SvgIcon>
-          </InputAdornment>
-        }
-        sx={{ maxWidth: 450 }}
-      />
+      <form onSubmit={(event) => submitChangeSearch(event)}>
+        <Stack direction="row" spacing={2}>
+          <OutlinedInput
+            onChange={(e) => setValueSearch(e.target.value)}
+            defaultValue=""
+            fullWidth
+            size="small"
+            placeholder="Tìm kiếm theo tên người dùng ..."
+            startAdornment={
+              <InputAdornment position="start">
+                <SvgIcon color="action" fontSize="small">
+                  <MagnifyingGlassIcon />
+                </SvgIcon>
+              </InputAdornment>
+            }
+            sx={{ maxWidth: 450 }}
+          />
+          <Button variant="outlined" size="small" type="submit">
+            Search
+          </Button>
+        </Stack>
+      </form>
     </Stack>
   );
 };

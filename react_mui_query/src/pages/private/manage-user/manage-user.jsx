@@ -16,22 +16,13 @@ import { apiGetAllUser } from "@/apis/user";
 import ListUser from "./list";
 import SearchUser from "./search";
 import EditUser from "./edit";
-import { useDispatch, useSelector } from "react-redux";
-import { setDepartments } from "@/store/department/departmentSlice";
-import { setRoles } from "@/store/role/roleSlice";
-import { setTotalUser, setUserList } from "@/store/user/userSlice";
-import { setLoading } from "@/store/app/appSlice";
 import { usePaginateMui } from "@/hooks/usePaginateMui";
 import { useQuery } from "@tanstack/react-query";
 // import EditDepartment from "./EditDepartment";
 
 const ManageUser = () => {
-  // const dispatch = useDispatch();
   //search
   const [search, setSearch] = useState("");
-  // const searchDebounce = useDebounce(search, 800);
-  // console.log(searchDebounce);
-  // const { departmentId } = useSelector((state) => state.department);
 
   //Add ///////////////
   const [openAddForm, setOpenAddForm] = useState(false);
@@ -40,9 +31,11 @@ const ManageUser = () => {
   const [openEditForm, setOpenEditForm] = useState(false);
 
   //set refresh department tai vi tri sau khi them va sua
-  const [reloadPage, setReloadPage] = useState(false);
+  const [reloadPage, setReloadPage] = useState(0);
 
   const [departmentId, setDepartmentId] = useState(0);
+
+  const [user, setUser] = useState(null);
 
   const {
     page,
@@ -117,7 +110,7 @@ const ManageUser = () => {
             <SearchUser
               onSearch={setSearch}
               handlePageReset={handlePageReset}
-              departments={departmentsData.data}
+              departments={departmentsData?.data || []}
               departmentId={departmentId}
               setDepartmentId={setDepartmentId}
             />
@@ -131,6 +124,7 @@ const ManageUser = () => {
               isLoading={isLoading}
               userList={usersData?.data.data || []}
               total={usersData?.data.total || 0}
+              setUser={setUser}
             />
           </Stack>
         </Container>
@@ -139,11 +133,16 @@ const ManageUser = () => {
         openAddForm={openAddForm}
         setOpenAddForm={setOpenAddForm}
         setReloadPage={setReloadPage}
+        departments={departmentsData?.data || []}
+        roles={rolesData?.data || []}
       />
       <EditUser
         openEditForm={openEditForm}
         setOpenEditForm={setOpenEditForm}
         setReloadPage={setReloadPage}
+        user={user}
+        departmentList={departmentsData?.data || []}
+        roleList={rolesData?.data || []}
       />
     </>
   );
