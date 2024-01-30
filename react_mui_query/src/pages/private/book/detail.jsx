@@ -13,52 +13,31 @@ import {
   Typography,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-// import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { apiGetBook } from "@/apis/book";
-import BookImageDefault from "@/assets/default-image-book.jpg";
+// import BookImageDefault from "@/assets/default-image-book.jpg";
 import { getUrlImage } from "@/utils/get-url-image";
 import CardLoader from "@/components/common/CardLoader";
 import { Parser } from "html-to-react";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { apiStoreBookHistory } from "@/apis/book-history";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "@/store/app/appSlice";
+import { useSelector } from "react-redux";
 
 const BookDetail = () => {
   let { id } = useParams();
-  const { isLoading } = useSelector((state) => state.app);
   const { user } = useSelector((state) => state.auth);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  const [book, setBook] = useState(null);
+  // const [book, setBook] = useState(null);
 
-  // const { data: book, isFetching } = useQuery({
-  //   queryKey: ["book", id],
-  //   queryFn: async () => {
-  //     const res = await apiGetBook(id);
-  //     return res.data;
-  //   },
-  //   placeholderData: [],
-  // });
-  const fetchData = async (id) => {
-    try {
-      dispatch(setLoading(true));
-      const response = await apiGetBook(id);
-      setBook(response.data);
-      dispatch(setLoading(false));
-    } catch (error) {
-      dispatch(setLoading(false));
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData(id);
-  }, []);
+  const { isLoading, data: bookData } = useQuery({
+    queryKey: ["book-detail", id],
+    queryFn: async () => {
+      return await apiGetBook(id);
+    },
+  });
 
   const handleSubscribe = () => {
     Swal.fire({
@@ -106,11 +85,11 @@ const BookDetail = () => {
                 <Grid item xs={12} md={5}>
                   <CardMedia
                     image={
-                      book?.photo_url &&
-                      book?.photo_url !== "0" &&
-                      book?.photo_url !== "null"
-                        ? book?.photo_url
-                        : getUrlImage(book?.photo)
+                      bookData?.data.photo_url &&
+                      bookData?.data.photo_url !== "0" &&
+                      bookData?.data.photo_url !== "null"
+                        ? bookData?.data.photo_url
+                        : getUrlImage(bookData?.data.photo)
                     }
                     component="img"
                     sx={{
@@ -149,7 +128,7 @@ const BookDetail = () => {
                   <CardContent>
                     <Stack spacing={1}>
                       <Typography mb={2} variant="h3">
-                        {book?.title}
+                        {bookData?.data.title}
                       </Typography>
 
                       <Stack alignItems="center" direction="row" spacing={2}>
@@ -159,17 +138,17 @@ const BookDetail = () => {
                         <Chip
                           color="info"
                           size="small"
-                          label={book?.cate_book?.name}
+                          label={bookData?.data.cate_bookData?.data.name}
                         />
                       </Stack>
                       <Typography variant="subtitle2">
-                        Tác giả: {book?.author}
+                        Tác giả: {bookData?.data.author}
                       </Typography>
 
                       <Stack alignItems="center" direction="row" spacing={2}>
                         <Typography variant="subtitle2">Số lượng:</Typography>
-                        {book?.quantity > 0 ? (
-                          <Chip size="small" label={book?.quantity} />
+                        {bookData?.data.quantity > 0 ? (
+                          <Chip size="small" label={bookData?.data.quantity} />
                         ) : (
                           <Chip
                             size="small"
@@ -180,20 +159,20 @@ const BookDetail = () => {
                       </Stack>
 
                       <Typography variant="subtitle2">
-                        Mã sách: {book?.code}
+                        Mã sách: {bookData?.data.code}
                       </Typography>
 
                       <Typography variant="subtitle2">
-                        Thông tin lưu trữ: {book?.storage_location}
+                        Thông tin lưu trữ: {bookData?.data.storage_location}
                       </Typography>
 
                       <Typography variant="subtitle2">
-                        {Parser().parse(book?.description)}
+                        {Parser().parse(bookData?.data.description)}
                       </Typography>
                     </Stack>
                   </CardContent>
                   <CardActions sx={{ padding: 3 }}>
-                    {book?.quantity > 0 ? (
+                    {bookData?.data.quantity > 0 ? (
                       <Button
                         onClick={handleSubscribe}
                         variant="contained"

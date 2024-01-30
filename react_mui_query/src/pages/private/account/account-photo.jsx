@@ -47,7 +47,7 @@ const AccountPhoto = () => {
     multiple: false,
   });
 
-  console.log(photo);
+  // console.log(photo);
   // useEffect(async () => {
   //   const res = await apiGetCurrentUser(user.id);
   //   dispatch(setUser(res.data.data));

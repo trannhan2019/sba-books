@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import {
   Box,
   Button,
@@ -12,10 +12,10 @@ import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import AddBook from "./add";
 import { apiGetAllCategoryBook } from "@/apis/category_book";
 // import { setCateBooks } from "@/store/category_book/catebookSlice";
-import { setLoading } from "@/store/app/appSlice";
+// import { setLoading } from "@/store/app/appSlice";
 import { apiGetListBook } from "@/apis/book";
 // import { setBooks, setTotalBook } from "@/store/book/bookSlice";
-import useDebounce from "@/hooks/useDebounce";
+// import useDebounce from "@/hooks/useDebounce";
 import ListBook from "./list";
 import SearchBook from "./search";
 import EditBook from "./edit";
@@ -31,13 +31,13 @@ const ManageBook = () => {
 
   //search
   const [search, setSearch] = useState("");
-  const searchDebounce = useDebounce(search, 800);
+  // const searchDebounce = useDebounce(search, 800);
 
   //set refresh department tai vi tri sau khi them va sua
   const [reloadPage, setReloadPage] = useState(0);
 
   //cac state
-  const [cateBooks, setCateBooks] = useState([]);
+  // const [cateBooks, setCateBooks] = useState([]);
   const [cateSelected, setCateSelected] = useState([]);
   const [book, setBook] = useState(null);
 
