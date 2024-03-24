@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { apiUpdateCompany } from "@/apis/company";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const scheme = Yup.object({
   name: Yup.string().required("Tên Công ty không để trống"),
@@ -28,18 +29,38 @@ const EditCompany = ({
     resolver: yupResolver(scheme),
   });
 
-  const onSubmit = async (values) => {
-    try {
-      await apiUpdateCompany(values, company.id);
+  // const onSubmit = async (values) => {
+  //   try {
+  //     await apiUpdateCompany(values, company.id);
 
-      reset();
-      setReloadPage((preState) => preState + 1);
-      toast.success("Sửa thông tin thành công");
-      handleCloseDialogEdit();
-    } catch (error) {
-      console.log("edit company", error);
-      toast.error("Lỗi không sửa được thông tin");
-    }
+  //     reset();
+  //     setReloadPage((preState) => preState + 1);
+  //     toast.success("Sửa thông tin thành công");
+  //     handleCloseDialogEdit();
+  //   } catch (error) {
+  //     console.log("edit company", error);
+  //     toast.error("Lỗi không sửa được thông tin");
+  //   }
+  // };
+
+  const queryClient = useQueryClient();
+  const editMutation = useMutation({
+    mutationFn: (values) => apiUpdateCompany(values, company.id),
+  });
+
+  const onSubmit = (values) => {
+    editMutation.mutate(values, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["company-list"] });
+        reset();
+        toast.success("Sửa thông tin thành công");
+        handleCloseDialogEdit();
+      },
+      onError: (error) => {
+        console.log("edit company", error);
+        toast.error("Lỗi không sửa được thông tin");
+      },
+    });
   };
 
   useEffect(() => {

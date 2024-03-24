@@ -15,6 +15,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { apiStoreCompany } from "@/apis/company";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const style = {
   position: "absolute",
@@ -41,17 +42,37 @@ const AddCompany = ({ openModal, handleCloseModal, setReloadPage }) => {
     resolver: yupResolver(scheme),
   });
 
+  // const onSubmit = async (values) => {
+  //   try {
+  //     await apiStoreCompany(values);
+  //     reset();
+  //     toast.success("Tạo mới thành công");
+  //     setReloadPage((preState) => preState + 1);
+  //     handleCloseModal();
+  //   } catch (error) {
+  //     console.log("add company", error);
+  //     toast.error("Lỗi không thêm được thông tin");
+  //   }
+  // };
+  const queryClient = useQueryClient();
+
+  const addMutation = useMutation({
+    mutationFn: (values) => apiStoreCompany(values),
+  });
+
   const onSubmit = async (values) => {
-    try {
-      await apiStoreCompany(values);
-      reset();
-      toast.success("Tạo mới thành công");
-      setReloadPage((preState) => preState + 1);
-      handleCloseModal();
-    } catch (error) {
-      console.log("add company", error);
-      toast.error("Lỗi không thêm được thông tin");
-    }
+    addMutation.mutate(values, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["company-list"] });
+        reset();
+        toast.success("Tạo mới thành công");
+        handleCloseModal();
+      },
+      onError: (error) => {
+        console.log("add company", error);
+        toast.error("Lỗi không thêm được thông tin");
+      },
+    });
   };
 
   return (

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
-import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
+// import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
+// import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import {
   Box,
@@ -56,6 +56,9 @@ const ManageCompany = () => {
       });
     },
   });
+
+  // const isFetching = useIsFetching();
+  // const isMutating = useIsMutating();
 
   return (
     <>
