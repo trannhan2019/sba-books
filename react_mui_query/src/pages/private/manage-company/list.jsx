@@ -22,6 +22,7 @@ import Swal from "sweetalert2";
 import { useSelection } from "@/hooks/useSelection";
 import { apiDeleteCompanies, apiDeleteCompany } from "@/apis/company";
 import { toast } from "react-toastify";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const CompanyList = (props) => {
   const {
@@ -47,7 +48,30 @@ export const CompanyList = (props) => {
     companies.length > 0 && listSelected.selected.length === companies.length;
 
   //handle Delete
-  const handleDelete = async (id) => {
+  const queryClient = useQueryClient();
+  const deleteMutation = useMutation({
+    mutationFn: (id) => apiDeleteCompany(id),
+  });
+  // const handleDelete = async (id) => {
+  //   Swal.fire({
+  //     icon: "info",
+  //     title: "Bạn có muốn xóa dữ liệu ?",
+  //     showCancelButton: true,
+  //     confirmButtonText: "Xác nhận",
+  //   }).then(async (result) => {
+  //     if (result.isConfirmed) {
+  //       try {
+  //         await apiDeleteCompany(id);
+  //         setReloadPage((preState) => preState + 1);
+  //         Swal.fire("Saved!", "", "success");
+  //       } catch (error) {
+  //         console.log("delete", error);
+  //         toast.error("Lỗi không xóa được thông tin");
+  //       }
+  //     }
+  //   });
+  // };
+  const handleDelete = (id) => {
     Swal.fire({
       icon: "info",
       title: "Bạn có muốn xóa dữ liệu ?",
@@ -55,19 +79,24 @@ export const CompanyList = (props) => {
       confirmButtonText: "Xác nhận",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        try {
-          await apiDeleteCompany(id);
-          setReloadPage((preState) => preState + 1);
-          Swal.fire("Saved!", "", "success");
-        } catch (error) {
-          console.log("delete", error);
-          toast.error("Lỗi không xóa được thông tin");
-        }
+        deleteMutation.mutate(id, {
+          onSuccess: () => {
+            Swal.fire("Deleted!", "", "success");
+            queryClient.invalidateQueries("company-list");
+          },
+          onError: (error) => {
+            console.log("delete", error);
+            toast.error("Lỗi không xóa được thông tin");
+          },
+        });
       }
     });
   };
 
-  const handleDeleteAll = async () => {
+  const deleteAllMutation = useMutation({
+    mutationFn: () => apiDeleteCompanies({ ids: listSelected.selected }),
+  });
+  const handleDeleteAll = () => {
     Swal.fire({
       icon: "info",
       title: "Bạn có muốn xóa dữ liệu ?",
@@ -75,17 +104,38 @@ export const CompanyList = (props) => {
       confirmButtonText: "Xác nhận",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        try {
-          await apiDeleteCompanies({ ids: listSelected.selected });
-          setReloadPage((preState) => preState + 1);
-          Swal.fire("Saved!", "", "success");
-        } catch (error) {
-          console.log("delete", error);
-          toast.error("Lỗi không xóa được thông tin");
-        }
+        deleteAllMutation.mutate(undefined, {
+          onSuccess: () => {
+            Swal.fire("Deleted!", "", "success");
+            queryClient.invalidateQueries("company-list");
+          },
+          onError: (error) => {
+            console.log("delete", error);
+            toast.error("Lỗi không xóa được thông tin");
+          },
+        });
       }
     });
   };
+  // const handleDeleteAll = async () => {
+  //   Swal.fire({
+  //     icon: "info",
+  //     title: "Bạn có muốn xóa dữ liệu ?",
+  //     showCancelButton: true,
+  //     confirmButtonText: "Xác nhận",
+  //   }).then(async (result) => {
+  //     if (result.isConfirmed) {
+  //       try {
+  //         await apiDeleteCompanies({ ids: listSelected.selected });
+  //         setReloadPage((preState) => preState + 1);
+  //         Swal.fire("Saved!", "", "success");
+  //       } catch (error) {
+  //         console.log("delete", error);
+  //         toast.error("Lỗi không xóa được thông tin");
+  //       }
+  //     }
+  //   });
+  // };
 
   // show edit
   const showEdit = (company) => {
